@@ -41,8 +41,7 @@ abstract class core {
     }
     
     function archive($select,$from,$where) {
-        $query = "SELECT $select FROM $from WHERE $where";
-        $items = $this->query($query);
+        $items = $this->query("SELECT $select FROM $from WHERE $where");
         $result = false;
         while($item = $this->fetch($items)) {
             $result[] = $item;
@@ -51,9 +50,8 @@ abstract class core {
     }
     
     function single($type,$id) {
-        $query = "SELECT * FROM object WHERE type='$type' AND id=$id";
-        $item = $this->query($query);
-        return $this->fetch($item);
+        $item = $this->fetch($this->query("SELECT * FROM object WHERE type='$type' AND id=$id"));
+        return ($item) ? $item : array('error' => 'no such object');
     }
     
 }
