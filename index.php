@@ -5,12 +5,7 @@ define('ABSPATH', dirname(__file__) . DS);
 
 require 'load.php';
 
-//where should plugins take action?
-
 $project = new system();
-
-
-
 $theme = new theme();
 
 $theme->set_include('header','<title>project</title>');
