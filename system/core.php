@@ -43,7 +43,7 @@ abstract class core {
     function archive($select,$from,$where) {
         $query = "SELECT $select FROM $from WHERE $where";
         $items = $this->query($query);
-        $result = array();
+        $result = false;
         while($item = $this->fetch($items)) {
             $result[] = $item;
         }
