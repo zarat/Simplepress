@@ -40,34 +40,20 @@ abstract class core {
         return (null !== $key) ? $ret[$key] : $ret;
     }
     
-    final function themes() {    
-        $themes = false;        
-        if($files = opendir(ABSPATH . 'content' . DS . 'themes')) {        
-                while (false !== ($file = readdir($files))) {        
-                    if ($file!='.' && $file!='..'){ 
-                        if(is_file(ABSPATH . 'content' . DS . 'themes' . DS . $file . DS . 'functions.php')) {
-                            $themes[] = $file;
-                        } 
-                    }        
-                }        
-            closedir($files);    
-        }        
-        return $themes;
+    function archive($select,$from,$where) {
+        $query = "SELECT $select FROM $from WHERE $where";
+        $items = $this->query($query);
+        $result = array();
+        while($item = $this->fetch($items)) {
+            $result[] = $item;
+        }
+        return $result;
     }
     
-    final function plugins() {    
-        $plugins = false;        
-        if($files = opendir(ABSPATH . 'content' . DS . 'plugins')) {        
-                while (false !== ($file = readdir($files))) {        
-                    if ($file!='.' && $file!='..'){           
-                        if(is_file(ABSPATH . 'content' . DS . 'plugins' . DS . $file . DS . 'functions.php')) {
-                            $plugins[] = $file;
-                        } 
-                    }        
-                }        
-            closedir($files);    
-        }        
-        return $plugins;
+    function single($type,$id) {
+        $query = "SELECT * FROM object WHERE type='$type' AND id=$id";
+        $item = $this->query($query);
+        return $this->fetch($item);
     }
     
 }
