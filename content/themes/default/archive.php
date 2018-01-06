@@ -6,7 +6,9 @@ $menu->html();
 
 echo "<div class='content'>";
 
-foreach($system->archive($what="*",$from="object",$where="type='post' AND ".$system->the_querystring('type') . "=" . $system->the_querystring('id') . " ORDER BY id DESC") as $item) {
+$archive = array('select' => '*','from' => 'object','where' => "type='post' AND ".$system->the_querystring('type') . "=" . $system->the_querystring('id') . " ORDER BY id DESC");
+
+foreach($system->archive($archive) as $item) {
 
     echo "<div class='content-item'>";
     echo "<div class='content-item-head'><a href='../?type=$item[type]&id=$item[id]'>" . $item['title'] . "</a></div>";
