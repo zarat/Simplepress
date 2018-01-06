@@ -8,9 +8,12 @@ $item = $system->single($type=$system->the_querystring('type'),$id=$system->the_
 
 echo "<div class='content'>";
 
-echo "<div class ='content-item-head'>" . $item['title'] . "</div>";
-echo "<div class ='content-item-head-secondary'>Kategorie: " . $system->single($type='category',$id=$item['category'])['title'] . "</div>";
-echo "<div class ='content-item-body'>" . html_entity_decode($item['content']) . "</div>";
+if($item) { 
+    echo "<div class ='content-item-head'>" . $item['title'] . "</div>";
+    echo "<div class ='content-item-body'>" . html_entity_decode($item['content']) . "</div>";
+} else {
+    echo "<div class ='content-item-head'>Sorry, but there is " . $item['error'] . "</div>";
+}
 
 echo "</div>";
 
