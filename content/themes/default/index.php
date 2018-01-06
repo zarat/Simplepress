@@ -6,7 +6,9 @@ $menu->html();
 
 echo "<div class='content'>\n\n";
 
-foreach($system->archive($what="*",$from="object",$where="type='post' ORDER BY id DESC") as $item) {
+$conf = array('select' => '*','from' => 'object', 'where' => 'type="post" ORDER BY id DESC');
+
+foreach($system->archive($conf) as $item) {
 
 echo "\t<div class='content-item'>\n";
     echo "\t\t<div class='content-item-head'><a href='../?type=$item[type]&id=$item[id]'>" . $item['title'] . "</a></div>\n";
