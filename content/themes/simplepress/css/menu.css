@@ -1,0 +1,353 @@
+.menu-container {
+     width:100%;
+     margin: 0 auto;
+     padding: 20px 0;
+}
+ label.responsive_menu span {
+     margin-left: 10px;
+     color: white;
+     display: none;
+}
+ .menu {
+     font-family: 'Open Sans', sans-serif;
+     font-weight: 400;
+     font-size: 15px;
+     line-height: 15px;
+     position: relative;
+     padding: 0 0 0 4px;
+     margin: 0;
+     background-color: #005b68;
+}
+/* Reset Links */
+ .menu a, .menu a:link, .menu a:visited, .menu a:focus, span {
+     color: #fff;
+     text-decoration: none;
+}
+ .menu a:hover {
+     color: #c4c4c4;
+     text-decoration: none;
+}
+/* Main element */
+ .menu > li {
+     display: inline-block;
+     text-align: center;
+     margin-left: -4px;
+     box-shadow: -1px 0 0 rgba(255, 255, 255, 0.2);
+}
+/* Link Style */
+ .menu > li > a {
+     padding:20px 18px;
+     display: block;
+}
+ .menu > li:hover > a{
+     color: #005b68;
+}
+ .menu > li:hover {
+     background-color: #fff;
+}
+ .menu > li:first-child {
+     border-left: none;
+     box-shadow: none;
+}
+/* Simple multilevel dropdown */
+ .menu > li > ul {
+     opacity: 0;
+     visibility: hidden;
+     position: absolute;
+     list-style: none;
+     top:55px;
+     background-color: #005b68;
+     width: 200px;
+     text-align: left;
+     margin-top:30px;
+     padding: 0px;
+     z-index: 99;
+}
+/* First level appear */
+ .menu > li:hover > ul {
+     opacity: 1;
+     visibility: visible;
+     margin-top: 0px;
+}
+/* Style for dropdown links */
+ .menu li > ul li {
+     font-size: 13px;
+     position: relative;
+     display: block;
+     padding: 15px 10px;
+}
+ .menu > li > ul li:hover {
+     background-color: #fff;
+}
+ .menu ul li:hover > a {
+     color: #005b68;
+}
+/* Second and third dropdown level */
+ .menu > li > ul li ul {
+     opacity: 0;
+     visibility: hidden;
+     position: absolute;
+     list-style: none;
+     top:0px;
+     left: 200px;
+     background-color: #005b68;
+     width: 200px;
+     text-align: left;
+     padding: 0px;
+     margin-left: 30px;
+}
+ .menu > li > ul li ul li:hover {
+     background-color: #fff;
+}
+ input#responsive_menu {
+     display: none;
+}
+ .menu > li > ul li ul li ul {
+     background-color: #005b68;
+}
+ .menu > li > ul li ul li ul li:hover {
+     background-color: #fff;
+}
+/* Second and third level appears */
+ .menu > li ul li:hover > ul {
+     opacity: 1;
+     visibility: visible;
+     margin-left: 0px;
+}
+/* Megadrop width dropdown */
+ .menu > li > .megadrop {
+     opacity: 0;
+     visibility: hidden;
+     position: absolute;
+     list-style: none;
+     top:53px;
+     left: 0px;
+     background-color: #005b68;
+     width: 100%;
+     min-height: 100px;
+     text-align: left;
+     margin-top:30px;
+     padding: 0;
+     z-index: 99;
+     border-bottom-left-radius: 5px;
+     border-bottom-right-radius: 5px;
+     overflow: hidden;
+}
+/* megadrop appears */
+ .menu > li:hover .megadrop {
+     opacity: 1;
+     visibility: visible;
+     margin-top: 0px;
+}
+ .menu ul li:hover:after {
+     color: white;
+}
+/* columndrop dropdown */
+ .menu .columndrop {
+     opacity: 0;
+     visibility: hidden;
+     position: absolute;
+     list-style: none;
+     top:55px;
+     background-color: #005b68;
+     min-height: 100px;
+     text-align: left;
+     margin-top:30px;
+     padding: 0;
+     padding: 0 10px;
+     z-index: 99;
+     border-bottom-left-radius: 5px;
+     border-bottom-right-radius: 5px;
+}
+ .menu > li:hover .columndrop {
+     opacity: 1;
+     visibility: visible;
+     margin-top: 0px;
+     color: #fff;
+}
+ .menu .columndrop .col {
+    width: 130px;
+    margin:0 9px;
+}
+/*.coldrop full width dropdown */
+ .menu .col {
+     width: 14.1%;
+     float: left;
+     color:white;
+     margin: 0 0 0 2.2%;
+}
+ .menu .col ul {
+     padding: 0;
+     margin: 0;
+}
+ .menu .col ul li {
+     padding: 0;
+     list-style: none;
+     font-size: 11px;
+}
+ .menu .col h3 {
+     font-size: 16px;
+     padding: 14px 0;
+     font-weight: 400;
+     margin: 5px 0 5px 0;
+}
+ .menu .col ul li a {
+     display: block;
+     padding: 0 0 15px 0;
+}
+ .menu .col ul li a:hover {
+     color: #111;
+     text-decoration: underline;
+}
+ .menu > li > ul li ul, .menu li >ul li, .menu > li > .megadrop, .menu > li > .columndrop, .menu > li > ul, .menu > li {
+     transition: all 0.2s ease-in-out;
+     -moz-transition: all 0.2s ease-in-out;
+    /* Firefox 4 */
+     -webkit-transition: all 0.2s ease-in-out;
+    /* Safari and Chrome */
+     -ms-transition: all 0.2s ease-in-out;
+    /* IE 11 */
+     -o-transition: all 0.2s ease-in-outs;
+    /* Opera */
+}
+/* Responsive container Setting */
+ @media only screen and (min-width: 768px) and (max-width: 959px) {
+     .menu-container {
+         width:768px;
+    }
+}
+ @media only screen and (min-width: 480px) and (max-width: 767px) {
+     .menu-container {
+         width: 420px;
+    }
+}
+ @media only screen and (max-width: 479px) {
+     .menu-container {
+         width: 300px;
+    }
+}
+ @media only screen and (max-width: 959px) {
+    /* New direction for third dropdown level */
+     .menu > li > ul li ul li ul {
+         left: -200px;
+         z-index: 3;
+    }
+     .menu > li > a{
+         padding: 20px 12px;
+         font-size: 12px;
+    }
+     .menu .columndrop .col {
+        width: 120px;
+        margin:0 5px;
+    }
+}
+ @media only screen and (max-width: 767px) {
+     .menu {
+         display: none;
+    }
+     label.responsive_menu span {
+         display: inline;
+         font-size: 25px;
+         font-variant: small-caps;
+         font-weight:400;
+    }
+     label.responsive_menu {
+         position: relative;
+         display: block;
+         width: 100%;
+         background-color: #005b68;
+         padding: 20px 0;
+    }
+     .menu {
+         padding: 0;
+    }
+     .menu li {
+         width: 100%;
+         display:block;
+         text-align: left;
+         margin-left: 0;
+    }
+     .menu > li {
+         border-right: none;
+         padding: 18px 0px;
+         position: relative;
+    }
+     .menu > li > a {
+         display: inline;
+    }
+     .menu li ul, .menu li .megadrop, .menu li .columndrop {
+         top:45px;
+    }
+     .menu li ul {
+         padding: 0;
+    }
+     .menu .megadrop, .menu .columndrop {
+         width: 100%;
+         padding: 0 2.5%;
+    }
+     .menu li > ul li {
+         padding: 18px 0px;
+    }
+     .menu .col, .menu .columndrop .col {
+         width: 94%;
+         padding: 0 3%;
+    }
+     .menu > li > ul {
+         width: 100%;
+    }
+     .menu > li > ul li ul {
+         width: 100%;
+         top:43px;
+         left: 0;
+         margin-top: 30px;
+         z-index: 2;
+    }
+     .menu > li > ul > li:hover ul {
+         margin-top: 0;
+    }
+     #responsive_menu:checked+.menu {
+         display: block;
+    }
+     label:after {
+         position: absolute;
+         top:9px;
+         right: 10px;
+         content: "\2263";
+         font-size: 35px;
+         color: #FFF;
+    }
+     .menu > li > ul li ul li ul {
+         width: 100%;
+         top:43px;
+         left: 0px;
+         margin-left: 0;
+         margin-top: 30px;
+    }
+     .menu > li > ul > li ul li:hover ul{
+         margin-top: 0;
+    }
+     .menu > li > ul li{
+         padding: 15px 0 15px 6%;
+         width: 94%;
+    }
+     .menu > li > ul li ul li{
+         padding: 15px 0 15px 9%;
+         width: 91%;
+    }
+     .menu > li > ul li ul li ul li{
+         padding: 15px 0 15px 12%;
+         width: 88%;
+    }
+     .menu ul li.dropdown:after {
+         left: 90%;
+    }
+    /* Disable animation */
+     .menu > li > ul li ul, .menu li >ul li, .menu > li > .megadrop, .menu > li > .columndrop, .menu > li > ul, .menu > li {
+         transition: none;
+         -moz-transition: none;
+         -webkit-transition: none;
+         -ms-transition: none;
+         -o-transition: none;
+    }
+}
+/* MENU */
