@@ -1,8 +1,11 @@
 <?php
 
 /**
+ * Diese Klasse sollte wenn moeglich nicht angefasst werden.
+ *
  * @author Manuel Zarat
  * @date 05.01.2018
+ * @license http://opensource.org/licenses/MIT
  * 
  */
 
@@ -13,16 +16,16 @@ abstract class core {
     /**
      * Datenbankverbindung aufbauen
      * 
+     * Unterstuetzung verschiedener Datenbanktypen wie MySQL, SQLite,.. u.a.
+     * 
+     * @todo
+     * 
      */
     final function __construct() {          
         if(is_file(ABSPATH . "config.php")) { include ABSPATH . "config.php"; } else { include ABSPATH . "install.php"; exit(); }                
         $this->db = new mysqli($dbhost,$dbuser,$dbpass,$dbname);                                                 
     }
     
-    /**
-     * Datenbankinteraktionen
-     * 
-     */
     private function sql_escape_string($query) {
         return mysqli_real_escape_string($this->db, $query);    
     }        
@@ -38,7 +41,9 @@ abstract class core {
     }
     
     /**
-     * Einstellungen aus der Tabelle settings
+     * Globale Einstellungen aus der Tabelle 'settings' holen.
+     * 
+     * Das Feld 'key' ist mit Tabellennamen davor angegeben weil 'key' ein Anweisungswort ist.
      * 
      * @param string $key
      * @return string/array
@@ -54,32 +59,35 @@ abstract class core {
     }
     
     /**
-     * Archiv von Objekten
+     * Ein Archiv aus der Datenbank holen
      * 
-     * @param array $config
-     * @return array
+     * @todo Neue Objekttypen sollten manuell erstellt werden koennen.
+     * @todo aktueller Parameter ist shice
+     *
+     * @param array $config array('select','from','where')
+     * @return array Ein Array aus allen enthaltenen Items.
      * 
      */
-    function archive($config) {
+    final function archive($config) {
         extract($config);
         $items = $this->query("SELECT $select FROM $from WHERE $where");
         $result = false;
         while($item = $this->fetch($items)) {
             $result[] = $item;
         }
-        return $result;
+        return ($result) ? $result : false;
     }
     
     /**
-     * Einzelnes Objekt
+     * Einzelnes Objekt aus der Datenbank holen
      * 
      * @param int $id
      * @return array
      * 
      */
-    function single($type,$id) {
+    final function single($type,$id) {
         $item = $this->fetch($this->query("SELECT * FROM object WHERE type='$type' AND id=$id"));
-        return ($item) ? $item : array('error' => 'no such object');
+        return ($item) ? $item : false;
     }
     
 }
