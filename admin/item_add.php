@@ -27,15 +27,7 @@ $category = $_POST['category'];
 /**
  * Custom fields
  * 
- *
- 
-$custom_fields = array_combine($_POST['custom_field_key'], $_POST['custom_field_value']); 
-echo "<pre>";
-print_r($custom_fields);
-echo "</pre>";
-
- *
- *
+ * $custom_fields = array_combine($_POST['custom_field_key'], $_POST['custom_field_value']); 
  */
 
     
