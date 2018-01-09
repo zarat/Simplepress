@@ -1,11 +1,14 @@
 <?php
 
 /**
- * Diese Klasse sollte wenn moeglich nicht angefasst werden.
- *
+ * Die Klasse Core sollte wenn moeglich nicht angefasst werden.
+ * Sie ist das Kernstueck - was hier nicht stabil laeuft ist BETA
+ * Sollte wenn moeglich auch abwaerts kompatibel bleiben :S
+ * 
+ * Sie baut die Datenbankverbindung auf und wickelt Querys ab. 
+ * 
  * @author Manuel Zarat
  * @date 05.01.2018
- * @license http://opensource.org/licenses/MIT
  * 
  */
 
@@ -16,9 +19,7 @@ abstract class core {
     /**
      * Datenbankverbindung aufbauen
      * 
-     * Unterstuetzung verschiedener Datenbanktypen wie MySQL, SQLite,.. u.a.
-     * 
-     * @todo
+     * @todo Unterstuetzung verschiedener Datenbanktypen wie MySQL, SQLite,.. u.a.
      * 
      */
     final function __construct() {          
@@ -43,53 +44,107 @@ abstract class core {
     /**
      * Globale Einstellungen aus der Tabelle 'settings' holen.
      * 
-     * Das Feld 'key' ist mit Tabellennamen davor angegeben weil 'key' ein Anweisungswort ist.
-     * 
-     * @param string $key
-     * @return string/array
-     * 
      */
     final function settings($key=null) {
         $query = (null!==$key) ? "SELECT * FROM settings WHERE settings.key='$key'" : "SELECT * FROM settings";
         $result = $this->query($query);
+        $ret = false;
         while($r = $this->fetch($result)) {
             $ret[$r['key']] = $r['value'];
         }   
-        return (null !== $key) ? $ret[$key] : $ret;
+        return isset($ret[$key]) ? $ret[$key] : $ret;
+    }
+        
+    /**
+     * baah, very static.. 
+     * 
+     */     
+    final function insert($config) {
+        extract($config);
+        $query = "INSERT INTO $insert VALUES $values";
+        $res = $this->query($query) or 'error';
+        return $res;
+    }
+    final function update($config) {
+        extract($config);
+        $query = "UPDATE $table SET $set";
+        $res = $this->query($query) or 'error';
+        return $res;
+    }    
+    final function delete($config) {
+        extract($config);
+        $query = "DELETE FROM $from WHERE $where";
+        $res = $this->query($query) or 'error';
+        return $res;
     }
     
     /**
-     * Ein Archiv aus der Datenbank holen
+     * Einzelnes Item
      * 
-     * @todo Neue Objekttypen sollten manuell erstellt werden koennen.
-     * @todo aktueller Parameter ist shice
-     *
-     * @param array $config array('select','from','where')
-     * @return array Ein Array aus allen enthaltenen Items.
+     * Wenn im $cfg Array ein Index "metadata" => true enthalten ist
+     * werden die Metadaten mit ausgegeben!
+     * 
+     * Array(
+     *    'id' => 123,
+     *    'title' => 'A post',
+     *    'content' => 'A very long story'
+     * )
+     * 
+     * @param array id,..
+     * @return array Item
      * 
      */
-    final function archive($config) {
-        extract($config);
-        $items = $this->query("SELECT $select FROM $from WHERE $where");
-        $result = false;
-        while($item = $this->fetch($items)) {
-            $result[] = $item;
+    final function single($cfg) {
+        extract($cfg);
+        $item = $this->fetch_assoc($this->query("SELECT * FROM object WHERE id=$id"));
+        $result = $item;
+        if(isset($metadata) && $metas = $this->single_meta($item['id'])) {
+            $result = array_merge($item, array_column($metas, 'v', 'k'));
         }
         return ($result) ? $result : false;
     }
     
     /**
-     * Einzelnes Objekt aus der Datenbank holen
+     * Metadaten zu einem Item
+     *
+     * @var int ItemID
+     * @return array Metadata
      * 
-     * @param int $id
+     */
+    final function single_meta($item_id) {
+        $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM object_meta WHERE meta_item_id=$item_id"); 
+        $metadata = false;
+        while($metas = $this->fetch_assoc($item_meta)) {
+            $metadata[] = $metas;
+        }      
+        return ($metadata) ? $metadata : false;
+    }
+    
+    /**
+     * Ein Archiv   
+     *
+     * @todo Sollten die Archive standardmaessig mit oder ohne Metadaten ausgegeben werden? 
+     * @todo Pagination
+     *
+     * @param array
      * @return array
      * 
      */
-    final function single($type,$id) {
-        $item = $this->fetch($this->query("SELECT * FROM object WHERE type='$type' AND id=$id"));
-        return ($item) ? $item : false;
+    final function archive($config) {
+        extract($config);
+        $result = false;
+        if($items = $this->query("SELECT $select FROM $from WHERE $where")) {
+            while($item = $this->fetch_assoc($items)) {
+                $result[] = $item;
+                /**
+                 * @todo Metdata
+                 * 
+                 */ 
+            }
+        }
+        return (false !== $result) ? $result : false;
     }
-    
+        
 }
 
 ?>
