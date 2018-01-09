@@ -4,11 +4,8 @@
  * SimplePress Theme Dummy
  *
  * @author Manuel Zarat
- * @date 05.01.2018
- * @license http://opensource.org/licenses/MIT
  * 
- * @todo THEMES sollten eine Datei "theme.php" in Root Verzeichnis beinhalten, die im Fall dieses Dummy Theme ueberschreibt.
- * @todo THEMES sollten einen Unterordner "<THEME-DIR>/views" beinhalten, in dem eigene VIEWS definiert werden koennen.
+ * THEMES sollen eine Datei "theme.php" und eine Datei "functions.php" im Root Verzeichnis haben, die dieses Dummy ueberschreibt.
  * 
  */
 
@@ -18,18 +15,18 @@ class theme extends system {
      * THEMES muessen VIEWS definieren, die vorgeben, welche Positionen ein Theme hat.
      * So koennen auch Themes mit individuellen VIEWS arbeiten (ShoppingCart, Listen, Profil, ...)
      *
-     * @todo Eigene VIEWS sollen manuell erstellbar sein
+     * @todo Eigene VIEWS erstellen und verwalten
      * 
      */
-    private $views = array('single','archive','index');
+    private $views = array('default','single','archive');
     
     /**
      * Themes muessen Positionen aufweisen, in welche man Inhalte einfuegen kann.
      * 
-     * @see self::set_include() 
+     * @todo Themes sollten Positionen erweitern bzw definieren koennen
      *
      */
-    private $positions = array('header','footer');
+    private $positions = array('header','content','sidebar','footer');
 
     /**
      * Zu bestimmten Zeiten waehrend dem Seitenaufbau werden SYSTEM Events geworfen.
@@ -50,33 +47,35 @@ class theme extends system {
     /**
      * Registriert Inhalte zum Einbinden an bestimmten Positionen (Hooks ->)
      * 
-     * @todo
+     * @todo Evtl besser mit array_pop()
      * 
      * @param string $position Wo soll es eingefuegt werden
      * @param string $include Was soll eingefuegt werden
      * 
      * @return void
      * 
-     * Example: set_include('header','i am the header');
+     * @example: set_include('header','i am the header');
      */
     function set_include($position,$include) {
-        //$this->include_positions[$position][] = $include;
-        $this->views[$position][] = $include;
+        $this->positions[$position][] = $include;
     }
     
     /**
-     * Zeigt einzubindende Inhalte zu einem Event an.
+     * Zeigt einzubindende Inhalte zu einer Position an.
      * 
      * @todo 
-     * @testing
      * 
      * @param string position
      * 
      */
     function get_includes($position) {
-        foreach($this->views[$position] as $include) {
-            echo $include . "\n";
+        if(isset($this->positions[$position])) {
+            foreach($this->positions[$position] as $include) {
+                $includes[] = $include;
+            }
+            return $includes;    
         }
+        return false;
     }
     
     /**
@@ -96,18 +95,81 @@ class theme extends system {
     function execute_triggers($event) { }
     
     /**
-     *  Bindet das angeforderte View Template ein (archiv,single,custom..)
-     *  Muss aufgeteilt werden um Hooks einzubauen.
-     *  
+     * Wenn kein Theme aktiv ist, gibt es auch kein Stylesheet. Das ist Mist!
+     * Deshalb zuerst pruefen, ob settings.php vorhanden ist und wenn ja - includen
+     * 
      * @todo
-     * @deprecated
+     * 
+     */
+    final function theme_functions() {
+        session_start();
+        if(is_file($theme_settings=ABSPATH . 'content' . DS . 'themes' . DS . $this->settings('site_theme') . DS . 'functions.php')) {
+            include $theme_settings;
+        }
+    }
+    
+    /**
+     * Die einzelnen Schritte sind in Funktionen aufgeteilt, um Trigger aufrufen zu koennen.
+     * 
+     * @todo Vielleicht noch mehr aufteilen => Hooks
+     * 
+     * @return string
+     * 
+     */
+    function render() { 
+        //session_start();
+        $this->theme_functions();   
+        $this->html_header();
+        $this->header();        
+        $this->content();
+        $this->sidebar();        
+        $this->footer();
+        $this->html_footer();    
+    }
+    
+    /**
+     * HTML Header
+     *
+     * Bindet die ganzen Includes vor </head> ein
+     * 
+     */
+    function html_header() {
+        echo "<!DOCTYPE html>\n<html>\n";
+        echo "<head>\n";
+        if(is_array($headers = $this->get_includes('header'))) {
+            foreach($headers as $header) {
+                echo "\t" . $header . "\n";
+            }
+        }
+        echo "</head>\n";
+        echo "<body>\n";
+    }
+    
+    function header() {
+        /**
+	       * Der im Browser sichtbare Teil nach <body>
+         * 
+         */
+         $nav = new menu();
+         $nav->config(array('id' => 1));
+         echo $nav->html();
+    }
+    
+    /**
+     * Content
+     * 
+     * Hier wird entschieden, welche Theme Dateien eingebunden werden.
+     *
+     * @todo Muss weiter aufgeteilt werden um Hooks einzubauen und das ganze dynamischer zu gestalten.
      *  
      * @return false
      * 
      */ 
-    function object_path() { 
+    function content() { 
+    
         $this->type = !empty($this->request('type')) ? $this->request('type') : "default"; // default
         $this->id = !empty($this->request('id')) ? $this->request('id') : false; // 0
+        
         switch($this->type) {
             case "post":
             case "page":
@@ -121,75 +183,82 @@ class theme extends system {
             default:
                 $this->view = "default"; 
                 break;
-        }
-        
-        $system = new system();
-        
-        switch($this->view) {        
-            case "single": 
-                $item = $this->single($this->type,$this->id); 
-                if(is_file(ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->type . ".php")) {                
-                    include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->type . ".php";                    
+        }   
+             
+        $system = new system(); /** Muss System hier wirklich initiiert werden? - dzt ja */  
+              
+        switch($this->view) { 
+            /**
+             * Ein einzelnes Objekt
+             * 
+             */
+            case "single":             
+                $item = $this->single(array('type'=>$this->type,'id'=>$this->id)); /** Ist das noch notwendig?!? */                 
+                if(is_file($single=ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->type . ".php")) {                
+                    include $single;                    
                 } else {                
                     include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php";                   
-                }
+                }                
             break;
+            /**
+             * Liste von Objekten
+             *
+             * @todo Pagination
+             * @todo search
+             *
+             */
             case "archive":
-                include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive.php";
+                if(is_file(ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $this->type . ".php")) {                
+                    include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $this->type . ".php";                    
+                } else {                
+                    include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive.php";                   
+                }
             break;            
+            /**
+             * Wenn die Seite ohne Parameter aufgerufen wird
+             * 
+             */
             case "default": 
                 include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";
             break;        
-        }    
-        return false;      
-    }
-
-    /**
-     * Ausgabe aller Komponenten
-     * Die einzelnen Schritte sind in Funktionen aufgeteilt, um Trigger aufrufen zu koennen.
-     * 
-     * @todo
-     * 
-     * @return string
-     * 
-     */
-    function render() {
-    
-        /** Theme Settings importieren */
-        include ABSPATH . 'content' . DS . 'themes' . DS . $this->settings('site_theme') . DS . 'functions.php';
-    
-        $this->get_header();
-
-        echo "<div class='main-wrapper'>\n";
-        
-        $this->object_path();
-        
-        echo "</div>";
-        
-        $this->get_footer();
-    
+        }       
     }
     
     /**
-     * Gibt den HTML Header aus
+     * Sidebar
+     * 
+     * @todo $system muss initiiert werden
      * 
      */
-    function get_header() {
-        echo "<html>\n";
-        echo "<head>\n";
-        $this->get_includes('header');
-        echo "</head>\n";
-        echo "<body>";
+    function sidebar() { 
+        $system = new system();
+        if(is_file($sidebar_tpl = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar-" . $this->type . ".php")) {                
+            include $sidebar_tpl;                    
+        } else {                
+            include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar.php";                   
+        }        
+    }
+    
+    function footer() {
+        $this->attribution();
     }
     
     /**
-     * Gibt den HTML Footer aus.
+     * HTML Foot
      * 
      */
-    function get_footer() {
-        $this->get_includes('footer');
+    function html_footer() {
         echo "</body>\n";
+        if(is_array($footers = $this->get_includes('footer'))) {
+            foreach($footers as $footer) {
+                echo "\t" . $footer . "\n";
+            }
+        }
         echo "</html>";
+    }
+    
+    function attribution() {
+        echo "Powered by <a href='https://github.com/zarat/simplepress' target='_blank'>Simplepress</a>";
     }
 
 }
