@@ -144,7 +144,7 @@ abstract class core {
          * Metadaten fuer jedes Item mit ausgeben.
          * 
          */
-        if(isset($metadata) && $metas = $this->single_meta($item['id'])) {
+        if((isset($metadata) && $metadata == 1) && $metas = $this->single_meta($item['id'])) {
             $archive = array_merge($archive, array_column($metas, 'v', 'k'));
         }
         return (false !== $archive) ? $archive : false;
