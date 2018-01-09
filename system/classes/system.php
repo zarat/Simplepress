@@ -2,8 +2,6 @@
 
 /**
  * @author Manuel Zarat
- * @date 05.01.2018
- * @license http://opensource.org/licenses/MIT
  * 
  */
 
@@ -30,21 +28,37 @@ class system extends core {
     
     /**
      * Wenn ein Theme File mit dem Namen wie das Theme heisst '<THEME-DIR>/<THEME-NAME>.php' existiert (was es sollte!) wird es hier eingebunden und initiiert.
-     * Das Custom Theme sollte dann natuerlich von THEME ableiten.
+     * 
+     * Das ganze muss aber natuerlich auch laufen, wenn ein Theme kaputt oder geloescht ist.
      * 
      * Ansonsten wird ein Dummy Theme initiiert.
      * 
-     * @todo
+     * @todo Was wenn das Theme nicht funktioniert? Fallback?
      *
      * @return false
      *
      */
     private function setup_theme() {
+        /**
+         * Pruefe, ob Themedatei existiert
+         * 
+         */
         if(is_file($custom_theme_file=ABSPATH . 'content' . DS . 'themes' . DS . $this->settings('site_theme') . DS . 'theme.php')) {
+            /**
+             * Wenn ja, includen und Theme initiieren
+             * 
+             */
             include $custom_theme_file; 
             $custom_theme = $this->settings('site_theme');
             $this->theme = new $custom_theme;
         } else {
+            /**
+             * Wenn nicht, wird das Theme Dummy aufgerufen
+             * Stylesheet u.a fehlen dann aber..
+             * Nochmal auf settings.php pruefen? Dzt in theme::default_header()
+             * @see theme.php
+             *
+             */
             $this->theme = new theme();
         }
         return false;               
@@ -68,6 +82,43 @@ class system extends core {
             }
         }
         return false;
+    }
+    
+    /**
+     * @todo Prueft dzt nur, welche Ordner im Ordner ../content/themes/* enthalten sind.
+     * 
+     */
+    function installed_themes() {
+        $themes = null;        
+        if ($files = opendir( ABSPATH . 'content' . DS . 'themes')) {        
+            while (false !== ($file = readdir($files))) { if ($file!='.' && $file!='..'){ $themes[] = $file; } }        
+            closedir($files);    
+        }        
+        return $themes;    
+    }
+    
+    /**
+     * Wird leider (noch) fuers Adminbackend gebraucht
+     *
+     * @todo
+     */
+    function update_object($config) {
+        $this->update($config);
+    }
+    
+    /**
+     * Uebersetzt einen String aus einer Sprachdatei  ../system/lang/*
+     * 
+     * @todo
+     * 
+     */
+    function _t($str) {
+        if($this->settings('site_language')) {
+            include ABSPATH . 'system' . DS . 'lang' . DS . 'lang-' . $this->settings('site_language') . '.php';
+        } else {
+            include ABSPATH . 'system' . DS . 'lang' . DS . 'lang.php';
+        }
+        return isset($lang[$str]) ? $lang[$str] : "Language file is missing or corrupt.";
     }
 
 }
