@@ -14,7 +14,8 @@
 
 abstract class core {               
  
-    private $db = false;  
+    private $db = false; 
+    private $last_insert_id = false; 
 
     /**
      * Datenbankverbindung aufbauen
@@ -40,6 +41,9 @@ abstract class core {
     private function fetch_assoc($sql) {
         return $sql->fetch_assoc();
     }
+    final function last_insert_id() {
+        return $this->last_insert_id;
+    }
     
     /**
      * Globale Einstellungen aus der Tabelle 'settings' holen.
@@ -56,14 +60,18 @@ abstract class core {
     }
         
     /**
-     * baah, very static.. 
+     * Fuegt ein Item in die DB ein
      * 
+     * @todo Custom Fields
+     * 
+     * @return int DB::last_insert_id
      */     
     final function insert($config) {
         extract($config);
         $query = "INSERT INTO $insert VALUES $values";
         $res = $this->query($query) or 'error';
-        return $res;
+        $this->last_insert_id = $this->db->insert_id;
+        return $this->last_insert_id;
     }
     final function update($config) {
         extract($config);
@@ -83,12 +91,6 @@ abstract class core {
      * 
      * Wenn im $cfg Array ein Index "metadata" => true enthalten ist
      * werden die Metadaten mit ausgegeben!
-     * 
-     * Array(
-     *    'id' => 123,
-     *    'title' => 'A post',
-     *    'content' => 'A very long story'
-     * )
      * 
      * @param array id,..
      * @return array Item
@@ -132,17 +134,20 @@ abstract class core {
      */
     final function archive($config) {
         extract($config);
-        $result = false;
+        $archive = false;
         if($items = $this->query("SELECT $select FROM $from WHERE $where")) {
             while($item = $this->fetch_assoc($items)) {
-                $result[] = $item;
-                /**
-                 * @todo Metdata
-                 * 
-                 */ 
+                $archive[] = $item; 
             }
         }
-        return (false !== $result) ? $result : false;
+        /**
+         * Metadaten fuer jedes Item mit ausgeben.
+         * 
+         */
+        if(isset($metadata) && $metas = $this->single_meta($item['id'])) {
+            $archive = array_merge($archive, array_column($metas, 'v', 'k'));
+        }
+        return (false !== $archive) ? $archive : false;
     }
         
 }
