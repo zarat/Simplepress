@@ -38,8 +38,8 @@ $(document).ready(function() {
     } );
 } );
 </script>
-<!-- Der selbst gehostete will auf Mobiles nicht angezeigt werden :S https://cdn.ckeditor.com/4.5.10/standard/ckeditor.js -->
-<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+<!-- Der selbst gehostete will auf Mobiles nicht angezeigt werden :S - fix https://cdn.ckeditor.com/4.5.10/standard/ckeditor.js -->
+<script type="text/javascript" src="https://cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
 
 </head>
 
