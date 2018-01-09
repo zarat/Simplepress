@@ -2,8 +2,6 @@
 
 /**
  * @author Manuel Zarat
- * @date 05.01.2018
- * @license http://opensource.org/licenses/MIT
  * 
  */
 
@@ -35,6 +33,7 @@ private $sublevel = 0;
     protected function items($id=0) {
         $query = array('select' => '*','from' => 'menu','where' => "menu_id=" . $this->menu_id . " AND parent=$id ORDER BY sort");
         if($parents = $this->archive($query)) {
+        
             if($this->sublevel<1) { echo "\n" . str_repeat("\t", $this->sublevel) . "<ul class='menu level-$this->sublevel'>\n"; } /** Noch kin Submenu!!! */
             else { echo "\n" . str_repeat("\t", $this->sublevel) . "<ul class='$this->ul level-$this->sublevel'>\n"; } 
             $this->sublevel = $this->sublevel+1;  
@@ -45,8 +44,16 @@ private $sublevel = 0;
                 }
                 echo str_repeat("\t", $this->sublevel) . "</li>\n";
             } 
-            $this->sublevel = $this->sublevel-1;       
+            $this->sublevel = $this->sublevel-1;
+            /**
+             * Adminlink bei letzter Iteration
+             * 
+             */
+            if($this->sublevel<1 && isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1) { 
+                echo str_repeat("\t", $this->sublevel) . "<li><a href='../admin'>Admin</a></li>\n"; 
+            }       
             echo str_repeat("\t", $this->sublevel) . "</ul>\n";
+            
         }
     }
     
@@ -57,7 +64,12 @@ private $sublevel = 0;
      */
     public function html() {    
         echo "<div class='$this->div'>";
-        $this->items();
+        echo "<div>";
+        echo "<label class='responsive_menu' for='responsive_menu'>";
+        echo "<span>Menu</span>";
+        echo "</label>";
+        echo "<input id='responsive_menu' type='checkbox'>"; 
+        $this->items();                  
         echo "</div>\n\n";
     }
 
