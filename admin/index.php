@@ -62,19 +62,7 @@ $(document).ready(function() {
 
     <ul class="menu">
     
-        <li><a href="#">System</a>
-                
-                <ul>
-                
-                    <li><a href="./?page=config_pages">Einstellungen</a></li>
-                    
-                    <li><a href="./?page=style">Stylesheet</a></li>
-                    
-                    <li><a href="./?page=menu_edit&menu_id=1">Menu</a></li>
-                    
-                </ul>
-            
-        </li>
+        <li><a href="./?page=config_pages">Einstellungen</a></li>
         
         <li><a href="#">Inhalte</a>
         
