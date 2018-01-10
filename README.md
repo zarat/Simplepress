@@ -1,5 +1,5 @@
 Simplepress
-=====================
+===========
 
 Objektorientiertes Content management system in PHP und SQL
 
@@ -11,7 +11,12 @@ Installation
 1. Einfach hochladen und die Seite aufrufen - wenn das Script nicht installiert ist, erscheint der Installer automatisch.
 2. Einige wichtige Grundparameter eingeben und auf installieren klicken - fertig.
 
-License
+Entwicklung
+-----------
+
+Für Entwickler oder Leute, die mithelfen wollen gibt es eine [Onlinedokumentation](http://dev.simplepress.ml)
+
+Lizenzbedingungen
 -------
 
-Derzeit unter keiner Lizenz, ich erlaube aber jedem die Freie Verwendung solange es nicht kommerzielisiert wird!
+Ich erlaube aber jedem die Freie Verwendung solange es nicht kommerzielisiert wird!
