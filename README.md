@@ -5,6 +5,8 @@ Objektorientiertes Content management system in PHP und SQL
 
 Simplepress erleichtert das Erstellen von Websites durch seinen unglaublich modularen Aufbau.
 
+Demo: [Link](https://simplepress.ml)
+
 Installation
 ------------
 
