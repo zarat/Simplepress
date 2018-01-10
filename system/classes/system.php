@@ -98,15 +98,6 @@ class system extends core {
     }
     
     /**
-     * Wird leider (noch) fuers Adminbackend gebraucht
-     *
-     * @todo
-     */
-    function update_object($config) {
-        $this->update($config);
-    }
-    
-    /**
      * Uebersetzt einen String aus einer Sprachdatei  ../system/lang/*
      * 
      * @todo
