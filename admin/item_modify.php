@@ -28,7 +28,7 @@ $text = strtr($text, $list);
 empty($_POST['category'])?$category=null:$category=$_POST['category']; 	
 
 $cfg = array("table" => "object","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category' WHERE id=$id");
-$system->update_object($cfg);
+$system->update($cfg);
     
 echo "Deine &Auml;nderungen wurden gespeichert. <a href='../admin/?page=item_modify&id=$id'>Erneut bearbeiten</a>";       	
 
