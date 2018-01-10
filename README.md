@@ -1,4 +1,4 @@
-Simplepress Alpha (not production ready)
+Simplepress Alpha (not production ready!!!)
 ===========
 
 Objektorientiertes Content management system in PHP und SQL
@@ -7,7 +7,7 @@ Simplepress erleichtert das Erstellen von Websites durch seinen unglaublich modu
 
 Demo: [Link](https://simplepress.ml)
 
-Installation
+Installation (coming soon!)
 ------------
 
 1. Einfach hochladen und die Seite aufrufen - wenn das Script nicht installiert ist, erscheint der Installer automatisch.
