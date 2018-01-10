@@ -1,4 +1,4 @@
-Simplepress
+Simplepress Alpha (not production ready)
 ===========
 
 Objektorientiertes Content management system in PHP und SQL
