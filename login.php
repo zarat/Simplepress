@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * Login script triple-alpha
+ *
+ * @author Manuel Zarat
+ *
+ */
+
 session_start();
 
 include "load.php";
