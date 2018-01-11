@@ -25,24 +25,6 @@ $site_settings = $system->settings();
 
 if (isset($_POST['submit'])) {
 
-$mysqli = $system;
-
-if(isset($_POST['startpage'])) {
-
-$startpage = $_POST['startpage'];
-
-//$delete_frontpage = new connection();
-//$delete_frontpage->query("UPDATE object SET startpage=0 WHERE startpage=1");
-$cfg = array('table'=>'object','set'=>'startpage=0 WHERE startpage=1');
-$system->update($cfg);
-
-//$update_frontpage = new connection();
-//$update_frontpage->query("UPDATE object SET startpage=1 WHERE id=$startpage");
-$cfg = array('table'=>'object','set'=>'startpage=1 WHERE id=$startpage');
-$system->update($cfg);
-
-}
-
 if(!empty($_POST['site_name'])) {
 
 $new_sitename = htmlentities($_POST['site_name']);
@@ -137,9 +119,7 @@ if($s = $system->archive($cfg)) {
 
 <p>Design w&auml;hlen</p>
 
-<p>
-
-<select name="site_theme" class="input" onchange="chg('site_theme',this.value)">
+<p><select name="site_theme" class="input" onchange="chg('site_theme',this.value)">
 
 <?php
 
@@ -158,43 +138,6 @@ print("<option value=\"$theme\">$theme</option>");
 }		    
 ?>
 </select>
-
-</p>
-
-<p>Startseite w&auml;hlen</p>
-
-<p>
-
-<select name="startpage" class="input" onchange="chg('startpage',this.value)">
-
-<option value="0">Die letzten Artikel</option>
-
-<?php
-//$query2 = new connection();
-//$query2->query("SELECT * FROM object WHERE type='page' ORDER BY id");
-
-$cfg = array('select'=>'*','from'=>'object','where'=>'type="page" ORDER BY id');
-$articles = $system->archive($cfg);
-
-foreach($articles as $row){
-
-$title = $row['title'];
-
-$cfg = array('select'=>'*','from'=>'object','where'=>'startpage=1');
-$art = $system->archive($cfg);
-$id = $art[0]['id'];
-
-if($row['id'] == $id) {
-print("<option value=\"$id\" selected=\"selected\">$title </option>");
-} else {
-print("<option value=\"$row[id]\">$title </option>");
-}
-
-
-}		    
-?>
-</select>
-
 </p>
 
 <p>Allgemeine SEO Keywords</p>
