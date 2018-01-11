@@ -123,83 +123,84 @@ div{
      * Main
      *
      */
-    .main-wrapper{
+    .sp-main-wrapper{
         width:1000px;
-         background:white;
-         margin:0px auto;
-         margin-top:20px;
-         margin-bottom:20px;
+        background:white;
+        margin:0px auto;
+        margin-top:20px;
+        margin-bottom:20px;
         box-shadow: 0 0 2px 2px silver;
     }
-    .main-header{
+    .sp-main-header{
     }
-    .main-header-logo{
+    .sp-main-header-logo{
         padding:10px;
     }
     /**
      * Content
      * 
      */
-    .content {
+    .sp-content {
          width:750px;
          float:left;
          padding:10px;
+         clear:both;
     }
-    .content-item {
+    .sp-content-item {
          margin-bottom:10px;
     }
-    .content-item-head {
+    .sp-content-item-head {
          font-size:24px;
          padding:10px;
          background:none;
     }
-    .content-item-head-secondary {
+    .sp-content-item-head-secondary {
          padding:10px;
          color:grey;
          border-top:1px solid silver;
     }
-    .content-item-body {
+    .sp-content-item-body {
          padding:10px;
     }
     /**
      * SIDEBAR 
      * 
      */
-    .sidebar{
+    .sp-sidebar{
          width:250px;
          float:right;
          padding:10px;
     }
-    .sidebar-item{
+    .sp-sidebar-item{
          margin-bottom:10px;
     }
-    .sidebar-item-head{
+    .sp-sidebar-item-head{
          font-size:24px;
          background:none;
          padding:10px;
     }
-    .sidebar-item-body{
+    .sp-sidebar-item-body{
          background:none;
     }
-    .sidebar-item-box-head{
-         font-weight:bold;
-         padding:10px;
+    .sp-sidebar-item-box-head{
+        font-weight:bold;
+        padding:10px;
     }
-    .sidebar-item-box-head-secondary {
-         padding:10px;
-         padding-top:0px;
+    .sp-sidebar-item-box-head-secondary {
+        padding:10px;
+        padding-top:0px;
         color:grey;
-         border-top:1px solid silver;
+        border-top:1px solid silver;
     }
-    .sidebar-item-box-body {
-         padding:10px;
-         color:grey;
+    .sp-sidebar-item-box-body {
+        padding:10px;
+        color:grey;
     }
     /**
      * Footer
      * 
      */
-    .footer{
+    .sp-footer{
         background:#f2f2f2;
         display:block;
         box-shadow: 0 0 2px 2px silver;
@@ -213,7 +214,7 @@ div{
      * Main
      * 
      */
-    .main-wrapper{
+    .sp-main-wrapper{
         width:90%;
          background:white;
          margin:0px auto;
@@ -221,71 +222,71 @@ div{
          margin-bottom:10px;
         box-shadow: 0 0 2px 2px silver;
     }
-    .main-header{
+    .sp-main-header{
     }
-    .main-header-logo{
+    .sp-main-header-logo{
         padding:10px;
     }
-    .admin-content {
+    .sp-admin-content {
          padding:10px;
     }
     /**
      * Content
      * 
      */
-    .content {
+    .sp-content {
          width:100%;
          float:left;
          padding:10px;
     }
-    .content-item {
+    .sp-content-item {
          margin-bottom:10px;
     }
-    .content-item-head {
+    .sp-content-item-head {
          font-size:24px;
          padding:10px;
          background:none;
     }
-    .content-item-head-secondary {
+    .sp-content-item-head-secondary {
          font-size:16px;
          padding:10px;
          color:grey;
          background:none;
          border-top:1px solid silver;
     }
-    .content-item-body {
+    .sp-content-item-body {
          padding:10px;
     }
     /**
      * Sidebar
      * 
      */
-    .sidebar{
+    .sp-sidebar{
          width:100%;
          float:left;
          padding:10px;
     }
-    .sidebar-item{
+    .sp-sidebar-item{
          border-top:0px solid silver;
     }
-    .sidebar-item-head{
+    .sp-sidebar-item-head{
          font-size:24px;
          background:none;
          padding:10px;
     }
-    .sidebar-item-body{
+    .sp-sidebar-item-body{
          background:none;
     }
-    .sidebar-item-box-head{
+    .sp-sidebar-item-box-head{
          font-weight:bold;
          padding:10px;
     }
-    .sidebar-item-box-head-secondary {
+    .sp-sidebar-item-box-head-secondary {
          padding:10px;
          color:grey;
          border-top:1px solid silver;
     }
-    .sidebar-item-box-body {
+    .sp-sidebar-item-box-body {
          padding:10px;
          color:grey;
     }
@@ -293,7 +294,7 @@ div{
      * Footer
      * 
      */
-    .footer{
+    .sp-footer{
         background:#f2f2f2;
         display:block;
         box-shadow: 0 0 2px 2px silver;
