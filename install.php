@@ -62,7 +62,7 @@ $create_table_settings = $db->query($table_settings);
 // Erstellt eine Tabelle für Einstellungen
 $table_object_meta = "CREATE TABLE IF NOT EXISTS `object_meta` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `item_id` int(11) NOT NULL,
+  `meta_item_id` int(11) NOT NULL,
   `meta_key` varchar(30) NOT NULL,
   `meta_value` longtext NOT NULL,
   PRIMARY KEY (`id`)
