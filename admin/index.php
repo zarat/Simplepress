@@ -85,7 +85,7 @@ input{
 
 <body>
 
-<div class="main-wrapper">
+<div class="sp-main-wrapper">
 
     <div class="nav-container">
     <div>
@@ -121,7 +121,7 @@ if(isset($_GET['page'])) {
 }
 
 ?>
-
+<div style="clear:both;"></div>
 </div>
 </body>
 </html>
