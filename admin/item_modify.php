@@ -93,85 +93,85 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
       break;
     }
     
-echo "<form method=\"post\">";
-
-echo '<p>' . $system->_t('item_modify_title') . ' - <a onclick="toggle(\'more\');" href="#">weitere Optionen</a> - <a href="' . $link . '">ansehen</a></p>'; 
-echo "<p><input name=\"title\" type=\"text\" value=\"$title\"></p>";
-
-echo "<div id=\"more\" style=\"display:none;\">";
+    echo "<form method=\"post\">";
     
-    echo '<p>' . $system->_t('item_modify_category') . '</p>';
-    echo "<p><select name=\"category\">";
-    $cfg = array('select'=>'*','from'=>'object','where'=>'type="category"');
-    $a = $system->archive($cfg);
-    for($i=0;$i<count($a);$i++) {
-        if($result['category'] == $a[$i]['id']) {
-            echo "<option value='" . $a[$i]['id'] . "' selected='selected'>" . $a[$i]['title'] . "</option>";
-        } else {
-            echo "<option value='" . $a[$i]['id'] . "'>" . $a[$i]['title'] . "</option>";
+    echo '<p>' . $system->_t('item_modify_title') . ' - <a onclick="toggle(\'more\');" href="#">weitere Optionen</a> - <a href="' . $link . '">ansehen</a></p>'; 
+    echo "<p><input name=\"title\" type=\"text\" value=\"$title\"></p>";
+    
+    echo "<div id=\"more\" style=\"display:none;\">";
+        
+        echo '<p>' . $system->_t('item_modify_category') . '</p>';
+        echo "<p><select name=\"category\">";
+        $cfg = array('select'=>'*','from'=>'object','where'=>'type="category"');
+        $a = $system->archive($cfg);
+        for($i=0;$i<count($a);$i++) {
+            if($result['category'] == $a[$i]['id']) {
+                echo "<option value='" . $a[$i]['id'] . "' selected='selected'>" . $a[$i]['title'] . "</option>";
+            } else {
+                echo "<option value='" . $a[$i]['id'] . "'>" . $a[$i]['title'] . "</option>";
+            }
         }
+        echo "</select></p>";
+        
+        echo '<p>' . $system->_t('item_modify_keywords') . '</p>'; 
+        echo "<p><input name=\"keywords\" type=\"text\" value=\"$keywords\"></p>";
+        
+        echo '<p>' . $system->_t('item_modify_description') . '</p>'; 
+        echo "<p><input name=\"description\" type=\"text\" value=\"$description\"></p>";    
+        
+    echo "</div>"; // close #more
+    
+    echo '<p>' . $system->_t('item_modify_content') . '</p>';
+    echo "<p><textarea cols=\"40\" rows=\"20\" name=\"text\" id=\"ckeditor\" class=\"ckeditor\">$text</textarea></p>";
+    
+    // close weiter unten wg custom fields
+    
+    $js ='<script>'."\n";
+    $js.='$(document).ready(function() {'."\n";
+    $js.='    var max_fields      = 10;'."\n";
+    $js.='    var wrapper         = $(".container1"); '."\n";
+    $js.='    var add_button      = $(".add_form_field"); '."\n";
+    $js.='    '."\n";
+    $js.='    var x = 1; '."\n";
+    $js.='    $(add_button).click(function(e){ '."\n";
+    $js.='        e.preventDefault();'."\n";
+    $js.='        if(x < max_fields){ '."\n";
+    $js.='            x++; '."\n";
+    $js.='            $(wrapper).append(\'<div><input type="text" name="custom_field_key[]"/> <input type="text" name="custom_field_value[]"/> <a href="#" class="delete">Delete</a></div>\'); //add input box'."\n";
+    $js.='        } else {'."\n";
+    $js.='		        alert(\'You Reached the limits\')'."\n";
+    $js.='		    }'."\n";
+    $js.='    });    '."\n";
+    $js.='    $(wrapper).on("click",".delete", function(e){ '."\n";
+    $js.='        e.preventDefault(); $(this).parent(\'div\').remove(); x--;'."\n";
+    $js.='    })'."\n";
+    $js.='});'."\n";
+    $js.='</script>';
+    
+    echo $js;
+    
+    echo "<a onclick=\"toggle('custom_fields')\" style=\"cursor:pointer;\">Custom fields</a>";
+    
+    echo "<div id=\"custom_fields\" style=\"display:none;\">";
+    echo "<div class=\"container1\">";
+    echo "<a class=\"add_form_field\">Neues Feld</a>";
+    
+    if($custom_fields = $system->single_meta($_GET['id'])) {
+        foreach($custom_fields as $field) {
+            echo "<div><input type='text' name='custom_field_key[]' value='$field[k]'> <input type='text' name='custom_field_value[]' value='$field[v]'><a href='#' class='delete'>Delete</a></div>";
+        }
+    } else {
+        echo "<div><input type='text' name='custom_field_key[]'> <input type='text' name='custom_field_value[]'><a href='#' class='delete'>Delete</a></div>";
     }
-    echo "</select></p>";
     
-    echo '<p>' . $system->_t('item_modify_keywords') . '</p>'; 
-    echo "<p><input name=\"keywords\" type=\"text\" value=\"$keywords\"></p>";
-    
-    echo '<p>' . $system->_t('item_modify_description') . '</p>'; 
-    echo "<p><input name=\"description\" type=\"text\" value=\"$description\"></p>";    
-    
-echo "</div>"; // close #more
-
-echo '<p>' . $system->_t('item_modify_content') . '</p>';
-echo "<p><textarea cols=\"40\" rows=\"20\" name=\"text\" id=\"ckeditor\" class=\"ckeditor\">$text</textarea></p>";
-
-// close weiter unten wg custom fields
-
-$js ='<script>'."\n";
-$js.='$(document).ready(function() {'."\n";
-$js.='    var max_fields      = 10;'."\n";
-$js.='    var wrapper         = $(".container1"); '."\n";
-$js.='    var add_button      = $(".add_form_field"); '."\n";
-$js.='    '."\n";
-$js.='    var x = 1; '."\n";
-$js.='    $(add_button).click(function(e){ '."\n";
-$js.='        e.preventDefault();'."\n";
-$js.='        if(x < max_fields){ '."\n";
-$js.='            x++; '."\n";
-$js.='            $(wrapper).append(\'<div><input type="text" name="custom_field_key[]"/> <input type="text" name="custom_field_value[]"/> <a href="#" class="delete">Delete</a></div>\'); //add input box'."\n";
-$js.='        } else {'."\n";
-$js.='		        alert(\'You Reached the limits\')'."\n";
-$js.='		    }'."\n";
-$js.='    });    '."\n";
-$js.='    $(wrapper).on("click",".delete", function(e){ '."\n";
-$js.='        e.preventDefault(); $(this).parent(\'div\').remove(); x--;'."\n";
-$js.='    })'."\n";
-$js.='});'."\n";
-$js.='</script>';
-
-echo $js;
-
-echo "<a onclick=\"toggle('custom_fields')\" style=\"cursor:pointer;\">Custom fields</a>";
-
-echo "<div id=\"custom_fields\" style=\"display:none;\">";
-echo "<div class=\"container1\">";
-echo "<a class=\"add_form_field\">Neues Feld</a>";
-
-if($custom_fields = $system->single_meta($_GET['id'])) {
-    foreach($custom_fields as $field) {
-        echo "<div><input type='text' name='custom_field_key[]' value='$field[k]'> <input type='text' name='custom_field_value[]' value='$field[v]'><a href='#' class='delete'>Delete</a></div>";
-    }
-} else {
-    echo "<div><input type='text' name='custom_field_key[]'> <input type='text' name='custom_field_value[]'><a href='#' class='delete'>Delete</a></div>";
-}
-
-echo "</div>";
-echo "</div>";
-echo "<p><input type=\"submit\" value=\"speichern\"></p>";
-echo "<div style=\"clear:both;\"></div>";
-echo "</form>";
+    echo "</div>";
+    echo "</div>";
+    echo "<p><input type=\"submit\" value=\"speichern\"></p>";
+    echo "<div style=\"clear:both;\"></div>";
+    echo "</form>";
 
 echo "</div>"; // close sp-content
 
 }
  
-?>					               
+?>
