@@ -26,12 +26,12 @@ $formlogin=NULL;
 
 <body>
 
-<div class="main-wrapper">
+<div class="sp-main-wrapper">
 
 <!-- HTML Header -->
-    <div class="main-header"> 
+    <div class="sp-main-header"> 
 
-        <div class="main-header-logo">
+        <div class="sp-main-header-logo">
 
             <h1>SimplePress</h1>
             <h4>Einfaches, kostenloses Blog CMS</h4>
@@ -48,7 +48,7 @@ $nav->html();
 ?>
 
 
-<div class="main-body">
+<div class="sp-main-body">
 <div class='content'>
 
 <!-- Hier kommt der Login -->
@@ -97,18 +97,18 @@ location.replace("admin");
 </div>
 
 <!-- Sidebar -->
-<div class='sidebar'>
+<div class='sp-sidebar'>
 
-<div class="sidebar-item-box">
-<div class="sidebar-item-box-head">Hinweis</div>
-<div class="sidebar-item-box-body">Achte immer darauf, das dir keiner beim anmelden zusieht!</div>
+<div class="sp-sidebar-item-box">
+<div class="sp-sidebar-item-box-head">Hinweis</div>
+<div class="sp-sidebar-item-box-body">Achte immer darauf, das dir keiner beim anmelden zusieht!</div>
 </div>
 
 </div>
 <!-- Sidebar Ende -->
 
 <div style='clear:both;'></div><!-- Der Footer -->
-<div class="footer" style="padding:10px;"></div>
+<div class="sp-footer" style="padding:10px;"></div>
 
 <!-- Der Wrapper aus dem Header wird geschlossen -->
 </div>
