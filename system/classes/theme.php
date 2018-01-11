@@ -53,8 +53,6 @@ class theme extends system {
      * @param string $include Was soll eingefuegt werden
      * 
      * @return void
-     * 
-     * @example: set_include('header','i am the header');
      */
     function set_include($position,$include) {
         $this->positions[$position][] = $include;
