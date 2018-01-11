@@ -6,13 +6,6 @@
  */
 
 /**
- * Installation
- * 
- */
-$lang['system_not_installed'] = "Es scheint, Simplepress ist nicht installiert.";
-$lang['please_enter_setup_details'] = "Bitte gib deine Serverdaten ein und klicke auf installieren.";
-
-/**
  * Config pages
  *
  */
