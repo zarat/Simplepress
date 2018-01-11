@@ -107,9 +107,8 @@ location.replace("admin");
 </div>
 <!-- Sidebar Ende -->
 
-<div style="clear:both;"></div>
 <div style='clear:both;'></div><!-- Der Footer -->
-<div class="footer" style="padding:10px;">&copy; 2017 SimplePress 0.1 | <a href='./rss.php'>RSS 2.0</a> | powered by <a href="https://github.com/zarat/simplepress" target="_blank">SimplePress</a></a></div>
+<div class="footer" style="padding:10px;"></div>
 
 <!-- Der Wrapper aus dem Header wird geschlossen -->
 </div>
