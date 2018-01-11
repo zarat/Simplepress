@@ -64,7 +64,6 @@ private $sublevel = 0;
      */
     public function html() {    
         echo "<div class='$this->div'>";
-        echo "<div>";
         echo "<label class='responsive_menu' for='responsive_menu'>";
         echo "<span>Menu</span>";
         echo "</label>";
