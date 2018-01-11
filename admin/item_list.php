@@ -35,7 +35,7 @@ $(document).ready(function() {
 
 <script src="../admin/js/admin.js"></script>
 
-<div class="content">
+<div class="sp-content">
 
 <h3><a href="./?page=item_add&type=<?php echo $type; ?>">Neu</a></h3><br>
 

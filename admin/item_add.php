@@ -12,7 +12,7 @@ if(!isset($_GET['type'])) {
 
 $posttype = $_GET['type'];
 
-echo "<div class=\"content\">";
+echo "<div class=\"sp-content\">";
 
 echo '<h3>' . $system->_t('item_add') . '</h3>';
 

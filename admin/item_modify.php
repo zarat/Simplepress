@@ -3,7 +3,8 @@
 // Wenn keine ID übergeben wurde, abbrechen!
 if(!isset($_GET['id']) && !isset($_POST['id'])) { echo "<p>Keine ID gesetzt</p>"; exit(); }
 
-echo "<div class=\"content\">";
+echo "<div class=\"sp-content\">";
+
 echo '<h3>' . $system->_t('item_modify') . '</h3>';
 
 if (isset($_GET['id']) && isset($_POST['title'])) {
@@ -168,7 +169,8 @@ echo "</div>";
 echo "<p><input type=\"submit\" value=\"speichern\"></p>";
 echo "<div style=\"clear:both;\"></div>";
 echo "</form>";
-echo "</div>";
+
+echo "</div>"; // close sp-content
 
 }
  
