@@ -49,7 +49,7 @@ $nav->html();
 
 
 <div class="sp-main-body">
-<div class='content'>
+<div class='sp-content'>
 
 <!-- Hier kommt der Login -->
 
