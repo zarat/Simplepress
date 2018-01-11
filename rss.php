@@ -16,29 +16,29 @@ include "load.php";
 
 $system = new system(); 
 
-$channel_url = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+$channel_url = "https://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 $item_url = str_replace(basename(__file__), '', $channel_url);
 
-echo "<channel>\n";
-echo "<title>" . $system->settings('site_name') . " > Updates</title>\n";
-echo "<link>" . $channel_url . "</link>\n";
-echo "<description>" . html_entity_decode($system->settings('site_description')) . "</description>\n";
+echo "<channel>";
+echo "<title>" . $system->settings('site_title') . " > Updates</title>";
+echo "<link>" . $channel_url . "</link>";
+echo "<description>" . html_entity_decode($system->settings('site_description')) . "</description>";
 
 $cfg = array("select"=>"*","from"=>"object","where"=>"type='post' AND status=1 ORDER BY id DESC");
 $rss = $system->archive($cfg);
     
 foreach($rss as $row)    {
     
-    echo "<item>\n";
-    echo "<title>" . htmlspecialchars(html_entity_decode($row['title'])) . "</title>\n";
-    echo "<link>" . htmlspecialchars($item_url . "?type=post&id=" . $row['id']) . "</link>\n";
-    echo "<description>" . substr(strip_tags(html_entity_decode($row['content'])),0,320) . "</description>\n";
-    echo "<pubDate>" . gmdate("Y-m-d\TH:i:s\Z", $row['date']) . "</pubDate>\n";
-    echo "</item>\n";
+    echo "<item>";
+    echo "<title>" . html_entity_decode($row['title']) . "</title>";
+    echo "<link>" . $item_url . "?type=" . $row['type'] . "&id=" . $row['id'] . "</link>";
+    echo "<description>" . substr(strip_tags(html_entity_decode($row['content'])),0,320) . "</description>";
+    echo "<pubDate>" . date(DATE_RFC822, strtotime(gmdate("Y-m-d\TH:i:s\Z", $row['date']))) . "</pubDate>"; /** moderne RSS Feeds haben RFC822 konformes Datum! */
+    echo "</item>";
 
 }
 
-echo "</channel";
+echo "</channel>";
 echo "</rss>";
 
 ?>
