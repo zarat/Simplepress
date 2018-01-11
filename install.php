@@ -160,5 +160,3 @@ Willkommen zum Installationsassistenten. Gib deine Serverdaten ein und klicke au
 <input type="text" name="adminpass" placeholder="Administrator Passwort"><br /><br />
 <input type="submit" value="Installation starten">
 </form>
-
-<?php } ?>
