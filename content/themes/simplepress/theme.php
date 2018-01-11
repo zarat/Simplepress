@@ -29,7 +29,7 @@ class simplepress extends theme {
     
     function header() {
         echo "<div class='main-header'>\n";
-        echo "<div class='main-header-logo'><h1>".$this->settings('site_name')."</h1><h4>".$this->settings('site_subtitle')."</h4></div>\n";
+        echo "<div class='main-header-logo'><h1>".$this->settings('site_title')."</h1><h4>".$this->settings('site_subtitle')."</h4></div>\n";
         echo "</div>\n";
         $this->nav();
     }
