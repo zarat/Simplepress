@@ -1,1 +1,1 @@
-Dieser Adminbereich ist im absoluten Alphastadium und ändert sich fast täglich!
+Der Adminbereich ist im auch noch im Alphastadium und ändert sich öfter!
