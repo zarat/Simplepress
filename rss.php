@@ -16,7 +16,8 @@ include "load.php";
 
 $system = new system(); 
 
-$channel_url = "https://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+$channel_url = $protocol . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 $item_url = str_replace(basename(__file__), '', $channel_url);
 
 echo "<channel>";
@@ -31,7 +32,7 @@ foreach($rss as $row)    {
     
     echo "<item>";
     echo "<title>" . html_entity_decode($row['title']) . "</title>";
-    echo "<link>" . $item_url . "?type=" . $row['type'] . "&id=" . $row['id'] . "</link>";
+    echo "<link>" . htmlspecialchars($item_url . "?type=" . $row['type'] . "&id=" . $row['id']) . "</link>";
     echo "<description>" . substr(strip_tags(html_entity_decode($row['content'])),0,320) . "</description>";
     echo "<pubDate>" . date(DATE_RFC822, strtotime(gmdate("Y-m-d\TH:i:s\Z", $row['date']))) . "</pubDate>"; /** moderne RSS Feeds haben RFC822 konformes Datum! */
     echo "</item>";
