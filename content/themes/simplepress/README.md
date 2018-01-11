@@ -1,1 +1,1 @@
-Dieses Beispieltheme befindet sich im Alphastadium und ändert sich fast täglich.
+Das Beispieltheme ist auch noch im absoluten Entwicklungsstadium und ändert sich mit dem System sehr oft!
