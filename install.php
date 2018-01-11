@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Installer (alpha!!!)
+ *
+ * @author Manuel Zarat
+ *
+ */
+
 if(!empty($_POST['host']) && !empty($_POST['user']) && !empty($_POST['password']) && !empty($_POST['database']) && !empty($_POST['adminpass']) && !empty($_POST['adminlogin'])) {
 
 $host = $_POST['host']; //mostly this is localhost if mysql server on the same machine.
