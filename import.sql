@@ -53,7 +53,7 @@ CREATE TABLE `settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `settings` (`key`, `value`) VALUES
-('site_name',	'SimplePress 2.0'),
+('site_title',	'SimplePress'),
 ('site_subtitle',	'while(!perfect) { develop() }'),
 ('site_keywords',	'CMS, Homepage, Website'),
 ('site_description',	'Objektorientiertes CMS in PHP und MySQL'),
