@@ -7,17 +7,17 @@
  * 
  */
 
+header("Content-type: text/xml");
+
+echo "<?xml version=\"1.0\" encoding=\"utf-8\" " . "?" . ">";
+echo "<rss version=\"2.0\">";
+
 include "load.php";
 
 $system = new system(); 
 
 $channel_url = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 $item_url = str_replace(basename(__file__), '', $channel_url);
-
-header("Content-type: text/xml");
-
-echo "<?xml version=\"1.0\" encoding=\"utf-8\" " . "?" . ">";
-echo "<rss version=\"2.0\">";
 
 echo "<channel>\n";
 echo "<title>" . $system->settings('site_name') . " > Updates</title>\n";
