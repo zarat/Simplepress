@@ -104,10 +104,9 @@ class system extends core {
      * 
      */
     function _t($str) {
-        if($this->settings('site_language')) {
+        include ABSPATH . 'system' . DS . 'lang' . DS . 'lang.php';
+        if(is_file(ABSPATH . 'system' . DS . 'lang' . DS . 'lang-' . $this->settings('site_language') . '.php')) {
             include ABSPATH . 'system' . DS . 'lang' . DS . 'lang-' . $this->settings('site_language') . '.php';
-        } else {
-            include ABSPATH . 'system' . DS . 'lang' . DS . 'lang.php';
         }
         return isset($lang[$str]) ? $lang[$str] : "Language file is missing or corrupt.";
     }
