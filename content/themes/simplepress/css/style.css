@@ -29,7 +29,7 @@ pre {
      display:block;
 }
  form input[type=text] {
-    padding:1em;
+    padding:0.5em;
 }
  form input[type=button] {
 }
