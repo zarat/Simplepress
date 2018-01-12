@@ -79,7 +79,7 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     $title = $result['title'];
     $keywords = $result['keywords'];
     $description = $result['description'];
-    $text = $result['content'];
+    $text = htmlspecialchars($result['content']); // htmlspecialchars weil sonst formatierungen interpretiert werden!
             
     switch($result['type']) {
       case ("page"):
