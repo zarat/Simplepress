@@ -23,7 +23,7 @@ if(!empty($_POST['title'])) {
     $description = htmlentities($_POST['description'], ENT_QUOTES, 'UTF-8');
     
     /** Der Text wurde vom CKEditor aufbereitet */
-    $text = $_POST['text'];   
+    $text = htmlentities($_POST['text'], ENT_QUOTES, 'UTF-8');   
     $category = $_POST['category'];     
     $date = time();
     
