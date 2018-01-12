@@ -1,5 +1,12 @@
 <?php 
+
+/**
+ * Simplepress MenuManager alpha
+ * 
+ */
+
 require_once '../load.php';
+
 ?>
 
     <link rel="stylesheet" type="text/css" href="./menumanager/style.css">
