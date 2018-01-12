@@ -64,10 +64,10 @@ if(false !== $results) {
     echo "<br>";       
     if($status==0) { 
         echo "<span id='item_status_link_$result[id]'><a style='cursor:pointer' onclick=\"update_status($result[id],1)\">aktivieren</a></span>";
-        echo " - <a href=\"#\" onClick=\"delete_item('../admin/item_delete.php?id=$result[id]',$result[id])\">entfernen</a>"; 
+        echo " - <a href=\"#\" onClick=\"delete_item($result[id])\">entfernen</a>"; 
     } else { 
         echo "<span id='item_status_link_$result[id]'><a style='cursor:pointer' onclick=\"update_status($result[id],0)\">deaktivieren</a></span>";
-        echo " - <a href=\"#\" onClick=\"delete_item('../admin/item_delete.php?id=$result[id]',$result[id])\">entfernen</a>";
+        echo " - <a href=\"#\" onClick=\"delete_item($result[id])\">entfernen</a>";
     }      
     echo "</td>";      
     echo "\n</tr>\n";    
