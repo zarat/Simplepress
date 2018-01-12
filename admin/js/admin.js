@@ -1,10 +1,10 @@
-function delete_item(url,id) {
+function delete_item(id) {
 	go_on = confirm("Diesen Inhalt wirklich entfernen?");
 	if (go_on) {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET",url,true);
-    xmlhttp.send();
-    document.getElementById(id).style="display:none";
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET","item_delete.php?id="+id,true);
+		xmlhttp.send();
+		document.getElementById(id).style="display:none";
 	}
 }
 function update_status(id,status) {
@@ -21,9 +21,9 @@ function update_status(id,status) {
 	}
 }
 function toggle(id) {
-    var e = document.getElementById(id);
-    if(e.style.display == 'block')
-       e.style.display = 'none';
-    else
-       e.style.display = 'block';
+  var e = document.getElementById(id);
+  if(e.style.display == 'block')
+     e.style.display = 'none';
+  else
+     e.style.display = 'block';
 }
