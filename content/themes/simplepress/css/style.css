@@ -73,21 +73,13 @@ blockquote {
     padding-left: 15px;
     border-left: 0.5em solid #ccc;
 }
-pre, code {
-     -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-     box-sizing: border-box;
-     width:100%;
+pre,code {
      padding:10px;
-     overflow-x:scroll;
+     overflow-x:auto;
      background:ghostwhite;
      font-family: "Courier 10 Pitch", Courier, monospace;
      font-size: 95%;
      line-height: 140%;
-     white-space: pre;
-     white-space: pre-wrap;
-     white-space: -moz-pre-wrap;
-     white-space: -o-pre-wrap;
 }
 div{
      -webkit-box-sizing: border-box;
