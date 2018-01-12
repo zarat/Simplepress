@@ -10,6 +10,7 @@ echo '<h3>' . $system->_t('item_modify') . '</h3>';
 if (isset($_GET['id']) && isset($_POST['title'])) {
 
     $id=$_GET['id'];
+    
     $title = htmlentities($_POST['title'], ENT_QUOTES, 'utf-8');      
     $keywords = htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8');    
     $description = htmlentities($_POST['description'], ENT_QUOTES, 'utf-8');
@@ -62,8 +63,10 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
         $insertcfg['values'] = $values;
         $system->insert($insertcfg);    
     }
-        
-    echo "Deine &Auml;nderungen wurden gespeichert. <a href='../admin/?page=item_modify&id=$id'>Erneut bearbeiten</a>";       	
+    
+    $it = $system->single(array('id' => $id));
+       
+    echo "Deine &Auml;nderungen wurden gespeichert. <a href='../admin/?page=item_modify&id=$id'>Erneut bearbeiten</a> oder <a href='../?type=" . $it['type']. "&id=$id'>ansehen</a>";       	
 
 } else {	
 
@@ -76,10 +79,10 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     
     $res_id = $result['id'];
     
-    $title = $result['title'];
-    $keywords = $result['keywords'];
-    $description = $result['description'];
-    $text = htmlspecialchars($result['content']); // htmlspecialchars weil sonst formatierungen interpretiert werden!
+    $title = 		$result['title'];
+    $keywords =     $result['keywords'];
+    $description =  $result['description'];
+    $text = htmlspecialchars($result['content']);
             
     switch($result['type']) {
       case ("page"):
