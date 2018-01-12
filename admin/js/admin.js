@@ -1,6 +1,6 @@
 function delete_item(id) {
-	go_on = confirm("Diesen Inhalt wirklich entfernen?");
-	if (go_on) {
+	confirmed = confirm("Diesen Inhalt wirklich entfernen?");
+	if (confirmed) {
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.open("GET","item_delete.php?id="+id,true);
 		xmlhttp.send();
