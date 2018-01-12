@@ -11,7 +11,7 @@ if($item = $system->single(array('type'=>$system->request('type'),'id'=>$system-
 
     echo "<div class ='sp-content-item'>\n";
     echo "<div class ='sp-content-item-head'>" . $item['title'] . "</div>\n";
-    echo "<div class ='sp-content-item-body'>" . html_entity_decode($item['content']) . "</div>\n";
+    echo "<div class ='sp-content-item-body'>" . $item['content'] . "</div>\n";
     echo "</div>\n";
     
 } else {
