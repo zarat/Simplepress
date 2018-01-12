@@ -76,10 +76,10 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     
     $res_id = $result['id'];
     
-    $title = 		$result['title'];
-    $keywords =     $result['keywords'];
-    $description =  $result['description'];
-    $text = 		($result['content']);
+    $title = $result['title'];
+    $keywords = $result['keywords'];
+    $description = $result['description'];
+    $text = $result['content'];
             
     switch($result['type']) {
       case ("page"):
