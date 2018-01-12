@@ -78,8 +78,4 @@ echo "</tbody>\n</table>";
 
 ?>
 
-    </tbody>
-</table>
-
-
 </div>
