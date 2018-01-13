@@ -137,7 +137,7 @@ abstract class core {
         $archive = false;
         if($items = $this->query("SELECT $select FROM $from WHERE $where")) {
             while($item = $this->fetch($items)) {            
-                if($metadata && $metas = $this->single_meta($item['id'])) {
+                if(isset($metadata) && $metas = $this->single_meta($item['id'])) {
                     $new_item = array_merge($item, array_column($metas, 'v', 'k'));
                     $item = $new_item;
                 }            
