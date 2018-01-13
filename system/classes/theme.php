@@ -12,37 +12,12 @@
 class theme extends system {
 
     /**
-     * THEMES muessen VIEWS definieren, die vorgeben, welche Positionen ein Theme hat.
-     * So koennen auch Themes mit individuellen VIEWS arbeiten (ShoppingCart, Listen, Profil, ...)
-     *
-     * @todo Eigene VIEWS erstellen und verwalten
-     * 
-     */
-    private $views = array('default','single','archive');
-    
-    /**
      * Themes muessen Positionen aufweisen, in welche man Inhalte einfuegen kann.
      * 
      * @todo Themes sollten Positionen erweitern bzw definieren koennen
      *
      */
     private $positions = array('header','content','sidebar','footer');
-
-    /**
-     * Zu bestimmten Zeiten waehrend dem Seitenaufbau werden SYSTEM Events geworfen.
-     * 
-     * @todo Events rufen Trigger auf, die den Aufbau zur Laufzeit erweitern sollen.
-     * 
-     */
-    private $events = array();
-    
-    /**
-     * Zu jedem registrierten Event werden zugehoerige Trigger aufgerufen.
-     * 
-     * @todo Eigene Trigger sollen registriert werden koennen.
-     * 
-     */
-    private $triggers = array();
     
     /**
      * Registriert Inhalte zum Einbinden an bestimmten Positionen (Hooks ->)
@@ -54,7 +29,7 @@ class theme extends system {
      * 
      * @return void
      */
-    function set_include($position,$include) {
+    final function set_include($position,$include) {
         $this->positions[$position][] = $include;
     }
     
@@ -66,7 +41,7 @@ class theme extends system {
      * @param string position
      * 
      */
-    function get_includes($position) {
+    final function get_includes($position) {
         if(isset($this->positions[$position])) {
             foreach($this->positions[$position] as $include) {
                 $includes[] = $include;
@@ -75,22 +50,6 @@ class theme extends system {
         }
         return false;
     }
-    
-    /**
-     * Setzt einen Trigger zu einem bestimmten Event
-     * 
-     * @todo Soll das Event ueberschreiben oder ueberladen koennen.
-     *
-     */
-     function set_trigger($event, $trigger) { }
-     
-     /**
-      * Ruft Trigger zu einem bestimmten Event auf.
-      * 
-      * @todo
-      *
-      */
-    function execute_triggers($event) { }
     
     /**
      * Wenn kein Theme aktiv ist, gibt es auch kein Stylesheet. Das ist Mist!
@@ -114,44 +73,82 @@ class theme extends system {
      * @return string
      * 
      */
-    function render() { 
-        //session_start();
-        $this->theme_functions();   
-        $this->html_header();
-        $this->header();        
-        $this->content();
-        $this->sidebar();        
-        $this->footer();
-        $this->html_footer();    
+    final function render() { 
+        $this->theme_functions();
+           
+        $this->head();
+        
+        $this->before_header();
+            $this->header();       
+        
+        $this->before_content(); 
+            $this->content();
+        
+        $this->before_sidebar();
+            $this->sidebar();       
+        
+        $this->before_footer(); 
+            $this->footer();
+        
+        $this->foot();    
     }
-    
+  
     /**
      * HTML Header
      *
-     * Bindet die ganzen Includes vor </head> ein
+     * Bindet die ganzen Metatags und Includes vor </head> ein
+     * 
+     * @todo Dokumenttitel bei Items!!!
      * 
      */
-    function html_header() {
+    final function head() {
         echo "<!DOCTYPE html>\n<html>\n";
         echo "<head>\n";
+        echo "<title>" . $this->settings('site_title') . "</title>\n";        
+        echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />\n";
+        echo "<meta name='viewport' content='width=device-width, initial-scale=1.0' />\n";        
+        echo "<meta name='generator' content='SimplePress - https://github.com/zarat/simplepress' />\n";
+        echo "<meta name='keywords' content='" . $this->settings('site_keywords') . "'>\n";
+        echo "<meta name='description' content='" . $this->settings('site_description') . "'>\n";
+        echo "<link rel='stylesheet' href='../content/themes/" . $this->settings('site_theme') . "/css/style.css'>\n";
+        
         if(is_array($headers = $this->get_includes('header'))) {
             foreach($headers as $header) {
-                echo "\t" . $header . "\n";
+                echo $header . "\n";
             }
         }
         echo "</head>\n";
         echo "<body>\n";
     }
     
+    /**
+     * Wenn etwas ganz am Anfang des HTML Markup stehen soll kommt es hierhin.
+     * 
+     * @todo
+     */
+    function before_header() { }
+    
+    /**
+     * Header 
+     * 
+     * Damit ist der im Browser sichtbare Teil nach <body> gemeint
+     * 
+     * @todo Was tun, wenn kein Menue erstellt wurde?!!!
+     * 
+     */    
     function header() {
-        /**
-	       * Der im Browser sichtbare Teil nach <body>
-         * 
-         */
          $nav = new menu();
          $nav->config(array('id' => 1));
          echo $nav->html();
     }
+    
+    /**
+     * Wenn etwas vor dem Hauptinhalt angezeigt werden soll, kommt es hierhin
+     * 
+     * @todo
+     * 
+     */
+    function before_content() { }
     
     /**
      * Content
@@ -163,7 +160,7 @@ class theme extends system {
      * @return false
      * 
      */ 
-    function content() { 
+    final function content() { 
     
         $this->type = !empty($this->request('type')) ? $this->request('type') : "default"; // default
         $this->id = !empty($this->request('id')) ? $this->request('id') : false; // 0
@@ -219,13 +216,23 @@ class theme extends system {
             case "default": 
                 include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";
             break;        
-        }       
+        }
+               
     }
     
     /**
-     * Sidebar
+     * Wenn etwas vor der Sidebar angezeigt werden soll, kommt es hierhin
      * 
-     * @todo $system muss initiiert werden
+     * @todo
+     * 
+     */
+    function before_sidebar() { }
+    
+    /**
+     * Sidebar
+     * Sekundaerer Inhalt, meisstens Kategorien und letzte Artikel
+     * 
+     * @todo $system muss initiiert werden :S
      * 
      */
     function sidebar() { 
@@ -237,19 +244,33 @@ class theme extends system {
         }        
     }
     
+    /**
+     * Wenn etwas unter dem ganzen Inhalt angezeigt werden soll, kommt es hierhin
+     * 
+     * @todo
+     * 
+     */
+    function before_footer() { }
+    
+    /**
+     * Footer
+     * Mit footer ist hier der sichtbare Footer gemeint, also der untere Teil der Website.
+     * 
+     */
     function footer() {
         $this->attribution();
     }
     
     /**
-     * HTML Foot
+     * HTML Footer, also der Teil nach </html>
+     * Eigentlich nur fuer Style- und Scriptincludes
      * 
      */
-    function html_footer() {
+    final function foot() {
         echo "</body>\n";
         if(is_array($footers = $this->get_includes('footer'))) {
             foreach($footers as $footer) {
-                echo "\t" . $footer . "\n";
+                echo $footer . "\n";
             }
         }
         echo "</html>";
