@@ -14,17 +14,9 @@ class simplepress extends theme {
         $nav->config(array('id' => 1));
         $nav->html();
     }
-
-    function render() {   
-        $this->theme_functions();
-        $this->html_header();
+    
+    function before_header() {
         echo "<div class='sp-main-wrapper'>\n";
-        $this->header();
-        $this->content();
-        $this->sidebar();
-        $this->footer();
-        echo "</div>\n";
-        $this->html_footer();    
     }
     
     function header() {
@@ -35,8 +27,8 @@ class simplepress extends theme {
     }
     
     function sidebar() {
-            parent::sidebar();
-            echo "<div style='clear:both;'></div>";
+        parent::sidebar();
+        echo "<div style='clear:both;'></div>";
     }
     
     function footer() {
@@ -44,7 +36,15 @@ class simplepress extends theme {
         parent::footer();
         echo " <a href='https://validator.w3.org/nu/?doc=https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]' target='_blank'>HTML5 Validator</a>";
         echo "</div>";
+        echo "</div>";
     }
+    
+    function before_content() {
+        if(!$this->request('type')) {
+            echo "<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/VWIQmgApIZI\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>";
+        }
+    }
+    
 }
 
 ?>
