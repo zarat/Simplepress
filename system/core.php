@@ -116,7 +116,7 @@ abstract class core {
     final function single_meta($item_id) {
         $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM object_meta WHERE meta_item_id=$item_id"); 
         $metadata = false;
-        while($metas = $this->fetch_assoc($item_meta)) {
+        while($metas = $this->fetch($item_meta)) {
             $metadata[] = $metas;
         }      
         return ($metadata) ? $metadata : false;
@@ -136,16 +136,13 @@ abstract class core {
         extract($config);
         $archive = false;
         if($items = $this->query("SELECT $select FROM $from WHERE $where")) {
-            while($item = $this->fetch_assoc($items)) {
+            while($item = $this->fetch($items)) {            
+                if($metadata && $metas = $this->single_meta($item['id'])) {
+                    $new_item = array_merge($item, array_column($metas, 'v', 'k'));
+                    $item = $new_item;
+                }            
                 $archive[] = $item; 
             }
-        }
-        /**
-         * Metadaten fuer jedes Item mit ausgeben.
-         * 
-         */
-        if((isset($metadata) && $metadata == 1) && $metas = $this->single_meta($item['id'])) {
-            $archive = array_merge($archive, array_column($metas, 'v', 'k'));
         }
         return (false !== $archive) ? $archive : false;
     }
