@@ -7,6 +7,36 @@
 
 class system extends core {
 
+    private $hooks = false;
+    
+    /**
+     * add an action (function), defined in theme/functions.php
+     * 
+     */
+    function add_action($hook, $placement, $function) {    
+        $this->hooks[$hook][$placement][] = $function;    
+    }
+    
+    /**
+     * check if a hook is registered for a function
+     * 
+     */
+    function has_action($hook, $placement) {
+        return isset($this->hooks[$hook][$placement]);
+    }
+    
+    /**
+     * call hook at a specific placement with/without params
+     * 
+     */
+    function do_action($hook, $placement, $params=false) {
+        if(isset($this->hooks[$hook][$placement])) { 
+            foreach($this->hooks[$hook][$placement] as $action) {
+                call_user_func($action, $params);
+            }
+        }
+    }    
+    
     /**
      * Ein THEME, das definiert, wie der Seitenaufbau ablaeuft und aussieht.
      * Das Theme muss zur Laufzeit initiiert werden, kommt aber aus der DB
