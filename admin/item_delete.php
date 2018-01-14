@@ -4,7 +4,6 @@ include "../load.php";
 
 $system = new system();
   
-$cfg = array("from"=>"object","where"=>"id=$id");
-$system->delete($cfg);
+$system->delete(array("from"=>"object","where"=>"id=$_GET[id]"));
 
 ?>
