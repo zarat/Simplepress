@@ -41,7 +41,7 @@ class simplepress extends theme {
     
     function before_content() {
         if(!$this->request('type')) {
-            echo "<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/VWIQmgApIZI\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>";
+            //echo "<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/VWIQmgApIZI\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>";
         }
     }
     
