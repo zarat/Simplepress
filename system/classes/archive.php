@@ -17,7 +17,7 @@ private $last = 0;
  * Ein Array mit den Inhalten
  * 
  */
-private $posts = array();
+private $posts = [];
 
 private $post_count = 0;
 
@@ -26,6 +26,10 @@ private $post_count = 0;
             $this->last = $this->request( 'last' );            
         }        
         $this->fill_posts();        
+    }
+    
+    function count_posts() {
+        return ( $this->posts );
     }
     
     /**
@@ -40,7 +44,7 @@ private $post_count = 0;
         } else {        
             $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY id ASC") );    
         } 
-        $this->post_count = count( $this->posts );       
+        $this->post_count = sizeof( $this->posts );       
     }
 
     function have_posts() {            
