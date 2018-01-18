@@ -188,7 +188,15 @@ class system extends core {
             
                 if(!empty($parameters[$key])) {
                     
-                    return $parameters[$key];
+                    /** 
+                    SQL Injection 
+                    @todo HOTFIX 
+                    */
+                    if($key == 'id') {
+                        return (int)$parameters[$key];
+                    } else {
+                        return $parameters[$key];
+                    }
                     
                 } else {
                 
