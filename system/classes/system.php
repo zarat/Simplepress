@@ -74,7 +74,7 @@ class system extends core {
     } 
     
     /**
-     * Themes koennen nicht alle Methoden ueberschreiben, z.B head() und foot() und auch nicht alle Methoden rufen Hooks auf, deshalb können Metadaten eingesetzt werden.
+     * Themes koennen nicht alle Methoden ueberschreiben, z.B head() und foot() und auch nicht alle Methoden rufen Hooks auf, deshalb kÃ¶nnen Metadaten eingesetzt werden.
      * 
      * @deprecated Das koennen eigentlich auch Hooks uebernehmen
      * 
@@ -188,7 +188,11 @@ class system extends core {
             
                 if(!empty($parameters[$key])) {
                 
-                    return $parameters[$key];
+                    if($key == 'id') {
+                        return (int)$parameters[$key];
+                    } else {
+                        return $parameters[$key];
+                    }
                     
                 } else {
                 
