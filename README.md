@@ -14,7 +14,7 @@ Installation
 Entwicklung
 -----------
 
-Für Leute, die mithelfen wollen gibt es eine [Onlinedokumentation](http://dev.simplepress.ml), die fast täglich - zumindest bei allen Änderungen die auch im Repository landen - aktualisiert wird.
+Für Leute, die mithelfen wollen gibt es eine [Onlinedokumentation](http://dev.simplepress.ml), die zumindest bei allen Änderungen die auch im Repository landen, aktualisiert wird.
 
 Lizenzbedingungen
 -----------------
