@@ -278,7 +278,7 @@ class theme extends system {
     
     function attribution() {
     
-        echo "Powered by <a href='https://github.com/zarat/simplepress' target='_blank'>Simplepress</a>";
+        echo "Powered by <a href='https://github.com/zarat/simplepress' target='_blank'>Simplepress</a> | <a href='../rss.php'>RSS</a>";
         
     }
 
