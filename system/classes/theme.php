@@ -159,7 +159,9 @@ class theme extends system {
                 
                 $archive = new archive();
                 $archive->archive_init();
+                
                 /** @todo HANDLE 404 */
+                if( $archive->count_posts() < 1) { $this->error404(); break; }
                                            
                 if( is_file( $custom_archive_file ) ) {                
                     include $custom_archive_file;                    
