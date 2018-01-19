@@ -12,7 +12,7 @@ require_once '../load.php';
     <link rel="stylesheet" type="text/css" href="./menumanager/style.css">
     <link rel="stylesheet" href="./menumanager/font-awesome/css/font-awesome.min.css">
 
-<div>
+<div class ="sp-content">
     
 <h3>Menu Manager</h3>
 <p>Hier kannst du deine Hauptnavigation bearbeiten</p>
@@ -20,23 +20,8 @@ require_once '../load.php';
     
     <div id="load"></div>
 
-    <table>
-        <tr>
-            <td>Label</td>
-            <td>:</td>
-            <td><input type="text" id="label" placeholder="Fill label" required></td>
-        </tr>
-        <tr>
-            <td>Link</td>
-            <td>:</td>
-            <td><input type="text" id="link" placeholder="Fill link" required></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td><button id="submit">Submit</button> <button id="reset">Reset</button></td>
-        </tr>
-    </table>
+    <input type="text" id="label" placeholder="Label" required> <input type="text" id="link" placeholder="Link" required></td>
+    <button id="submit">add</button>
     <input type="hidden" id="id">
     <br /><br />
 
