@@ -159,8 +159,8 @@ class theme extends system {
                 
                 $archive = new archive();
                 $archive->archive_init();
-                
                 /** @todo HANDLE 404 */
+                
                 if( $archive->count_posts() < 1) { $this->error404(); break; }
                                            
                 if( is_file( $custom_archive_file ) ) {                
@@ -173,10 +173,11 @@ class theme extends system {
                         
             case "default": 
             
-                $latest = $system->archive(array('select' => '*','from' => 'object', 'where' => 'type="post" AND status=1 ORDER BY id DESC'));
-                
-                /** @todo HANDLE 404 */ 
-                if(!$latest) { $this->error404(); return; }
+                $latest = new archive();
+                $latest->archive_init();
+
+                /** @todo HANDLE 404 */                
+                if( $latest->count_posts() < 1) { $this->error404(); break; }
                 
                 include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";
                 
