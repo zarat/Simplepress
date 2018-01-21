@@ -39,12 +39,47 @@ private $post_count = 0;
      * 
      */
     final function fill_posts() {        
-        if( $this->request( 'last' ) ) {         
-            $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' AND category='" . $this->request( 'id' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
-        } else {        
-            $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY id ASC") );    
-        } 
+    
+        if( $this->request( 'type' ) && $this->request( 'type' ) == 'category' ) {
+        
+            if( $this->request( 'last' ) ) {
+                     
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' AND category='" . $this->request( 'id' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
+            
+            } else {        
+            
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY id ASC") );    
+            
+            } 
+        
+        } elseif( $this->request( 'type' ) && $this->request( 'type' ) != 'category' ) {
+        
+            if( $this->request( 'last' ) ) {
+                     
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='" . $this->request( 'type' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
+            
+            } else {        
+            
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='" . $this->request( 'type' ) . "' ORDER BY id ASC") );    
+            
+            } 
+        
+        } else {
+        
+            if( $this->request( 'last' ) ) {
+                     
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
+            
+            } else {        
+            
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' ORDER BY id ASC") );    
+            
+            }       
+        
+        }
+        
         $this->post_count = sizeof( $this->posts );       
+    
     }
 
     function have_posts() {            
@@ -63,8 +98,18 @@ private $post_count = 0;
     }
 
     function pagination() {
-        if( $this->displayed_this_page >= $this->max_per_page && $this->post_count > 1 ) {
-            echo "<div class='sp-content-item'><div class='sp-content-item-head'><a href='../?type=" . $this->request( 'type' ) . "&id=" . $this->request( 'id' ) . "&last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>"; 
+        if( $this->displayed_this_page >= $this->max_per_page && $this->post_count > 1 ) {  
+                
+            if( $this->request( 'type' ) && $this->request( 'type' ) == 'category' ) {  
+                        
+                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a href='../?type=category&id=" . $this->request( 'id' ) . "&last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";                    
+                                
+            } else {
+                        
+                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a href='../?last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";
+                                
+            }
+                        
         }         
     }
 
