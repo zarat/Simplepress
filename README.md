@@ -19,4 +19,4 @@ Für Leute, die mithelfen wollen gibt es eine [Onlinedokumentation](http://dev.s
 Lizenzbedingungen
 -----------------
 
-Jedem ist die Freie Verwendung gestattet solange es nicht kommerzielisiert wird!
+Jedem ist die Freie Verwendung gestattet solange es nicht monetarisiert wird!
