@@ -90,7 +90,7 @@ private $post_count = 0;
         return ( count($this->posts) > 0) ? true : false;    
     }
     
-    function the_post() {   
+    function the_post( $strip_tags = false, $content_length = false ) {   
         $post = @array_pop( $this->posts );        
         $this->displayed_this_page++;        
         $this->last = $post['id']; 
