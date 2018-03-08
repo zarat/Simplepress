@@ -93,7 +93,17 @@ private $post_count = 0;
     function the_post() {   
         $post = @array_pop( $this->posts );        
         $this->displayed_this_page++;        
-        $this->last = $post['id'];        
+        $this->last = $post['id']; 
+        
+        if($strip_tags ) { $post['content'] = strip_tags(html_entity_decode($post['content'])); }
+        
+        if($content_length) {
+            $line=$post['content'];
+            if (preg_match('/^.{1,'.$content_length.'}\b/s', $post['content'], $match)) {
+                $post['content']=$match[0];
+            }
+        }
+        
         return $post;        
     }
 
