@@ -44,11 +44,11 @@ private $post_count = 0;
         
             if( $this->request( 'last' ) ) {
                      
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' AND category='" . $this->request( 'id' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
             
             } else {        
             
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY id ASC") );    
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY id ASC") );    
             
             } 
         
@@ -56,11 +56,11 @@ private $post_count = 0;
         
             if( $this->request( 'last' ) ) {
                      
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='" . $this->request( 'type' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='" . $this->request( 'type' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
             
             } else {        
             
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='" . $this->request( 'type' ) . "' ORDER BY id ASC") );    
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='" . $this->request( 'type' ) . "' ORDER BY id ASC") );    
             
             } 
         
@@ -68,11 +68,11 @@ private $post_count = 0;
         
             if( $this->request( 'last' ) ) {
                      
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
             
             } else {        
             
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "type='post' ORDER BY id ASC") );    
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' ORDER BY id ASC") );    
             
             }       
         
