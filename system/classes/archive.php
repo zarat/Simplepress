@@ -38,48 +38,36 @@ private $post_count = 0;
      * @todo kategorien ausnehmen!!!!!
      * 
      */
-    final function fill_posts() {        
-    
+    final function fill_posts() { 
+               
         if( $this->request( 'type' ) && $this->request( 'type' ) == 'category' ) {
         
-            if( $this->request( 'last' ) ) {
-                     
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
-            
-            } else {        
-            
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY id ASC") );    
-            
+            if( $this->request( 'last' ) ) {      
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                 
+            } else {                   
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY id ASC") );               
             } 
-        
-        } elseif( $this->request( 'type' ) && $this->request( 'type' ) != 'category' ) {
-        
-            if( $this->request( 'last' ) ) {
-                     
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='" . $this->request( 'type' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
-            
-            } else {        
-            
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='" . $this->request( 'type' ) . "' ORDER BY id ASC") );    
-            
-            } 
-        
-        } else {
-        
-            if( $this->request( 'last' ) ) {
-                     
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );      
-            
-            } else {        
-            
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' ORDER BY id ASC") );    
-            
-            }       
-        
-        }
-        
-        $this->post_count = sizeof( $this->posts );       
-    
+                   
+        } elseif( $this->request( 'type' ) && $this->request( 'type' ) == 'search' ) {  
+
+            if( $this->request( 'last' ) ) {      
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . $this->request( 'term' ) . "%' OR content LIKE '%" . $this->request( 'term' ) . "%' ) AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                 
+            } else {                   
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . $this->request( 'term' ) . "%' OR content LIKE '%" . $this->request( 'term' ) . "%' ) ORDER BY id ASC") );               
+            }                                
+                 
+        } else {   
+             
+            if( $this->request( 'last' ) ) {                     
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND id < " . $this->request( 'last' ) . " AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                  
+            } else {                    
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' ORDER BY id ASC") );                
+            }  
+                         
+        }  
+             
+        /* set post count */
+        $this->post_count = sizeof( $this->posts );           
     }
 
     function have_posts() {            
