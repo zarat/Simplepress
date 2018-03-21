@@ -59,7 +59,7 @@ private $post_count = 0;
         } else {   
              
             if( $this->request( 'last' ) ) {                     
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND id < " . $this->request( 'last' ) . " AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                  
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                  
             } else {                    
                 $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' ORDER BY id ASC") );                
             }  
