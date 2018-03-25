@@ -34,7 +34,7 @@ class simplepress extends theme {
     function footer() {
         echo "<div class='sp-footer' style='padding:10px;'>";
         parent::footer();
-        echo " <a href='https://validator.w3.org/nu/?doc=https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]' target='_blank'>HTML5 Validator</a>";
+        echo " <a href='https://validator.w3.org/nu/?doc=https://" . $_SERVER[HTTP_HOST] . urlencode($_SERVER[REQUEST_URI]) . "' target='_blank'>HTML5 Validator</a>";
         echo "</div>";
         echo "</div>";
     }
