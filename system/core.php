@@ -27,9 +27,12 @@ abstract class core {
         if(is_file(ABSPATH . "config.php")) { include ABSPATH . "config.php"; } else { include ABSPATH . "install.php"; exit(); }                
         $this->db = new mysqli($dbhost,$dbuser,$dbpass,$dbname);                                                 
     }
- 
-     final function __destruct() {          
-        $this->db->close();                                                 
+
+    final function __destruct() {          
+        if($this->db) {
+            $this->db->close();
+            $this->db = false;
+        }                                                 
     }
     
     private function sql_escape_string($query) {
