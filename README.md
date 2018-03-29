@@ -1,7 +1,7 @@
 Simplepress (alpha!!!)
 ===========================================
 
-Simplepress soll ein objektorientiertes Content management system in PHP und SQL werden, das durch seinen modularen Aufbau und seine Erweiterbarkeit das Erstellen von Webanwendungen erleichtert. Es befindet sich allerdings noch in aktiver Entwicklung.
+Simplepress soll ein objektorientiertes Content management system in PHP und SQL werden, das durch seinen modularen Aufbau und seine Erweiterbarkeit das Erstellen von Webanwendungen erleichtern soll. Das Integrieren von eigenen Themes ist kinderleicht - Ordner hochladen, im Controlpanel aktivieren, fertig! Es befindet sich allerdings noch in aktiver Entwicklung und soll noch durch ein Pluginsystem und Usermanagement erweitert werden.
 
 Demo: [Link](https://simplepress.ml)
 
