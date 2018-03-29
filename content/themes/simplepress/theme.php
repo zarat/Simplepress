@@ -27,7 +27,9 @@ class simplepress extends theme {
     }
     
     function sidebar() {
+        echo "<div class='sp-sidebar'>";
         parent::sidebar();
+        echo "</div>";
         echo "<div style='clear:both;'></div>";
     }
     
