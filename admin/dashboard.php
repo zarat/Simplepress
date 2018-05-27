@@ -46,7 +46,7 @@ if (isset($_POST['submit'])) {
     }    
     
     echo "<p>Konfiguration wurde erfolgreich gespeichert. <b>Weiterleitung..</b></p>\n";    
-    echo "<script type=\"text/javascript\">function Redirect() {window.location = './index.php?page=config_pages';}setTimeout('Redirect()', 1000);</script>";
+    echo "<script type=\"text/javascript\">function Redirect() {window.location = './index.php?page=dashboard';}setTimeout('Redirect()', 1000);</script>";
 
 } else {
 
