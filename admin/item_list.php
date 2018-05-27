@@ -1,9 +1,8 @@
 <?php
 
 /**
- * @author Manuel Zarat
- *
- * DataTables hier hergepackt, damit sie nicht auf jeder Seite geladen werden.
+ * 
+ * Zeigt alle Items aus der Datenbank.
  * 
  */
 
