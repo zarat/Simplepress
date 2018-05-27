@@ -1,7 +1,9 @@
 <?php
 
 /**
- * @author Manuel Zarat
+ * 
+ * Bearbeitet den Status eines Items.
+ * Wird asynchron aufgerufen, deshalb load.php einbinden!
  * 
  */
 
