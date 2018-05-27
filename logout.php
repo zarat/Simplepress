@@ -1,29 +1,37 @@
 <?php
+
 session_start();
 
 include "load.php";
 
 $formpass=NULL;
 $formlogin=NULL;
+
+$system = new system();
+
+require ("config.php"); 
+
+$actual_theme = $system->settings('site_theme');
+
 ?>
-<?php require ("config.php"); ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
 <head>
 	<title>Login</title>
 
-  <link href="../content/themes/default/css/style.css" rel="stylesheet" type="text/css" />
+  <link href="../content/themes/<?php echo $system->settings('site_theme'); ?>/css/style.css" rel="stylesheet" type="text/css" />
+  <link href="../content/themes/<?php echo $system->settings('site_theme'); ?>/css/menu.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
-<div class="main-wrapper">
+<div class="sp-main-wrapper">
 
 <!-- HTML Header -->
-    <div class="main-header"> 
+    <div class="sp-main-header"> 
 
-        <div class="main-header-logo">
+        <div class="sp-main-header-logo">
 
             <h1>SimplePress</h1>
             <h4>Einfaches, kostenloses Blog CMS</h4>
@@ -40,30 +48,26 @@ $nav->html();
 ?>
 
 
-<div class="main-body">
-<div class='content'>
+<div class="sp-main-body">
+<div class='sp-content'>
 
-<!-- Hier kommt der Login -->
+<?php session_destroy(); ?>
 
-<?php
-session_destroy();
-?>
-<script language="javascript">
-<!-- 
-location.replace("admin");
--->
+<script type="text/javascript"> 
+setTimeout(window.location.replace("admin"), 2000);
 </script>
-	<h4><a href='admin'>Du bist jetzt abgemeldet</a></h4>
+
+<p>Du bist jetzt abgemeldet. Zum <a href='admin'>LOGIN</a></p>
 
 
 </div>
 
 <!-- Sidebar -->
-<div class='sidebar'>
+<div class='sp-sidebar'>
 
-<div class="sidebar-item-box">
-<div class="sidebar-item-box-head">Hinweis</div>
-<div class="sidebar-item-box-body">Achte immer darauf, das dir keiner beim anmelden zusieht!</div>
+<div class="sp-sidebar-item-box">
+<div class="sp-sidebar-item-box-head">Hinweis</div>
+<div class="sp-sidebar-item-box-body">Achte immer darauf, das dir keiner beim anmelden zusieht!</div>
 </div>
 
 </div>
@@ -71,7 +75,7 @@ location.replace("admin");
 
 <div style="clear:both;"></div>
 <div style='clear:both;'></div><!-- Der Footer -->
-<div class="footer" style="padding:10px;">&copy; 2017 SimplePress 0.1 | <a href='./rss.php'>RSS 2.0</a> | powered by <a href="https://github.com/zarat/simplepress" target="_blank">SimplePress</a></a></div>
+<div class="sp-footer" style="padding:10px;">&copy; 2017 SimplePress 0.1 | <a href='./rss.php'>RSS 2.0</a> | powered by <a href="https://github.com/zarat/simplepress" target="_blank">SimplePress</a></a></div>
 
 <!-- Der Wrapper aus dem Header wird geschlossen -->
 </div>
