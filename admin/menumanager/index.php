@@ -1,5 +1,9 @@
 <?php 
-require_once '/menumanager/config.php';
+/*
+ *
+ * Menumanager Star
+ *
+ */
 ?>
 
     <link rel="stylesheet" type="text/css" href="./menumanager/style.css">
