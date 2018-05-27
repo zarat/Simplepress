@@ -94,7 +94,7 @@ input{
     </label>
     <input id="responsive_menu" type="checkbox">
         <ul class="menu">    
-            <li><a href="./?page=config_pages">Dashboard</a>
+            <li><a href="./?page=dashboard">Dashboard</a>
                 <ul>
                     <li><a href="../">Zur Homepage</a></li>
                     <li><a href='../logout.php'>Logout</a></li>
@@ -118,7 +118,7 @@ input{
 if(isset($_GET['page'])) {
     include $_GET['page'] . ".php";
 } else {
-    include "config_pages.php";
+    include "dashboard.php";
 }
 
 ?>
