@@ -102,7 +102,7 @@ $filecontent = file_get_contents($filename);
 <form method="post">
 
 <div style="min-height:300px;">
-<input type="text" name="filename" value="<?php echo $filename; ?>">
+<input type="text" name="filename" value="<?php echo realpath($filename); ?>">
 <p><textarea name="filecontent" style="min-height:300px;resize:none;"><?php echo $filecontent; ?></textarea></p>
 </div>
 
