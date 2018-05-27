@@ -17,9 +17,8 @@ require_once '../load.php';
 
 <div class ="sp-content">
     
-<h3>Menu Manager</h3>
-<p>Hier kannst du deine Hauptnavigation bearbeiten</p>
-<br>
+<h3><?php echo $system->_t('welcome_to_menu_edit'); ?></h3>
+<p><?php echo $system->_t('menu_edit_description'); ?></p>
     
     <div id="load"></div>
 
