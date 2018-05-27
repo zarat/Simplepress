@@ -1,3 +1,12 @@
+<?php
+
+/*
+ *
+ * Bearbeiten des Stylesheets.
+ *
+ */
+?>
+
 <div>
 
 <h3>Bearbeite dein Design</h3>
