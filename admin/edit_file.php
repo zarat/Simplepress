@@ -70,7 +70,7 @@ if(isset($_POST['filename']) && isset($_POST['filecontent'])) {
     
     if(empty($filename)) {
         $get_filedir = ('..' . DS . 'content' . DS . 'themes' . DS . $aktuelles_theme . DS);
-        $filename = $get_filedir . "theme.php";
+        $filename = realpath($get_filedir . "theme.php");
     }
     
     $filecontent = file_get_contents($filename);
