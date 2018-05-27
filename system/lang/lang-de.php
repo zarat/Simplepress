@@ -20,8 +20,8 @@ $lang['change_website_description'] = "Kurzbeschreibung deiner Website";
 /**Theme Editor
  * 
  */
-$lang["welcome_to_menu_edit"] = "Willkommen zum Menumanager";
-$lang["menu_edit_description"] = "Hier kannst du die Hauptnavigation bearbeiten.<hr>";
+$lang["welcome_to_theme_edit"] = "Willkommen zum Theme Editor";
+$lang["theme_edit_description"] = "Hier kannst du die Dateien deines Themes bearbeiten.<hr>";
 
 /**
  * Menu Manager
