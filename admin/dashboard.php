@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * Startseite des Adminbereiches. 
+ * Dashboard. 
  * 
  */
 ?>
