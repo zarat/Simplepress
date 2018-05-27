@@ -1,5 +1,11 @@
 <?php
 
+/*
+ *
+ * Asynchrones Speichern der Daten von dashboard.php
+ *
+ */
+
 include("../load.php");
 include("auth.php");
 
