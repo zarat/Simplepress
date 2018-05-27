@@ -1,128 +1,102 @@
 <?php
 
-/*
+/**
  *
- * Bearbeiten des Themes.
+ * Bearbeiten de Theme Dateien.
  * 
- * Parameter file sagt, welche Datei bearbeitet werden soll
+ * GET->file sagt, welche Datei bearbeitet werden soll.
+ *
+ * POST->[] wird gespeichert und danach nochmal ausgegeben.
  *
  */
  
 require_once "../load.php";
-?>
 
-<div class="sp-content">
-
-<h3>Bearbeite dein Design</h3>
-
-<p>Ich empfehle, vorher eine Sicherungskopie zu machen ;) </p>
-
-<br>
-
-<?php 
-
-function getDirContents($dir, &$results = array()){
+/**
+ *
+ * Rekursives Auslesen eines Verzeichnisses
+ * 
+ */
+function getDirContents($dir, &$results = array()) {
     $files = scandir($dir);
-
-    foreach($files as $key => $value){
-    
-        $path = realpath($dir.DS.$value);
-        
-        if(!is_dir($path)) {
+    foreach($files as $key => $value){    
+        $path = realpath($dir . DS . $value);
+        /* Dont add directories */        
+        if(!is_dir($path)) {        
             $pi = pathinfo($path);
-            $results[] = $pi['dirname'] . DIRECTORY_SEPARATOR . $pi['basename'];
-            
-        } else if($value != "." && $value != "..") {
-        
-            getDirContents($path, $results);
-            //$results[] = $path;
-            
-        }
+            $results[] = $pi['dirname'] . DS . $pi['basename'];            
+        } else if($value != "." && $value != "..") {        
+            getDirContents($path, $results);            
+        }        
     }
-
-    return $results;
+    return $results;    
 }
 
-$sett = $system->settings();
+echo "<div class=\"sp-content\">";
+echo '<h3>' . $system->_t('welcome_to_theme_edit') . '</h3>';
+echo '<p>' . $system->_t('theme_edit_description') . '</p>'; 
 
-$aktuelles_theme = $sett['site_theme'];
-
-$filepath = dirname('..' . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . $aktuelles_theme . DIRECTORY_SEPARATOR);
-
-//default file = functions.php
+$aktuelles_theme = $system->settings('site_theme');
+$filepath = dirname('..' . DS . 'content' . DS . 'themes' . DS . $aktuelles_theme . DS);
 $filename = "theme.php";
 
 if(isset($_POST['filename']) && isset($_POST['filecontent'])) {
 
-$filename = $_POST['filename'];  
-$filecontent = $_POST['filecontent'];
-
-// in Datei schreiben
-$f = @fopen($filename, 'w');
-if (!$f) {
-        //return false;
-} else {
-        $bytes = fwrite($f, $filecontent);
-        fclose($f);
-        //return $bytes;
-}
-
-$filecontent = file_get_contents($filename);
-
-?>
-
-<form method="post">
-
-<div style="min-height:300px;">
-<input type="hidden" name="filename" value="<?php echo $filename; ?>">
-<p><textarea name="filecontent" style="min-height:300px;resize:none;"><?php echo $filecontent; ?></textarea></p>
-</div>
-
-<input type="submit" name="save">
-
-<div style="clear:both;"></div>
-
-</form>
-
-<?php
+    $filename = $_POST['filename'];  
+    $filecontent = $_POST['filecontent'];
+    
+    $f = @fopen($filename, 'w');
+    if (!$f) {
+            // @ToDo
+    } else {
+            $bytes = fwrite($f, $filecontent);
+            fclose($f);
+    }
+    
+    $filecontent = file_get_contents($filename);
+    
+    echo '<form method="post">
+        <div style="min-height:300px;">
+            <input type="hidden" name="filename" value="' . $filename . '">
+            <p><textarea name="filecontent" style="min-height:300px;resize:none;">' . $filecontent . '</textarea></p>
+        </div>
+        <input type="submit" name="save">
+        <div style="clear:both;"></div>
+    </form>';
 
 } else {
 
-//$filepath = dirname('..' . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . $aktuelles_theme . DIRECTORY_SEPARATOR);
-$filename = @$_GET['filename'];
-if(empty($filename)) {
-$get_filedir = ('..' . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . $aktuelles_theme . DIRECTORY_SEPARATOR);
-$filename = $get_filedir . "theme.php";
-}
+    $filename = @$_GET['filename'];
+    
+    if(empty($filename)) {
+        $get_filedir = ('..' . DS . 'content' . DS . 'themes' . DS . $aktuelles_theme . DS);
+        $filename = $get_filedir . "theme.php";
+    }
+    
+    $filecontent = file_get_contents($filename);
+    
+    echo '<form method="post">
+        <div style="min-height:300px;">
+            <input type="text" name="filename" value="' . $filename . '">
+            <p><textarea name="filecontent" style="min-height:300px;resize:none;">' . $filecontent . '</textarea></p>
+        </div>
+        <input type="submit" name="save">
+        <div style="clear:both;"></div>
+    </form>';
 
-$filecontent = file_get_contents($filename);
+} 
 
-?>
+echo '</div>';
+echo '<div class="sp-sidebar">';
 
-<form method="post">
-
-<div style="min-height:300px;">
-<input type="text" name="filename" value="<?php echo realpath($filename); ?>">
-<p><textarea name="filecontent" style="min-height:300px;resize:none;"><?php echo $filecontent; ?></textarea></p>
-</div>
-
-<input type="submit" name="save">
-
-<div style="clear:both;"></div>
-
-</form>
-
-<?php } ?>
-
-</div>
-
-<div class="sp-sidebar">
-<?php
 $allfilesindir = getDirContents('../content/themes/'. $system->settings('site_theme') );
 
 foreach($allfilesindir as $file) {
-        echo "<a href='./?page=edit_file&filename=$file'>" . $file . "</a><hr>";
+
+    echo "<a href='./?page=edit_file&filename=$file'>" . $file . "</a><hr>";
+    
 }
 
+echo "</div>";
+
 ?>
-</div>
