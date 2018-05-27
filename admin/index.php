@@ -96,9 +96,7 @@ input{
         <ul class="menu">    
             <li><a href="./?page=dashboard">Dashboard</a>
                 <ul>
-                    <li><a href="../">Zur Homepage</a></li>
 					<li><a href="./?page=edit_file">Theme Editor</a></li>
-                    <li><a href='../logout.php'>Logout</a></li>
                 </ul>
             </li>
             <li><a href="./?page=menu_edit&menu_id=1">Navigation</a></li>        
@@ -108,6 +106,11 @@ input{
                     <li><a href="./?page=item_list&type=post">Artikel</a></li>
                     <li><a href="./?page=item_list&type=category">Kategorien</a></li>
                 
+                </ul>
+            </li>
+            <li><a href="../">Zur Homepage</a>
+                <ul>
+                    <li><a href='../logout.php'>Logout</a></li>
                 </ul>
             </li>        
         </ul>
