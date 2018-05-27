@@ -1,6 +1,12 @@
 <?php
 
-// Wenn keine ID übergeben wurde, abbrechen!
+/**
+ * 
+ * Bearbeitet ein Item aus der Datenbank. 
+ * Wenn $_POST[] uebergeben wurde, wird es gespeichert und danach angezeigt, sonst nur angezeigt.
+ * 
+ */
+
 if(!isset($_GET['id']) && !isset($_POST['id'])) { echo "<p>Keine ID gesetzt</p>"; exit(); }
 
 echo "<div class=\"sp-content\">";
@@ -69,8 +75,6 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     echo "Deine &Auml;nderungen wurden gespeichert. <a href='../admin/?page=item_modify&id=$id'>Erneut bearbeiten</a> oder <a href='../?type=" . $it['type']. "&id=$id'>ansehen</a>";       	
 
 } else {	
-
-// ANZEIGEN
 		
     //check ID!!!
     isset($_GET['id']) ? $id=$_GET['id'] : exit();
