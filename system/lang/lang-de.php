@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Simplepress Sprachdatei
+ * Simplepress default Sprachdatei
  * 
  */
 
@@ -9,13 +9,20 @@
  * Config pages
  *
  */
-$lang['welcome_to_dashboard'] = "Willkommen im Dashboard";
-$lang['dashboard_description'] = "Das ist die Komandozentrale deiner Website.";
+$lang['welcome_to_dashboard'] = "Willkommen in deinem Dashboard";
+$lang['dashboard_description'] = "Das ist die Komandozentrale deiner Website.<hr>";
 $lang['change_website_title'] = "Titel deiner Website";
 $lang['change_website_subtitle'] = "Subtitel deiner Website";
 $lang['change_website_theme'] = "Design deiner Website";
 $lang['change_website_keywords'] = "Schlagworte deiner Website";
 $lang['change_website_description'] = "Kurzbeschreibung deiner Website";
+
+/**
+ * Menu edit
+ * 
+ */
+$lang["welcome_to_menu_edit"] = "Willkommen zum Menumanager";
+$lang["menu_edit_description"] = "Hier kannst du die Hauptnavigation bearbeiten.<hr>";
 
 /**
  * Item add
