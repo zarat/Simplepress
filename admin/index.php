@@ -97,6 +97,7 @@ input{
             <li><a href="./?page=dashboard">Dashboard</a>
                 <ul>
                     <li><a href="../">Zur Homepage</a></li>
+					<li><a href="./?page=edit_file">Theme Editor</a></li>
                     <li><a href='../logout.php'>Logout</a></li>
                 </ul>
             </li>
