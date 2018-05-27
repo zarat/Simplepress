@@ -12,16 +12,16 @@ $system = new system();
 
 function recursiveDelete($id,$system) {
 
-    // Alle unterpunkte finden
+    // Finden aller Unterpunkte..
     $get_child_items = $system->select( array( "select" => "id", "from" => "menu", "where" => "parent=$id" ) );
     
+    // Jeden hierarchisch darunter liegenden REKURSIV!!! entfernen
     foreach($get_child_items as $k => $v) { 
         $system->delete( array( "from" => "menu", "where" => "id=$v[0]" ) );
-        //echo $v[0] . "<br>";
         recursiveDelete($v[0], $system);
     }
     
-    // Menupunkt selbst entfernen
+    // Und den Menupunkt selbst entfernen
     $system->delete( array( "from" => "menu", "where" => "id=$id" ) );
 }
 
