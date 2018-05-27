@@ -1,7 +1,10 @@
 <?php 
 
 /**
- * Simplepress MenuManager alpha
+ * 
+ * Bearbeiten der Navigation.
+ * Wird asynchron aufgerufen, deshalb load.php einbinden!
+ * @ToDo
  * 
  */
 
