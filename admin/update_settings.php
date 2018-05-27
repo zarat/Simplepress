@@ -4,6 +4,8 @@
  *
  * Asynchrones Speichern der Daten von dashboard.php
  *
+ * @ToDo: Uebergebene Werte pruefen!
+ *
  */
 
 include("../load.php");
