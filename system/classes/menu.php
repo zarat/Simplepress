@@ -50,7 +50,8 @@ private $sublevel = 0;
              * 
              */
             if($this->sublevel<1 && isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1) { 
-                echo str_repeat("\t", $this->sublevel) . "<li><a href='../admin'>Admin</a></li>\n"; 
+                echo str_repeat("\t", $this->sublevel) . "<li><a href='../admin'>Admin</a></li>\n";
+                echo str_repeat("\t", $this->sublevel) . "<li><a href='../logout.php'>logout</a></li>\n";
             }       
             echo str_repeat("\t", $this->sublevel) . "</ul>\n";
             
