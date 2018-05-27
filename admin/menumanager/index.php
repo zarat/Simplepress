@@ -1,7 +1,7 @@
 <?php 
 /*
  *
- * Menumanager Star
+ * Menumanager Start
  *
  */
 ?>
