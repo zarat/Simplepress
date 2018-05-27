@@ -3,7 +3,7 @@
 /**
  * 
  * Entfernt ein Item aus der Datenbank.
- * Die Datei load.php ist eingebunden, weil die Datei asynchron aufgerufen wird.
+ * Wird asynchron aufgerufen, deshalb load.php eingebunden.
  * 
  */
 
