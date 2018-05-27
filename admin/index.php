@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author Manuel Zarat
+ * Startseite des Adminbereiches.
  * 
  */
 
