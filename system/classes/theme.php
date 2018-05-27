@@ -139,7 +139,7 @@ class theme extends system {
             
                 $single_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php"; 
                 $custom_single_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";  
-                $item = $this->single( array( 'type' => $this->request('type'), 'id' => $this->request('id') ) );
+                $item = $this->single( array( 'type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true ) );
                 
                 /** @todo  HANDLE 404 */
                 if(!$item) { $this->error404(); return; } 
