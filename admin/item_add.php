@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @author Manuel Zarat
+ * 
+ * Erstellt ein neues Item.
  * 
  */
 
