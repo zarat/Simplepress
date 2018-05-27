@@ -1,3 +1,11 @@
+<?php
+/**
+ * 
+ * Startseite des Adminbereiches. 
+ * 
+ */
+?>
+
 <script type="text/javascript">function chg(k,id) { go_on = confirm("Diesen Inhalt wirklich entfernen?"); if (go_on) { var xmlhttp = new XMLHttpRequest(); xmlhttp.open("GET","../admin/update_settings.php?setting="+k+"&value="+id,true); xmlhttp.send(); } }</script>
 
 <?php 
