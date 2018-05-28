@@ -1,4 +1,4 @@
-Beispieltheme
-=============
+Simplepress Theme
+=================
 
-Auch das Beispieltheme ist noch im absoluten Entwicklungsstadium und ändert sich mit dem System sehr oft!
+Dieses Theme ist das Standard Theme auf das auch zurückgegriffen werden, wenn man ein kaputtes Theme installiert hat.
