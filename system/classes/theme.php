@@ -180,12 +180,10 @@ class theme extends system {
             
                 $single_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php"; 
                 $custom_single_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";  
+                                               
+                if( ( $item = $this->single( array( 'type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true ) ) ) == false ) { $this->error404(); break; }                
                 $item = $this->single( array( 'type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true ) );
-                
-                $this->set_current_item($item);
-                
-                /** @todo  HANDLE 404 */
-                if(!$item) { $this->error404(); return; } 
+                $this->set_current_item($item); 
                 
                 if( is_file( $custom_single_file ) ) {                
                     include $custom_single_file;                    
@@ -202,7 +200,17 @@ class theme extends system {
                 
                 $archive = new archive();
                 $archive->archive_init();
-                /** @todo HANDLE 404 */
+
+                /**
+                 * @todo Metadaten fuer Archive, damit Header darauf zugreifen kann
+                 *
+                $this->set_current_item( array( 
+                                            'title' => 'Ein Titel', 
+                                            'keywords' => 'ein, paar, key, words', 
+                                            'description' => 'Ein paar Keywords als Description' 
+                                            ) 
+                                        );
+                */
                 
                 if( $archive->count_posts() < 1) { $this->error404(); break; }
                                            
@@ -214,12 +222,14 @@ class theme extends system {
                 
             break;
                         
-            case "default": 
+            default: 
             
+                /**
+                 * Default wird ein Archiv der letzten Items (post) gezeigt.
+                 */
                 $latest = new archive();
                 $latest->archive_init();
-
-                /** @todo HANDLE 404 */                
+                
                 if( $latest->count_posts() < 1) { $this->error404(); break; }
                 
                 include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";
@@ -228,33 +238,15 @@ class theme extends system {
                     
         }
         
-        $content = ob_get_contents(); // zwischenspeichern
+        $content = ob_get_contents(); 
         
-        ob_end_clean(); // Puffer leeren UND deaktivieren, sonst wird alles 2mal ausgegeben. ob_get_clean() leert ihn nicht!
+        /**
+         * Puffer leeren UND deaktivieren, sonst wird alles 2mal ausgegeben. ob_get_clean() leert ihn nicht!
+         */
+        ob_end_clean(); 
         
         return $content;
                
-    }
-    
-    /**
-     * @todo Einstweiliges 404 Handle
-     */
-    final function error404() {  
-          
-        if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404-" . $this->request('type') . ".php") ) {
-        
-            include $errorfile;
-            
-        } else if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404.php") ) {
-        
-            include $errorfile;
-            
-        } else {
-        
-            echo "<div class='sp-content'><div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div></div>";
-            
-        }  
-              
     }
     
     /**
@@ -304,7 +296,7 @@ class theme extends system {
      */
     function footer() {
     
-        echo $this->attribution();
+        echo "Powered by <a href='https://github.com/zarat/simplepress' target='_blank'>Simplepress</a> | <a href='../rss.php'>RSS</a>";
         
     }
     
@@ -320,14 +312,19 @@ class theme extends system {
 
     }
     
-    function attribution() {
-    
-        ob_start();        
-        echo "Powered by <a href='https://github.com/zarat/simplepress' target='_blank'>Simplepress</a> | <a href='../rss.php'>RSS</a>";
-        $c = ob_get_contents(); // zwischenspeichern        
-        ob_end_clean(); // Puffer leeren UND deaktivieren, sonst wird alles 2mal ausgegeben. ob_get_clean() leert ihn nicht!        
-        return $c;
-        
+    /**
+     * @todo Einstweiliges 404 Handle
+     */
+    final function error404() { 
+           
+        if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404-" . $this->request('type') . ".php") ) {        
+            include $errorfile;            
+        } else if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404.php") ) {        
+            include $errorfile;            
+        } else {
+            echo "<div class='sp-content'><div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div></div>";            
+        }   
+                          
     }
 
 }
