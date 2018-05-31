@@ -6,6 +6,15 @@
  */
 
 class system extends core {
+    
+    private $current_item = false;
+    
+    function set_current_item($item) {
+        $this->current_item = $item;
+    }
+    function get_current_item() {
+        return $this->current_item;
+    }
 
     /**
      * Mit Hilfe von Hooks koennen zu bestimmten Punkten der Laufzeit - zuvor in theme/settings.php definierte - Funktionen aufgerufen werden.
