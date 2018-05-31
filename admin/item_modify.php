@@ -143,7 +143,7 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     <div id=\"customfieldsList\"></div>
     <script>
     function mycustomfunc() {
-        getcustomfields(<?php echo $id; ?>);
+        getcustomfields('" . $id . "');
     }
     window.setTimeout(mycustomfunc, 2000);
     </script>";
