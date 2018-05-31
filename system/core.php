@@ -97,8 +97,10 @@ abstract class core {
      * Dazu einen Index 'metadata' im Array(config) anlegen.
      */
     final function single($cfg) {
-        extract($cfg);
-        $item = $this->fetch_assoc($this->query("SELECT * FROM object WHERE id=$id"));
+        extract($cfg);       
+        $item = false;
+        $item = @$this->fetch_assoc($this->query("SELECT * FROM object WHERE id=$id"));
+        if(!$item) { return false; }
         $result = $item;
         if(isset($metadata) && $metas = $this->single_meta($item['id'])) {
             $result = array_merge($item, array_column($metas, 'v', 'k'));
