@@ -1,11 +1,7 @@
 <?php
 
 /**
- * Die Klasse Core sollte wenn moeglich nicht angefasst werden.
- * Sie ist das Kernstueck - was hier nicht stabil laeuft ist BETA
- * Sollte wenn moeglich auch abwaerts kompatibel bleiben :S
- * 
- * Sie baut die Datenbankverbindung auf und wickelt Querys ab. 
+ * Die Klasse Core sollte so selten wie moeglich angefasst werden.
  * 
  * @author Manuel Zarat
  * @date 05.01.2018
@@ -18,10 +14,7 @@ abstract class core {
     private $last_insert_id = false; 
 
     /**
-     * Datenbankverbindung aufbauen
-     * 
      * @todo Unterstuetzung verschiedener Datenbanktypen wie MySQL, SQLite,.. u.a.
-     * 
      */
     final function __construct() {          
         if(is_file(ABSPATH . "config.php")) { include ABSPATH . "config.php"; } else { include ABSPATH . "install.php"; exit(); }                
@@ -53,8 +46,9 @@ abstract class core {
     }
     
     /**
-     * Globale Einstellungen aus der Tabelle 'settings' holen.
+     * Gibt ein assoziatives Array mit Einstellungen aus der Tabelle 'settings' zurück.
      * 
+     * Wenn der Parameter key angegeben wurde, wird nur der jeweilige Datensatz ausgegeben.
      */
     final function settings($key=null) {
         $query = (null!==$key) ? "SELECT * FROM settings WHERE settings.key='$key'" : "SELECT * FROM settings";
@@ -65,14 +59,7 @@ abstract class core {
         }   
         return isset($ret[$key]) ? $ret[$key] : $ret;
     }
-        
-    /**
-     * Fuegt ein Item in die DB ein
-     * 
-     * @todo Custom Fields
-     * 
-     * @return int DB::last_insert_id
-     */     
+   
     final function insert($config) {
         extract($config);
         $query = "INSERT INTO $insert VALUES $values";
@@ -104,14 +91,10 @@ abstract class core {
     }
     
     /**
-     * Einzelnes Item
+     * Ein assoziatives Array eines Items.
      * 
-     * Wenn im $cfg Array ein Index "metadata" => true enthalten ist
-     * werden die Metadaten mit ausgegeben!
-     * 
-     * @param array id,..
-     * @return array Item
-     * 
+     * Kann mit oder ohne Metadaten aufgerufen werden.
+     * Dazu einen Index 'metadata' im Array(config) anlegen.
      */
     final function single($cfg) {
         extract($cfg);
@@ -124,11 +107,10 @@ abstract class core {
     }
     
     /**
-     * Metadaten zu einem Item
-     *
-     * @var int ItemID
-     * @return array Metadata
+     * Ein assoziatives Array aller Metadaten zu einem Item.
      * 
+     * Wird der Parameter index auf true gesetzt, wird die jeweilige ID des Metatags mit ausgegeben. 
+     * In dem Fall kann es allerdngs nicht mehr an ein Item eangehängt werden.
      */
     final function single_meta($item_id,$index=false) {
         if($index==true) {
@@ -144,24 +126,17 @@ abstract class core {
     }
     
     /**
-     * Ein Archiv   
-     *
-     * @todo Sollten die Archive standardmaessig mit oder ohne Metadaten ausgegeben werden? 
-     * @todo Pagination
-     *
-     * @param array
-     * @return array
+     * Gibt ein Array mit Ergebnissen aus einer Tabelle aus.
      * 
+     * Wird fuer das Menue verwendet.
+     * 
+     * @deprecated
      */
     final function archive($config) {
         extract($config);
         $archive = false;
         if($items = $this->query("SELECT $select FROM $from WHERE $where")) {
-            while($item = $this->fetch($items)) {            
-                if(isset($metadata) && $metas = $this->single_meta($item['id'])) {
-                    $new_item = array_merge($item, array_column($metas, 'v', 'k'));
-                    $item = $new_item;
-                }            
+            while($item = $this->fetch($items)) {                       
                 $archive[] = $item; 
             }
         }
