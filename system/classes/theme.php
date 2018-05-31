@@ -12,62 +12,101 @@
 class theme extends system {
     
     /**
-     * Diese Funktion gibt im Prinzip alles aus
-     * 
-     * Die einzelnen Schritte sind in Funktionen aufgeteilt, um Hooks aus System aufrufen zu koennen.
+     * Diese Funktion gibt im Prinzip alles aus. 
      */
     final function render() {
            
+        /**
+         * Diese Funktion muss zuerst ausgefuehrt werden, da die Variablen im Header gebraucht werden. 
+         * wird gebuffert - deshalb echo!!!
+         */
+        $content = $this->content();
+        
+        /**
+         * Der unsichtbare Header holt sich jetzt die Daten, die davor gebuffert wurden.
+         * zwecks SEO warats
+         */
         $this->head();
         
+        /**
+         * Custom scripts & Co bevor der sichtbare Header ausgegeben wird.
+         */
         $this->before_header();
-            $this->header();       
         
+        /**
+         * Der sichtbare Header.
+         * Darin ist z.B die Navigation.
+         */
+        $this->header();
+        
+        /**
+         * Custom scripts & Co bevor der sichtbare MAIN CONTENT ausgegeben wird.
+         * Also nach der Navigation aber noch vor dem Inhalt.
+         */
         $this->before_content(); 
-            $this->content();
         
-        $this->before_sidebar();
-            $this->sidebar();       
+        /**
+         * Jetzt wird der Inhalt ausgegeben, der zu Beginn gebuffert wurde.
+         * WICHTIG: Den Buffer immer leeren!!!
+         */
+        echo $content;
         
-        $this->before_footer(); 
-            $this->footer();
+        /**
+         * Custom scripts & Co die vor der Sidebar ausgegeben werden.
+         */
+        $this->before_sidebar();        
         
-        $this->foot();    
+        /**
+         * Die Sidebar
+         */
+        $this->sidebar();       
+        
+        /**
+         * Custom scripts & Co, die vor dem sichbaren Footer ausgegeben werden.
+         */
+        $this->before_footer();
+        
+        /**
+         * Der sichtbare Footer.
+         */
+        $this->footer();
+        
+        /**
+         * Der unsichtbare Footer
+         */
+        $this->foot(); 
+           
     }
   
     /**
-     * HTML Header
-     *
-     * Bindet die ganzen Metatags und Includes vor </head> ein
-     * 
-     * @todo Dokumenttitel bei Items!!!
-     * 
+     * Der unsichtbare Header
+     * Bindet die ganzen Metatags & Co vor </head> ein
      */
     final function head() { 
-       
-        ob_start();
         
         echo "<!DOCTYPE html>\n<html>\n";
         echo "<head>\n";
+
+        $item = false;
+        $item = @$this->get_testvar();
         
-        /**
-         * @todo Wenn ein Objekt angezeigt wird, werden auch dessen Metainformationen benoetigt
-         */
-        echo "<title>" . $this->settings( 'site_title' ) . "</title>\n";        
+        $title = $item['title'] ? $this->settings( 'site_title' ) . " - " . $item['title'] :$this->settings( 'site_title' );
+        $keywords = $item['keywords'] ? $item['keywords'] : $this->settings( 'site_keywords' );
+        $description = $item['description'] ? $item['description'] : $this->settings( 'site_description' );
+        
+        echo "<title>" . $title . "</title>\n";        
         
         echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />\n";
         echo "<meta name='viewport' content='width=device-width, initial-scale=1.0' />\n";        
         echo "<meta name='generator' content='SimplePress - https://github.com/zarat/simplepress' />\n";
-        echo "<meta name='keywords' content='" . $this->settings( 'site_keywords' ) . "'>\n";
-        echo "<meta name='description' content='" . $this->settings( 'site_description' ) . "'>\n";
+        echo "<meta name='keywords' content='$keywords'>\n";
+        echo "<meta name='description' content='$description'>\n";
+        
         echo "<link rel='stylesheet' href='../content/themes/" . $this->settings( 'site_theme' ) . "/css/style.css'>\n";
-        echo "<link rel='stylesheet' href='../content/themes/" . $this->settings( 'site_theme' ) . "/css/menu.css'>\n";      
+        echo "<link rel='stylesheet' href='../content/themes/" . $this->settings( 'site_theme' ) . "/css/menu.css'>\n"; 
+             
         echo "</head>\n";
         echo "<body>\n";
-        
-        $header = ob_get_clean();
-        
-        echo $header;
         
     }
     
@@ -89,7 +128,7 @@ class theme extends system {
     function header() {
          $nav = new menu();
          $nav->config(array('id' => 1));
-         echo $nav->html();
+         echo $nav->html();         
     }
     
     /**
@@ -129,9 +168,11 @@ class theme extends system {
                 break;
         }   
         
-        ob_start();
+        
              
-        $system = new system(); /** Muss System hier wirklich initiiert werden? - dzt ja */        
+        $system = new system(); /** Muss System hier wirklich initiiert werden? - dzt ja */ 
+        
+        ob_start();       
               
         switch($this->view) { 
         
@@ -140,6 +181,8 @@ class theme extends system {
                 $single_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php"; 
                 $custom_single_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";  
                 $item = $this->single( array( 'type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true ) );
+                
+                $this->set_testvar($item);
                 
                 /** @todo  HANDLE 404 */
                 if(!$item) { $this->error404(); return; } 
@@ -189,7 +232,7 @@ class theme extends system {
         
         ob_end_clean(); // Puffer leeren UND deaktivieren, sonst wird alles 2mal ausgegeben. ob_get_clean() leert ihn nicht!
         
-        echo $content;
+        return $content;
                
     }
     
@@ -233,7 +276,7 @@ class theme extends system {
     function sidebar() { 
     
         $system = new system();
-        
+    
         if(is_file($sidebar = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar-" . $this->request('type') . ".php")) {  
                       
             include $sidebar; 
@@ -241,9 +284,9 @@ class theme extends system {
         } else { 
                        
             include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar.php"; 
-                              
-        } 
-               
+          
+        }
+                      
     }
     
     /**
@@ -261,7 +304,7 @@ class theme extends system {
      */
     function footer() {
     
-        $this->attribution();
+        echo $this->attribution();
         
     }
     
@@ -274,12 +317,16 @@ class theme extends system {
     
         echo "</body>\n";
         echo "</html>";
-        
+
     }
     
     function attribution() {
     
+        ob_start();        
         echo "Powered by <a href='https://github.com/zarat/simplepress' target='_blank'>Simplepress</a> | <a href='../rss.php'>RSS</a>";
+        $c = ob_get_contents(); // zwischenspeichern        
+        ob_end_clean(); // Puffer leeren UND deaktivieren, sonst wird alles 2mal ausgegeben. ob_get_clean() leert ihn nicht!        
+        return $c;
         
     }
 
