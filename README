@@ -1,4 +1,4 @@
-Simplepress ist ein objektorientiertes Content management system in PHP mit Datenbankanbindung, das durch seinen modularen Aufbau und seine Erweiterbarkeit das Erstellen von Webanwendungen erleichtern soll. Das Integrieren von eigenen Themes ist kinderleicht - Ordner hochladen, im Controlpanel aktivieren, fertig! Es befindet sich allerdings noch in aktiver Entwicklung und soll noch durch ein Pluginsystem, Usermanagement und einiges mehr erweitert werden.
+Simplepress ist ein Content management system in PHP mit Datenbankanbindung zum Erstellen von dynamischen Webseiten. Es befindet sich in aktiver Entwicklung und wird noch erweitert.
 
 Demo: https://simplepress.ml
 
