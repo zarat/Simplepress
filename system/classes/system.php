@@ -7,8 +7,12 @@
 
 class system extends core {
     
-    private $current_item = false;
-    
+    /**
+     * Header Hotfix
+     *
+     * @todo
+     */
+    private $current_item = false;    
     function set_current_item($item) {
         $this->current_item = $item;
     }
