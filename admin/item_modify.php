@@ -26,50 +26,6 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     $cfg = array("table" => "object","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category' WHERE id=$id");
     $system->update($cfg);
     
-    /**
-     * @todo Was wenn weniger neue felder uebergeben wurden als vorher bestanden haben?
-     */ 
-    $existing_custom_fields = false;
-    if($existing_custom_fields = $system->single_meta($id)) {
-        foreach($existing_custom_fields as $field => $value) {
-            $existing_custom_fields[$value[0]] = $value[1];
-        }    
-    }
-     
-    /**
-     * Custom fields
-     * 
-     * @todo bestehende mit uebergebenen abgleichen
-     * 
-     */
-    if(isset($_POST['custom_field_key']) && isset($_POST['custom_field_value'])) {
-        $posted_custom_fields = array_combine($_POST['custom_field_key'], $_POST['custom_field_value']);
-        $insertcfg = array();
-        $insert = "object_meta (`meta_item_id`, `meta_key`, `meta_value`)";
-        $values = "";
-        $posted_custom_field_count = count($posted_custom_fields);
-        $count = 1;    
-        foreach($posted_custom_fields as $k => $v) { 
-            if( empty($k) || empty($v) ) { break; } 
-            if(isset($existing_custom_fields[$k]) && $existing_custom_fields[$k] == $v) {        
-                /**
-                 * @todo doppelte keys mit den selben values
-                 */
-            } elseif(isset($existing_custom_fields[$k]) && $existing_custom_fields[$k] != $v) {        
-                /**
-                 * @todo doppelte keys mit unterschiedlichen values. Derzeit werden sie einfach nocheinmal angelegt - also bei der Ausgabe ueberschrieben.
-                 */ 
-            } else { 
-                $values .= "($id, '$k', '$v')";
-                if($count<$posted_custom_field_count) { $values .= ","; } 
-            }        
-            $count++;        
-        }    
-        $insertcfg['insert'] = $insert;
-        $insertcfg['values'] = $values;
-        $system->insert($insertcfg);    
-    }
-    
     $it = $system->single(array('id' => $id));
        
     echo "Deine &Auml;nderungen wurden gespeichert. <a href='../admin/?page=item_modify&id=$id'>Erneut bearbeiten</a> oder <a href='../?type=" . $it['type']. "&id=$id'>ansehen</a>";       	
