@@ -130,8 +130,12 @@ abstract class core {
      * @return array Metadata
      * 
      */
-    final function single_meta($item_id) {
-        $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM object_meta WHERE meta_item_id=$item_id"); 
+    final function single_meta($item_id,$index=false) {
+        if($index==true) {
+            $item_meta = $this->query("SELECT meta_id as id, meta_key as k, meta_value as v FROM object_meta WHERE meta_item_id=$item_id"); 
+        } else {
+            $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM object_meta WHERE meta_item_id=$item_id");
+        }
         $metadata = false;
         while($metas = $this->fetch($item_meta)) {
             $metadata[] = $metas;
