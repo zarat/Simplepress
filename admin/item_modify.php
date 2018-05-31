@@ -140,6 +140,7 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     <input type=\"text\" id=\"customfieldValue\" placeholder=\"Value\">
     <a style=\"cursor:pointer;\" onclick=\"savecustomfield('" . $id . "')\">Speichern</a>
     </div>
+    <br>
     <div id=\"customfieldsList\"></div>
     <script>
     function mycustomfunc() {
