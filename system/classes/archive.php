@@ -22,55 +22,65 @@ private $posts = [];
 private $post_count = 0;
 
     function archive_init() {
-        if( !empty( $this->request( 'last' ) ) ) {        
-            $this->last = $this->request( 'last' );            
-        }        
-        $this->fill_posts();        
-    }
-    
-    function count_posts() {
-        return ( $this->posts );
+        /**
+         * Wird geblaettert?
+         */
+        if( !empty( $this->request( 'last' ) ) ) { 
+            /**
+             * Wenn ja, was war die letzte id?
+             */
+            $this->last = $this->request( 'last' );
+        }
+        $this->fill_posts(); 
     }
     
     /**
-     * Fuellt das Array $posts mit den gefundenen Eintraegen
+     * Fuellt das Array(posts) mit den gefundenen Items
      * 
-     * @todo kategorien ausnehmen!!!!!
-     * 
+     * @todo Archiv Pagination
      */
     final function fill_posts() { 
-               
+        /**
+         * Wird in einem Archiv geblaettert, muss dieses im Query enthalten bleiben.
+         * 
+         * @todo Archiv Pagination
+         */
         if( $this->request( 'type' ) && $this->request( 'type' ) == 'category' ) {
-        
             if( $this->request( 'last' ) ) {      
                 $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                 
             } else {                   
                 $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY id ASC") );               
             } 
-                   
-        } elseif( $this->request( 'type' ) && $this->request( 'type' ) == 'search' ) {  
-
+        } elseif( $this->request( 'type' ) && $this->request( 'type' ) == 'search' ) { 
             if( $this->request( 'last' ) ) {      
                 $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . $this->request( 'term' ) . "%' OR content LIKE '%" . $this->request( 'term' ) . "%' ) AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                 
             } else {                   
                 $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . $this->request( 'term' ) . "%' OR content LIKE '%" . $this->request( 'term' ) . "%' ) ORDER BY id ASC") );               
             }                                
-                 
         } else {   
-             
             if( $this->request( 'last' ) ) {                     
                 $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                  
             } else {                    
                 $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' ORDER BY id ASC") );                
             }  
-                         
         }  
-             
-        /* set post count */
-        $this->post_count = sizeof( $this->posts );           
+        /** 
+         * Wieviele wurden gefunden?
+         */
+        $this->post_count = sizeof( $this->posts );                   
+    }
+    
+    /**
+     * @deprecated Wird vom Theme verwendet
+     */
+    function count_posts() {    
+        return ($this->posts);
     }
 
-    function have_posts() {            
+    /**
+     * Wird im Loop verwendet.
+     */
+    function have_posts() {                
         if( $this->displayed_this_page >= $this->max_per_page )  {        
             $this->is_page_limit = true;            
             return false;            
@@ -78,37 +88,39 @@ private $post_count = 0;
         return ( count($this->posts) > 0) ? true : false;    
     }
     
+    /**
+     * Wird im Loop verwendet.
+     */
     function the_post( $strip_tags = false, $content_length = false ) {   
         $post = @array_pop( $this->posts );        
         $this->displayed_this_page++;        
-        $this->last = $post['id']; 
-        
-        if($strip_tags ) { $post['content'] = strip_tags(html_entity_decode($post['content'])); }
-        
+        $this->last = $post['id'];         
+        if($strip_tags ) { $post['content'] = strip_tags(html_entity_decode($post['content'])); }        
         if($content_length) {
             $line=$post['content'];
             if (preg_match('/^.{1,'.$content_length.'}\b/s', $post['content'], $match)) {
                 $post['content']=$match[0];
             }
-        }
-        
+        }        
         return $post;        
     }
 
-    function pagination() {
-        if( $this->displayed_this_page >= $this->max_per_page && $this->post_count > 1 ) {  
-                
-            if( $this->request( 'type' ) && $this->request( 'type' ) == 'category' ) {  
-                        
-                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a href='../?type=category&id=" . $this->request( 'id' ) . "&last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";                    
-                                
+    /**
+     * Gibt die Pagination Links aus.
+     */
+    function pagination() {    
+        if( $this->displayed_this_page >= $this->max_per_page && $this->post_count > 1 ) {                  
+            /**
+             * Wenn in einem Archiv geblaettert wird, muss dieses im Query enthalten bleiben. 
+             * 
+             * @todo Archiv Pagination
+             */
+            if( $this->request( 'type' ) && $this->request( 'type' ) == 'category' ) {                          
+                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a href='../?type=category&id=" . $this->request( 'id' ) . "&last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";                                                    
             } else {
-                        
                 echo "<div class='sp-content-item'><div class='sp-content-item-head'><a href='../?last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";
-                                
-            }
-                        
-        }         
+            }                        
+        }                 
     }
 
 }
