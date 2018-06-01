@@ -6,10 +6,7 @@
  * 
  */
 
-if(!isset($_GET['type'])) {
-		echo "ERROR: missing GET param 'type'";
-    exit();    
-}
+if( !@$_GET['type'] && !@$_POST['title'] ) { die("sorry, wrong query."); }
 
 // Auch POST Anfragen werden auf GET Url geschickt!!!
 $posttype = $_GET['type'];
@@ -20,36 +17,17 @@ echo '<h3>' . $system->_t('item_add') . '</h3>';
 
 if(!empty($_POST['title'])) { 
 
-    $title = htmlentities($_POST['title'], ENT_QUOTES, 'UTF-8');
-    $keywords = htmlentities($_POST['keywords'], ENT_QUOTES, 'UTF-8');
-    $description = htmlentities($_POST['description'], ENT_QUOTES, 'UTF-8');
-    
-    /** Der Text wurde vom CKEditor aufbereitet */
+    $title = htmlentities($_POST['title']);
+    $keywords = htmlentities($_POST['keywords']);
+    $description = htmlentities($_POST['description']);
     $text = $_POST['text'];   
-    $category = $_POST['category'];     
-    $date = time();
-    
-    /** Save object */
+    $category = $_POST['category'];         
+    $date = isset($_POST['date']) ? strtotime(str_replace(".", "-", $_POST['date'])) : date();
+        
     $cfg = array("insert"=>"object (type, title, content, description, keywords, status, category, date)","values"=>"('$posttype','$title', '$text', '$description', '$keywords', 1, $category, '$date')");
     $system->insert($cfg);
-    $last = $system->last_insert_id();
     
-    /** save custom fields */
-    $custom_fields = array_combine($_POST['custom_field_key'], $_POST['custom_field_value']);
-    $insertcfg = array();
-    $insert = "object_meta (`meta_item_id`, `meta_key`, `meta_value`)";
-    $values = "";
-    $cc = count($custom_fields);
-    $c = 1;
-    foreach($custom_fields as $k => $v) {
-        $values .= "($last, '$k', '$v')";
-        if($c<$cc) {
-            $values .= ",";
-        }
-        $c++;
-    }
-    $insertcfg['insert'] = $insert;
-    $insertcfg['values'] = $values;
+    $last = $system->last_insert_id();
       
     echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?type=$posttype&id=". $last . "'>hier ansehen</a> oder <a href='../admin/?page=item_modify&id=" . $last . "'>weiter bearbeiten</a>.";
 	
@@ -63,6 +41,9 @@ if(!empty($_POST['title'])) {
     echo "<p><input name=\"title\" type=\"text\"></p>";
     
     echo "<div id=\"more\" style=\"display:none;\">";
+    
+        echo '<p>' . $system->_t('item_modify_date') . '</p>'; 
+        echo "<p><input type=\"text\" name=\"date\" class=\"datepicker\"></p>";
         
         echo '<p>' . $system->_t('item_add_category') . '</p>';
         echo "<p><select name=\"category\">";
@@ -88,51 +69,20 @@ if(!empty($_POST['title'])) {
     echo '<p>' . $system->_t('item_add_content') . '</p>';
     echo "<p><textarea cols=\"40\" rows=\"20\" name=\"text\" id=\"ckeditor\" class=\"ckeditor\"></textarea></p>";
     
-    $js ='<script>'."\n";
-    $js.='$(document).ready(function() {'."\n";
-    $js.='    var max_fields      = 10;'."\n";
-    $js.='    var wrapper         = $(".container1"); '."\n";
-    $js.='    var add_button      = $(".add_form_field"); '."\n";
-    $js.='    '."\n";
-    $js.='    var x = 1; '."\n";
-    $js.='    $(add_button).click(function(e){ '."\n";
-    $js.='        e.preventDefault();'."\n";
-    $js.='        if(x < max_fields){ '."\n";
-    $js.='            x++; '."\n";
-    $js.='            $(wrapper).append(\'<div><input type="text" name="custom_field_key[]"/> <input type="text" name="custom_field_value[]"/> <a href="#" class="delete">Delete</a></div>\'); //add input box'."\n";
-    $js.='        } else {'."\n";
-    $js.='		        alert(\'You Reached the limits\')'."\n";
-    $js.='		    }'."\n";
-    $js.='    });    '."\n";
-    $js.='    $(wrapper).on("click",".delete", function(e){ '."\n";
-    $js.='        e.preventDefault(); $(this).parent(\'div\').remove(); x--;'."\n";
-    $js.='    })'."\n";
-    $js.='});'."\n";
-    $js.='</script>';
-    
-    echo $js;
-    
-    //echo "<div>";
-    
-    echo "<p><a onclick=\"toggle('custom_fields')\" href=\"#\">Custom fields</a></p>";
-    
-    echo "<div id=\"custom_fields\" style=\"display:none;\">";
-        echo "<div class=\"container1\">";
-        echo "<a class=\"add_form_field\"><span>Neues Feld</span></a>";
-            echo "<div><input type=\"text\" name=\"custom_field_key[]\"> <input type=\"text\" name=\"custom_field_value[]\"><a href=\"#\" class=\"delete\">Delete</a></div>";
-        echo "</div>";
-    echo "</div>";
-    
     echo "<p><input type=\"submit\" value=\"speichern\"></p>";
     
     echo "<div style=\"clear:both;\"></div>";
     
     echo "</form>";
 
-//echo "</div>";
-
 }
 
-echo "</div>"; // sp-content
+echo "</div>";
 
 ?> 
+
+<script>
+window.onload = function({
+      document.getElementById("datepicker").datepicker();
+});
+</script>
