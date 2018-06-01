@@ -2,7 +2,6 @@
 
 /**
  * @author Manuel Zarat
- * 
  */
 
 class menu extends system {
