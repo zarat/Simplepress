@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Simplepress Archiv
+ * archive.php
  * 
  * @author Manuel Zarat
  * 
@@ -9,16 +9,10 @@
 
 class archive extends system {
 
+private $posts = [];
 private $max_per_page = 5;
 private $displayed_this_page = 0;
 private $last = 0;
-
-/**
- * Ein Array mit den Inhalten
- * 
- */
-private $posts = [];
-
 private $post_count = 0;
 
     function archive_init() {
@@ -78,12 +72,10 @@ private $post_count = 0;
      * Wird im Loop verwendet.
      */
     function have_posts() {                
-
         if( $this->displayed_this_page >= $this->max_per_page )  {        
             $this->is_page_limit = true;            
             return false;            
-        }
-        
+        }    
         return ( count($this->posts) > 0) ? true : false;    
     }
     
@@ -94,28 +86,20 @@ private $post_count = 0;
     /**
      * Wird im Loop verwendet.
      */
-    function the_post( $strip_tags = false, $content_length = false ) {   
-        
+    function the_post( $strip_tags = false, $content_length = false ) {        
         if( $this->more() ) {
-        
             $post = array_pop( $this->posts );        
-            
             $this->last = $post['id'];
             $this->displayed_this_page++;         
-            
             if($strip_tags ) { $post['content'] = strip_tags($post['content']); }        
-            
             if($content_length) {
                 $line=$post['content'];
                 if (preg_match('/^.{1,'.$content_length.'}\b/s', $post['content'], $match)) {
                     $post['content'] = $match[0];
                 }
-            }        
-            
+            }                   
             return $post; 
-        
         }
-        
         return false;       
     }
 
@@ -125,19 +109,14 @@ private $post_count = 0;
      * Hier koennte man noch die Funktion aus
      */
     function pagination() {  
-      
-        if( $this->more() ) { 
-                         
+        if( $this->more() ) {               
             if( $this->request( 'type' ) == 'category' ) {                          
                 echo "<div class='sp-content-item'><div class='sp-content-item-head'><a href='../?type=category&id=" . $this->request( 'id' ) . "&last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";                                                    
             } else {
                 echo "<div class='sp-content-item'><div class='sp-content-item-head'><a href='../?last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";
-            } 
-                                   
-        } 
-                        
+            }                      
+        }                         
     }
-
 }
 
 ?>
