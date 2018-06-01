@@ -64,9 +64,6 @@ private $post_count = 0;
                 $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' ORDER BY id ASC") );                
             }  
         }  
-        /** 
-         * Wieviele wurden gefunden?
-         */
         $this->post_count = sizeof( $this->posts );                   
     }
     
@@ -81,46 +78,64 @@ private $post_count = 0;
      * Wird im Loop verwendet.
      */
     function have_posts() {                
+
         if( $this->displayed_this_page >= $this->max_per_page )  {        
             $this->is_page_limit = true;            
             return false;            
-        }        
+        }
+        
         return ( count($this->posts) > 0) ? true : false;    
+    }
+    
+    function more() {
+        return ( count($this->posts) > 0) ? true : false;
     }
     
     /**
      * Wird im Loop verwendet.
      */
     function the_post( $strip_tags = false, $content_length = false ) {   
-        $post = @array_pop( $this->posts );        
-        $this->displayed_this_page++;        
-        $this->last = $post['id'];         
-        if($strip_tags ) { $post['content'] = strip_tags(html_entity_decode($post['content'])); }        
-        if($content_length) {
-            $line=$post['content'];
-            if (preg_match('/^.{1,'.$content_length.'}\b/s', $post['content'], $match)) {
-                $post['content']=$match[0];
-            }
-        }        
-        return $post;        
+        
+        if( $this->more() ) {
+        
+            $post = array_pop( $this->posts );        
+            
+            $this->last = $post['id'];
+            $this->displayed_this_page++;         
+            
+            if($strip_tags ) { $post['content'] = strip_tags($post['content']); }        
+            
+            if($content_length) {
+                $line=$post['content'];
+                if (preg_match('/^.{1,'.$content_length.'}\b/s', $post['content'], $match)) {
+                    $post['content'] = $match[0];
+                }
+            }        
+            
+            return $post; 
+        
+        }
+        
+        return false;       
     }
 
     /**
      * Gibt die Pagination Links aus.
+     * 
+     * Hier koennte man noch die Funktion aus
      */
-    function pagination() {    
-        if( $this->displayed_this_page >= $this->max_per_page && $this->post_count > 1 ) {                  
-            /**
-             * Wenn in einem Archiv geblaettert wird, muss dieses im Query enthalten bleiben. 
-             * 
-             * @todo Archiv Pagination
-             */
-            if( $this->request( 'type' ) && $this->request( 'type' ) == 'category' ) {                          
+    function pagination() {  
+      
+        if( $this->more() ) { 
+                         
+            if( $this->request( 'type' ) == 'category' ) {                          
                 echo "<div class='sp-content-item'><div class='sp-content-item-head'><a href='../?type=category&id=" . $this->request( 'id' ) . "&last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";                                                    
             } else {
                 echo "<div class='sp-content-item'><div class='sp-content-item-head'><a href='../?last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";
-            }                        
-        }                 
+            } 
+                                   
+        } 
+                        
     }
 
 }
