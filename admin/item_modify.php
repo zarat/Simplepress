@@ -15,21 +15,22 @@ echo '<h3>' . $system->_t('item_modify') . '</h3>';
 
 if (isset($_GET['id']) && isset($_POST['title'])) {
 
-    $id=$_GET['id'];
+    $id = $_GET['id'];
     
-    $title = htmlentities($_POST['title'], ENT_QUOTES, 'utf-8');      
+    //$title = htmlentities($_POST['title'], ENT_QUOTES, 'utf-8');      
+    $title = htmlentities($_POST['title']);
     $keywords = htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8');    
     $description = htmlentities($_POST['description'], ENT_QUOTES, 'utf-8');
     $text = $_POST['text'];
     $category = $_POST['category'];
-    $date = isset($_POST['date']) ? strtotime($_POST['date']) : $timestamp; 	
+    $date = isset($_POST['date']) ? strtotime($_POST['date']) : time(); 	
     
     $cfg = array("table" => "object","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category', date=$date WHERE id=$id");
     $system->update($cfg);
     
     $it = $system->single(array('id' => $id));
        
-    echo "Deine &Auml;nderungen wurden gespeichert. <a href='../admin/?page=item_modify&id=$id'>Erneut bearbeiten</a> oder <a href='../?type=" . $it['type']. "&id=$id'>ansehen</a>";       	
+    echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?type=" . $it['type']. "&id=$id'>hier ansehen</a> oder <a href='../admin/?page=item_modify&id=$id'>weiter bearbeiten</a>.";       	
 
 } else {	
 		
@@ -94,10 +95,10 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     <br>
     <div id=\"customfieldsList\"></div>
     <script>
-    function mycustomfunc() {
+    function customfields() {
         getcustomfields('" . $id . "');
     }
-    window.setTimeout(mycustomfunc, 2000);
+    window.setTimeout(customfields, 2000);
     </script>";
 
 }
@@ -106,8 +107,8 @@ echo "</div>"; // close sp-content
  
 ?>
 
-  <script>
-  $( function() {
-    $( "#datepicker" ).datepicker();
-  } );
-  </script>
+<script>
+window.onload = function({
+      document.getElementById("datepicker").datepicker();
+});
+</script>
