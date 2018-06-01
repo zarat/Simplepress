@@ -22,14 +22,19 @@ if(isset($_GET['page'])){
 <title>Adminpanel</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-<link href="../content/themes/simplepress/css/menu.css" rel="stylesheet" type="text/css" />
+
+	<link href="../content/themes/simplepress/css/menu.css" rel="stylesheet" type="text/css" />
 <link href="../content/themes/simplepress/css/style.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="./js/jquery.js"></script>
 <script type="text/javascript" src="./js/admin.js"></script>
-<!-- Der selbst gehostete will auf Mobiles nicht angezeigt werden :S - fix https://cdn.ckeditor.com/4.5.10/standard/ckeditor.js -->
+	
+<!-- CKEditor -->
 <script type="text/javascript" src="https://cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
-
+	
+<!-- Date Picker -->
+<link href="../admin/css/datepicker.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../admin/js/datepicker.js"></script>
 
 <style>
 .container1 input[type=text] {
