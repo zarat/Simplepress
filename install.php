@@ -1,41 +1,29 @@
 <?php
 
 /**
- * Installer
- * 
- * Ein SQL Dump muss im ROOT Verzeichnis vorhanden sein.
- *
+ * Automatisches Installationsscript
  * @author Manuel Zarat
- *
  */
 
 if(!empty($_POST['host']) && !empty($_POST['user']) && !empty($_POST['password']) && !empty($_POST['database']) && !empty($_POST['adminpass']) && !empty($_POST['adminlogin'])) {
 
-$host = $_POST['host']; //mostly this is localhost if mysql server on the same machine.
-$user = $_POST['user'];        	//database username here.
-$password = $_POST['password'];   	//database password here.
-$database = $_POST['database']; 		//the name of the database where you want the script installed in. 
+$dbhost = $_POST['host'];
+$dbuser = $_POST['user'];
+$dbpass = $_POST['password'];
+$dbname = $_POST['database']; 
 
-if(!empty($_POST['site_name'])) { 
-$site_name = $_POST['site_name'];
-} else {
-$site_name = $_SERVER['SERVER_NAME'];
-}
+$site_name = !empty($_POST['site_name']) ? $_POST['site_name'] : $_SERVER['SERVER_NAME'];
 
-if(!empty($_POST['adminpass'])) { 
-$admin_pass = $_POST['adminpass'];
-}
-
-if(!empty($_POST['adminlogin'])) { 
 $admin_login = $_POST['adminlogin'];
-}
+$admin_pass = $_POST['adminpass'];
 
-$conn = new mysqli($host, $user, $password);
+$conn = new mysqli($dbhost, $dbuser, $dbpass);
 
-$init_1 = "CREATE DATABASE IF NOT EXISTS `$database` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-$conn->query($init_1) or die($db->error);
-$init_2 = "USE $database";
-$conn->query($init_2) or die($db->error);
+$query = "CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+$conn->query($query) or die('Could not create database: ' . $dbname);
+
+$query = "USE $dbname";
+$conn->query($query) or die('Could not use database: ' . $dbname);
 
 $filename = './import.sql';
 $op_data = '';
@@ -47,47 +35,50 @@ foreach ($lines as $line) {
     }
     $op_data .= $line;
     if (substr(trim($line), -1, 1) == ';') {
-        $conn->query($op_data);
+        $conn->query($op_data) or die('could not run insert script:op_data: ' . $op_data);
         $op_data = '';
     }
 }
 
-echo "<p>SimplePress wurde erfolgreich installiert. Gehe <a href='./login.php'>zum Administrationsbereich</a> oder <a href='./'>deiner Startseite</a></p>";
+echo "<h1>Gratulation</h1><p>SimplePress wurde erfolgreich installiert. Gehe <a href='./login.php'>zum Administrationsbereich</a> oder <a href='./'>deiner Startseite</a></p>";
    
-$dateiname = './config';
-$code = '
+$configfile = './config.php';
+$config = '
 <?php
-$dbhost = "' . $host . '";
-$dbuser = "' . $user . '";
-$dbpass = "' . $password . '";
-$dbname = "' . $database . '";
+$dbhost = "' . $dbhost . '";
+$dbuser = "' . $dbuser . '";
+$dbpass = "' . $dbpass . '";
+$dbname = "' . $dbname . '";
 
 $adminlogin = "' . $admin_login . '";
 $adminpass = "' . $admin_pass . '";
 ';
 
-$code .= "?";
-$code .= ">";
+$config .= "?";
+$config .= ">";
 
-$datei = fopen($dateiname.'.php', 'w');
-fwrite($datei, $code);
-fclose($datei);   
+$configfile_tmp = fopen($configfile, 'w') or die('could not write config file: ' . $configfile);
+fwrite($configfile_tmp, $config);
+fclose($configfile_tmp);   
 
 } else {
 
 ?>
 
-Willkommen zum Installationsassistenten. Gib deine Serverdaten ein und klicke auf weiter.
+<h1>Simplepress Installation</h1>
+<p>Die ben&ouml;tigte Tabellen- und Feldstruktur ist bereits in der Datei "install.sql" vordefiniert. Diese Tabellenstruktur wird jetzt in deine Datenbank importiert.
+Sollte die Datenbank bereits bestehen, wird</p>
+<p>Gib deine Serverdaten ein und klicke danach auf weiter.</p>
 
 <form name="installer" action="<?php echo "$_SERVER[PHP_SELF]"; ?>" method="post">
-<input type="text" name="host" placeholder="Host"><br /><br />
-<input type="text" name="user" placeholder="Benutzer"><br /><br />
-<input type="text" name="password" placeholder="Passwort"><br /><br />
-<input type="text" name="database" placeholder="Datenbank"><br /><br /><br />
-<input type="text" name="site_name" placeholder="Titel deiner Seite"><br /><br />
-<input type="text" name="adminlogin" placeholder="Administrator Username"><br /><br />
-<input type="text" name="adminpass" placeholder="Administrator Passwort"><br /><br />
-<input type="submit" value="Installation starten">
+    <input type="text" name="host" placeholder="Host"><br /><br />
+    <input type="text" name="user" placeholder="Benutzer"><br /><br />
+    <input type="text" name="password" placeholder="Passwort"><br /><br />
+    <input type="text" name="database" placeholder="Datenbank"><br /><br /><br />
+    <input type="text" name="site_name" placeholder="Titel deiner Seite"><br /><br />
+    <input type="text" name="adminlogin" placeholder="Administrator Username"><br /><br />
+    <input type="text" name="adminpass" placeholder="Administrator Passwort"><br /><br />
+    <input type="submit" value="Installation starten">
 </form>
 
 <?php } ?>
