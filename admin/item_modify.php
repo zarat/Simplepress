@@ -21,9 +21,10 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     $keywords = htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8');    
     $description = htmlentities($_POST['description'], ENT_QUOTES, 'utf-8');
     $text = $_POST['text'];
-    $category = $_POST['category']; 	
+    $category = $_POST['category'];
+    $date = isset($_POST['date']) ? strtotime($_POST['date']) : $timestamp; 	
     
-    $cfg = array("table" => "object","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category' WHERE id=$id");
+    $cfg = array("table" => "object","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category', date=$date WHERE id=$id");
     $system->update($cfg);
     
     $it = $system->single(array('id' => $id));
@@ -43,18 +44,9 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     $keywords =     $result['keywords'];
     $description =  $result['description'];
     $text = htmlspecialchars($result['content']);
-            
-    switch($result['type']) {
-      case ("page"):
-      $link = "../?type=page&id=$result[id]";
-      break;
-      case ("post"):
-      $link = "../?type=post&id=$result[id]";
-      break;
-      case ("category"):
-      $link = "../?type=category&id=$result[id]";
-      break;
-    }
+    $date = date("d.m.Y", $result['date']);
+    
+    $link = "../?type=$result[type]&id=$result[id]";
     
     echo "<form method=\"post\">";
     
@@ -62,6 +54,9 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     echo "<p><input name=\"title\" type=\"text\" value=\"$title\"></p>";
     
     echo "<div id=\"more\" style=\"display:none;\">";
+    
+        echo '<p>' . $system->_t('item_modify_date') . '</p>'; 
+        echo "<p><input type=\"text\" name=\"date\" class=\"datepicker\" value=\"$date\"></p>";
         
         echo '<p>' . $system->_t('item_modify_category') . '</p>';
         echo "<p><select name=\"category\">";
@@ -110,3 +105,9 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
 echo "</div>"; // close sp-content
  
 ?>
+
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+  } );
+  </script>
