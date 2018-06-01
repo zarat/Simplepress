@@ -1,19 +1,16 @@
 <?php
 
 /**
- * 
- * Bearbeitet ein Item aus der Datenbank. 
- * Wenn $_POST[] uebergeben wurde, wird es gespeichert und danach angezeigt, sonst nur angezeigt.
- * 
+ * Wenn $_GET && $_POST uebergeben wurden, wird es gespeichert und dann angezeigt, sonst nur angezeigt.
  */
-
-if(!isset($_GET['id']) && !isset($_POST['id'])) { echo "<p>Keine ID gesetzt</p>"; exit(); }
 
 echo "<div class=\"sp-content\">";
 
 echo '<h3>' . $system->_t('item_modify') . '</h3>';
 
-if (isset($_GET['id']) && isset($_POST['title'])) {
+if( !@$_GET['id'] && !@$_POST['title'] ) { die("sorry, wrong query."); }
+
+if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
     $id = $_GET['id'];
     
@@ -23,7 +20,13 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     $description = htmlentities($_POST['description'], ENT_QUOTES, 'utf-8');
     $text = $_POST['text'];
     $category = $_POST['category'];
-    $date = isset($_POST['date']) ? strtotime($_POST['date']) : time(); 	
+    $date = isset($_POST['date']) ? strtotime(str_replace(".", "-", $_POST['date'])) : date();
+    
+    if(!isset($_POST['date'])) {
+        $date = time();
+    } else {
+        $date = strtotime( str_replace( ".", "-", $_POST['date'] ) );
+    } 	
     
     $cfg = array("table" => "object","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category', date=$date WHERE id=$id");
     $system->update($cfg);
@@ -35,9 +38,9 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
 } else {	
 		
     //check ID!!!
-    isset($_GET['id']) ? $id=$_GET['id'] : exit();
+    isset($_GET['id']) ? $id = $_GET['id'] : exit();
     
-    $result = $system->single(array('a'=>'b','id'=>$id));  
+    $result = $system->single(array('id'=>$id));  
     
     $res_id = $result['id'];
     
@@ -101,9 +104,9 @@ if (isset($_GET['id']) && isset($_POST['title'])) {
     window.setTimeout(customfields, 2000);
     </script>";
 
-}
+} 
 
-echo "</div>"; // close sp-content
+echo "</div>";
  
 ?>
 
