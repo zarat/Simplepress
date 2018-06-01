@@ -1,10 +1,7 @@
 <?php
 
 /**
- * archive.php
- * 
  * @author Manuel Zarat
- * 
  */
 
 class archive extends system {
