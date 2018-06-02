@@ -118,7 +118,10 @@ class system extends core {
             case "single":            
                 $include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php"; 
                 $custom_include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";                                                
-                if(($item = $this->single( array('type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true))) == false ) { $this->error404(); break; }                
+                if( ( $item = $this->single( array('type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true) ) ) == false ) { 
+                    $this->error404(); 
+                    break; 
+                }                
                 $this->set_current_item($item);                 
                 if( is_file( $custom_include_file ) ) {                
                     include $custom_include_file;                    
@@ -130,8 +133,15 @@ class system extends core {
                 $include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive.php";
                 $custom_include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $this->request('type') . ".php";
                 $archive = new archive();
-                $archive->archive_init();           
-                if( $archive->count_posts() < 1) { $this->error404(); break; }                                           
+                $archive->archive_init();
+                if( $this->request( 'id' ) ) { 
+                    $item = $this->single( array( 'id' => $this->request( 'id' ) ) );
+                    $this->set_current_item($item);
+                }           
+                if( $archive->count_posts() < 1) { 
+                    $this->error404(); 
+                    break; 
+                }                                           
                 if( is_file( $custom_include_file ) ) {                
                     include $custom_include_file;                    
                 } else {                
@@ -144,7 +154,10 @@ class system extends core {
                  */
                 $latest = new archive();
                 $latest->archive_init();                
-                if( $latest->count_posts() < 1) { $this->error404(); break; }                
+                if( $latest->count_posts() < 1) { 
+                    $this->error404(); 
+                    break; 
+                }                
                 include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";                
             break;                    
         }        
