@@ -1,12 +1,7 @@
 <?php
 
 /** 
- * SimplePress Theme Dummy
- *
  * @author Manuel Zarat
- * 
- * THEMES sollen eine Datei "theme.php" und eine Datei "functions.php" im Root Verzeichnis haben, die dieses Dummy ueberschreibt.
- * 
  */
 
 class theme extends system {
@@ -18,9 +13,9 @@ class theme extends system {
            
         /**
          * Diese Funktion muss zuerst ausgefuehrt werden, da die Variablen im Header gebraucht werden. 
-         * wird gebuffert - deshalb echo!!!
+         * Inhalt wird in system gebuffert!
          */
-        $content = $this->content();
+        $content = $this->path();
         
         /**
          * Der unsichtbare Header holt sich jetzt die Daten, die davor gebuffert wurden.
@@ -47,7 +42,6 @@ class theme extends system {
         
         /**
          * Jetzt wird der Inhalt ausgegeben, der zu Beginn gebuffert wurde.
-         * WICHTIG: Den Buffer immer leeren!!!
          */
         echo $content;
         
@@ -140,116 +134,6 @@ class theme extends system {
     function before_content() { }
     
     /**
-     * Content
-     * 
-     * Hier wird entschieden, welche Theme Dateien eingebunden werden.
-     *
-     * @todo Muss weiter aufgeteilt werden um Hooks einzubauen und das ganze dynamischer zu gestalten.
-     *  
-     * @return false
-     * 
-     */ 
-    final function content() { 
-    
-
-        
-        switch($this->request('type')) {
-            case "post":
-            case "page":
-                $this->view = "single"; 
-                break;
-            case "category":
-            case "tag":
-            case "search":
-                $this->view = "archive"; 
-                break;
-            default:
-                $this->view = "default"; 
-                break;
-        }   
-        
-        
-             
-        $system = new system(); /** Muss System hier wirklich initiiert werden? - dzt ja */ 
-        
-        ob_start();       
-              
-        switch($this->view) { 
-        
-            case "single":
-            
-                $single_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php"; 
-                $custom_single_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";  
-                                               
-                if( ( $item = $this->single( array( 'type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true ) ) ) == false ) { $this->error404(); break; }                
-                $item = $this->single( array( 'type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true ) );
-                $this->set_current_item($item); 
-                
-                if( is_file( $custom_single_file ) ) {                
-                    include $custom_single_file;                    
-                } else {                
-                    include $single_file;                   
-                }
-                                
-            break;
-            
-            case "archive":
-            
-                $archive_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive.php";
-                $custom_archive_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $this->request('type') . ".php";
-                
-                $archive = new archive();
-                $archive->archive_init();
-
-                /**
-                 * @todo Metadaten fuer Archive, damit Header darauf zugreifen kann
-                 *
-                $this->set_current_item( array( 
-                                            'title' => 'Ein Titel', 
-                                            'keywords' => 'ein, paar, key, words', 
-                                            'description' => 'Ein paar Keywords als Description' 
-                                            ) 
-                                        );
-                */
-                
-                if( $archive->count_posts() < 1) { $this->error404(); break; }
-                                           
-                if( is_file( $custom_archive_file ) ) {                
-                    include $custom_archive_file;                    
-                } else {                
-                    include $archive_file;                   
-                }
-                
-            break;
-                        
-            default: 
-            
-                /**
-                 * Default wird ein Archiv der letzten Items (post) gezeigt.
-                 */
-                $latest = new archive();
-                $latest->archive_init();
-                
-                if( $latest->count_posts() < 1) { $this->error404(); break; }
-                
-                include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";
-                
-            break;
-                    
-        }
-        
-        $content = ob_get_contents(); 
-        
-        /**
-         * Puffer leeren UND deaktivieren, sonst wird alles 2mal ausgegeben. ob_get_clean() leert ihn nicht!
-         */
-        ob_end_clean(); 
-        
-        return $content;
-               
-    }
-    
-    /**
      * Wenn etwas vor der Sidebar angezeigt werden soll, kommt es hierhin
      * 
      * @todo
@@ -265,20 +149,13 @@ class theme extends system {
      * @todo $system muss initiiert werden :S
      * 
      */
-    function sidebar() { 
-    
-        $system = new system();
-    
-        if(is_file($sidebar = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar-" . $this->request('type') . ".php")) {  
-                      
-            include $sidebar; 
-                               
-        } else { 
-                       
-            include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar.php"; 
-          
-        }
-                      
+    function sidebar() {     
+        $system = new system();    
+        if(is_file($sidebar = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar-" . $this->request('type') . ".php")) {                        
+            include $sidebar;                                
+        } else {                        
+            include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar.php";           
+        }                      
     }
     
     /**
@@ -294,10 +171,8 @@ class theme extends system {
      * Mit footer ist hier der sichtbare Footer gemeint, also der untere Teil der Website.
      * 
      */
-    function footer() {
-    
-        echo "Powered by <a href='https://github.com/zarat/simplepress' target='_blank'>Simplepress</a> | <a href='../rss.php'>RSS</a>";
-        
+    function footer() {    
+        echo "Powered by <a href='https://github.com/zarat/simplepress' target='_blank'>Simplepress</a> | <a href='../rss.php'>RSS</a>";        
     }
     
     /**
@@ -305,26 +180,22 @@ class theme extends system {
      * Eigentlich nur fuer Style- und Scriptincludes
      * 
      */
-    final function foot() {
-    
+    final function foot() {    
         echo "</body>\n";
         echo "</html>";
-
     }
     
     /**
      * @todo Einstweiliges 404 Handle
      */
-    final function error404() { 
-           
+    final function error404() {            
         if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404-" . $this->request('type') . ".php") ) {        
             include $errorfile;            
         } else if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404.php") ) {        
             include $errorfile;            
         } else {
             echo "<div class='sp-content'><div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div></div>";            
-        }   
-                          
+        }                             
     }
 
 }
