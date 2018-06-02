@@ -12,7 +12,7 @@ echo "<div class='sp-content'>\n";
 if($item) { 
 
     echo "<div class ='sp-content-item-head'>" . $item['title'] . "</div>\n";
-    echo "<div class ='sp-content-item-body'>" . html_entity_decode($item['content']) . "</div>\n";
+    echo "<div class ='sp-content-item-body'>" . $item['content'] . "</div>\n";
     
 } else {
 
