@@ -11,6 +11,6 @@ include "../load.php";
 
 $system = new system();
   
-$system->delete(array("from"=>"object","where"=>"id=$_GET[id]"));
+$system->delete(array("from"=>"item","where"=>"id=$_GET[id]"));
 
 ?>
