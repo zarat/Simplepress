@@ -32,7 +32,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
         $date = strtotime( str_replace( ".", "-", $_POST['date'] ) );
     } 	
     
-    $cfg = array("table" => "object","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category', date=$date WHERE id=$id");
+    $cfg = array("table" => "item","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category', date=$date WHERE id=$id");
     $system->update($cfg);
     
     $it = $system->single(array('id' => $id));
