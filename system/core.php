@@ -39,23 +39,7 @@ abstract class core {
     }
     final function last_insert_id() {
         return $this->last_insert_id;
-    }
-    
-    /**
-     * Gibt ein assoziatives Array mit Einstellungen aus der Tabelle 'settings' zurück.
-     * 
-     * Wenn der Parameter key angegeben wurde, wird nur der jeweilige Datensatz ausgegeben.
-     */
-    final function settings($key=null) {
-        $query = (null!==$key) ? "SELECT * FROM settings WHERE settings.key='$key'" : "SELECT * FROM settings";
-        $result = $this->query($query);
-        $ret = false;
-        while($r = $this->fetch($result)) {
-            $ret[$r['key']] = $r['value'];
-        }   
-        return isset($ret[$key]) ? $ret[$key] : $ret;
-    }
-   
+    }   
     final function insert($config) {
         extract($config);
         $query = "INSERT INTO $insert VALUES $values";
@@ -84,6 +68,21 @@ abstract class core {
             $ret[] = $r;
         }
         return ($ret) ? $ret : false;
+    }
+ 
+    /**
+     * Gibt ein assoziatives Array mit Einstellungen aus der Tabelle 'settings' zurück.
+     * 
+     * Wenn der Parameter key angegeben wurde, wird nur der jeweilige Datensatz ausgegeben.
+     */
+    final function settings($key=null) {
+        $query = (null!==$key) ? "SELECT * FROM settings WHERE settings.key='$key'" : "SELECT * FROM settings";
+        $result = $this->query($query);
+        $ret = false;
+        while($r = $this->fetch($result)) {
+            $ret[$r['key']] = $r['value'];
+        }   
+        return isset($ret[$key]) ? $ret[$key] : $ret;
     }
     
     /**
