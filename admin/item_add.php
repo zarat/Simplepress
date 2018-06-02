@@ -1,15 +1,15 @@
 <?php
 
 /**
- * 
- * Erstellt ein neues Item.
- * 
+ * @author Manuel Zarat
  */
 
 if( !@$_GET['type'] && !@$_POST['title'] ) { die("sorry, wrong query."); }
 
-// Auch POST Anfragen werden auf GET Url geschickt!!!
 $posttype = $_GET['type'];
+
+echo "<script type=\"text/javascript\" src=\"https://cdn.ckeditor.com/4.5.10/standard/ckeditor.js\"></script>\n";
+echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
 
 echo "<div class=\"sp-content\">";
 
