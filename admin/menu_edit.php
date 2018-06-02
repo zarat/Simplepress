@@ -1,19 +1,15 @@
 <?php 
 
 /**
- * 
- * Bearbeiten der Navigation.
- * Wird asynchron aufgerufen, deshalb load.php einbinden!
- * @ToDo
- * 
+ * @author Manuel Zarat
  */
 
 require_once '../load.php';
 
 ?>
 
-    <link rel="stylesheet" type="text/css" href="./menumanager/style.css">
-    <link rel="stylesheet" href="./menumanager/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="./menumanager/style.css">
+
 
 <div class ="sp-content">
     
@@ -22,7 +18,8 @@ require_once '../load.php';
     
     <div id="load"></div>
 
-    <input type="text" id="label" placeholder="Label" required> <input type="text" id="link" placeholder="Link" required></td>
+    <input type="text" id="label" placeholder="Label" required> 
+    <input type="text" id="link" placeholder="Link" required>
     <button id="submit">add</button>
     <input type="hidden" id="id">
     <br /><br />
@@ -69,9 +66,10 @@ function get_menu($items,$class = 'dd-list') {
         $html.= '<li class="dd-item dd3-item" data-id="'.$value['id'].'" >
                     <div class="dd-handle dd3-handle"></div>
                     <div class="dd3-content"><span id="label_show'.$value['id'].'">'.$value['label'].'</span> 
-                        <span class="span-right"><span id="link_show'.$value['id'].'">'.$value['link'].'</span> &nbsp;&nbsp; 
-                            <a class="edit-button" id="'.$value['id'].'" label="'.$value['label'].'" link="'.$value['link'].'" ><i class="fa fa-pencil"></i></a>
-                            <a class="del-button" id="'.$value['id'].'"><i class="fa fa-trash"></i></a></span> 
+                        <span class="span-right"> 
+                            <a class="edit-button" id="'.$value['id'].'" label="'.$value['label'].'" link="'.$value['link'].'" >edit</a>
+                            <a class="del-button" id="'.$value['id'].'">delete</a>
+                        </span> 
                     </div>';
         if(array_key_exists('child',$value)) {
             $html .= get_menu($value['child'],'child');
@@ -96,11 +94,9 @@ print get_menu($items);
     </div>
     <p></p>
     <input type="hidden" id="nestable-output">
-    <button id="save">Save</button>
 
 </div>
 
-<script src="./menumanager/jquery.min.js"></script>
 <script src="./menumanager/jquery.nestable.js"></script>
 <script type="text/javascript">
 
@@ -169,7 +165,6 @@ $(document).ready(function()
                  $("#menu-id").append(data.menu);
               } else if(data.type == 'edit'){
                  $("#label_show"+data.id).html(data.label);
-                 $("#link_show"+data.id).html(data.link);
               }
               $("#label").val("");
               $("#link").val("");
@@ -214,9 +209,7 @@ $(document).ready(function()
             data: dataString,
             cache : false,
             success: function(data){
-              $("#load").hide();
-              alert("Data has been saved");
-          
+              $("#load").hide();  
             } ,error: function(xhr, status, error) {
               alert(error);
             },
@@ -251,12 +244,6 @@ $(document).ready(function()
         $("#id").val(id);
         $("#label").val(label);
         $("#link").val(link);
-    });
-
-    $(document).on("click","#reset",function() {
-        $("#label").val("");
-        $("#link").val("");
-        $("#id").val("");
     });
 
   });
