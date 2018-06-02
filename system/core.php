@@ -42,32 +42,26 @@ abstract class core {
     }   
     final function insert($config) {
         extract($config);
-        $query = "INSERT INTO $insert VALUES $values";
-        $this->query($query);
+        $this->query( "INSERT INTO $insert VALUES $values" );
         $this->last_insert_id = $this->db->insert_id;
         return $this->last_insert_id;
     }
     final function update($config) {
         extract($config);
-        $query = "UPDATE $table SET $set";
-        $res = $this->query($query) or 'error';
-        return $res;
+        return $this->query( "UPDATE $table SET $set" );
     }    
-    final function delete($config) {
-        extract($config);
-        $query = "DELETE FROM $from WHERE $where";
-        $res = $this->query($query) or 'error';
-        return $res;
+    final function delete( $config ) {
+        extract( $config );
+        return $this->query( "DELETE FROM $from WHERE $where" );
     }
     final function select($config) {
         extract($config);
-        $query = "SELECT $select FROM $from WHERE $where";
-        $ret = [];
-        $res = $this->query($query) or 'error';
-        while($r = $this->fetch($res)) {
-            $ret[] = $r;
+        $arr = false;
+        $query = $this->query( "SELECT $select FROM $from WHERE $where" );
+        while( $row = $this->fetch( $query ) ) {
+            $arr[] = $row;
         }
-        return ($ret) ? $ret : false;
+        return ( $arr ) ? $arr : false;
     }
  
     /**
@@ -75,14 +69,13 @@ abstract class core {
      * 
      * Wenn der Parameter key angegeben wurde, wird nur der jeweilige Datensatz ausgegeben.
      */
-    final function settings($key=null) {
-        $query = (null!==$key) ? "SELECT * FROM settings WHERE settings.key='$key'" : "SELECT * FROM settings";
-        $result = $this->query($query);
-        $ret = false;
-        while($r = $this->fetch($result)) {
-            $ret[$r['key']] = $r['value'];
+    final function settings($key = false) { 
+        $query = $this->query( ( false !== $key ) ? "SELECT * FROM settings WHERE settings.key='$key'" : "SELECT * FROM settings" );
+        $arr = false;
+        while( $row = $this->fetch( $query ) ) {
+            $arr[$row['key']] = $row['value'];
         }   
-        return isset($ret[$key]) ? $ret[$key] : $ret;
+        return $key ? $arr[$key] : $arr;
     }
     
     /**
@@ -91,16 +84,13 @@ abstract class core {
      * Kann mit oder ohne Metadaten aufgerufen werden.
      * Dazu einen Index 'metadata' im Array(config) anlegen.
      */
-    final function single($cfg) {
-        extract($cfg);       
-        $item = false;
-        $item = @$this->fetch_assoc($this->query("SELECT * FROM object WHERE id=$id"));
-        if(!$item) { return false; }
-        $result = $item;
+    final function single( $config ) {
+        extract( $config );       
+        $item = @$this->fetch_assoc( $this->query( "SELECT * FROM object WHERE id=$id" ) );
         if(isset($metadata) && $metas = $this->single_meta($item['id'])) {
-            $result = array_merge($item, array_column($metas, 'v', 'k'));
+            array_merge($item, array_column($metas, 'v', 'k'));
         }
-        return ($result) ? $result : false;
+        return ($item) ? $item : false;
     }
     
     /**
@@ -110,7 +100,7 @@ abstract class core {
      * In dem Fall kann es allerdngs nicht mehr an ein Item eangehängt werden.
      */
     final function single_meta($item_id,$index=false) {
-        if($index==true) {
+        if($index) {
             $item_meta = $this->query("SELECT meta_id as id, meta_key as k, meta_value as v FROM object_meta WHERE meta_item_id=$item_id"); 
         } else {
             $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM object_meta WHERE meta_item_id=$item_id");
@@ -143,17 +133,16 @@ abstract class core {
     /**
      * @todo Prueft nur, welche Ordner in ../content/themes/* enthalten sind.
      */
-    final function installed_themes() {
-        $themes = null;     
-        if ($files = opendir( ABSPATH . 'content' . DS . 'themes')) {     
-            while (false !== ($file = readdir($files))) { 
-                if ($file!='.' && $file!='..') { 
+    final function installed_themes() {     
+        if( $files = opendir( ABSPATH . 'content' . DS . 'themes') ) {     
+            while ( false !== ( $file = readdir( $files ) ) ) { 
+                if ( $file != '.' && $file != '..' ) { 
                     $themes[] = $file;     
                 }              
             }                  
             closedir($files);               
         }           
-        return $themes;          
+        return $themes ? $themes : false;          
     }
     
     /**
