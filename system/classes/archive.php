@@ -7,7 +7,7 @@
 class archive extends system {
 
 private $posts = [];
-private $max_per_page = 5;
+private $max_per_page = 10;
 private $displayed_this_page = 0;
 private $last = 0;
 private $post_count = 0;
