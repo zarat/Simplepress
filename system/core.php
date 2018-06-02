@@ -43,7 +43,7 @@ abstract class core {
     final function insert($config) {
         extract($config);
         $query = "INSERT INTO $insert VALUES $values";
-        $res = $this->query($query) or 'error';
+        $this->query($query);
         $this->last_insert_id = $this->db->insert_id;
         return $this->last_insert_id;
     }
