@@ -22,7 +22,7 @@ if(!empty($_POST['title'])) {
     $description = htmlentities($_POST['description']);
     $text = $_POST['text'];   
     $category = $_POST['category'];         
-    $date = isset($_POST['date']) ? strtotime(str_replace(".", "-", $_POST['date'])) : date();
+    $date = !empty($_POST['date']) ? strtotime(str_replace(".", "-", $_POST['date'])) : time();
         
     $cfg = array("insert"=>"object (type, title, content, description, keywords, status, category, date)","values"=>"('$posttype','$title', '$text', '$description', '$keywords', 1, $category, '$date')");
     $system->insert($cfg);
