@@ -12,7 +12,7 @@ echo "<div class='sp-sidebar-item'>";
     echo "</div>\n";
 echo "</div>";
  
-$conf = array('select' => 'id,title','from' => 'object','where' => 'status=1 AND type="category"');
+$conf = array('select' => 'id,title','from' => 'item','where' => 'status=1 AND type="category"');
 
 echo "<div class='sp-sidebar-item'>";
     echo "<div class='sp-sidebar-item-head'>Kategorien</div>";
