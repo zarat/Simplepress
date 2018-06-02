@@ -2,10 +2,7 @@
 
 /**
  * @author Manuel Zarat
- * 
  */
-
-$item = $system->single(array('type'=>$system->request('type'),'id'=>$system->request('id'))); 
 
 echo "<div class='sp-content'>\n";
 
