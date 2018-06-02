@@ -19,7 +19,7 @@ $system = new system();
     $newstatus = ($status==1) ? 0 : 1;
     $var = ($status==1) ? "deaktivieren" : "aktivieren";
     
-    $config = array("table"=>"object","set"=>"status=$status WHERE id=$id");
+    $config = array("table"=>"item","set"=>"status=$status WHERE id=$id");
     $system->update($config);
     
     /**
