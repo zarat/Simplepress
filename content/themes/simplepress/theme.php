@@ -35,7 +35,7 @@ class simplepress extends theme {
     }
     
     function random_posts() {
-        $posts = $this->archive( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' ORDER BY RAND() LIMIT 3" ) );
+        $posts = $this->archive( array( "select" => "*", "from" => "item", "where" => "status=1 AND type='post' ORDER BY RAND() LIMIT 3" ) );
         echo "<div class='sp-sidebar-item'>";
         echo "<div class='sp-sidebar-item-head'>Weiterlesen</div>";
         foreach( $posts as $post) {
