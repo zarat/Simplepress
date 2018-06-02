@@ -8,6 +8,7 @@ if( !@$_GET['type'] && !@$_POST['title'] ) { die("sorry, wrong query."); }
 
 $posttype = $_GET['type'];
 
+echo "<link rel=\"stylesheet\" href\"../admin/css/datepicker.css\">\n";
 echo "<script type=\"text/javascript\" src=\"https://cdn.ckeditor.com/4.5.10/standard/ckeditor.js\"></script>\n";
 echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
 
