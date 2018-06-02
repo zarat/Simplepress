@@ -43,10 +43,13 @@ private $post_count = 0;
                 $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY id ASC") );               
             } 
         } elseif( $this->request( 'type' ) && $this->request( 'type' ) == 'search' ) { 
+            /**
+             * @todo Suche mit AND, OR und IN
+             */
             if( $this->request( 'last' ) ) {      
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . $this->request( 'term' ) . "%' OR content LIKE '%" . $this->request( 'term' ) . "%' ) AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                 
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                 
             } else {                   
-                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . $this->request( 'term' ) . "%' OR content LIKE '%" . $this->request( 'term' ) . "%' ) ORDER BY id ASC") );               
+                $this->posts = $this->select( array( "select" => "*", "from" => "object", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ORDER BY id ASC") );               
             }                                
         } else {   
             if( $this->request( 'last' ) ) {                     
