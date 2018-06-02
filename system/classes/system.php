@@ -108,7 +108,7 @@ class system extends core {
         } 
         $this->theme_functions();
         if($this->has_action(__FUNCTION__)) {     
-            $this->do_action(__FUNCTION__, $this->theme);       
+            $this->do_action(__FUNCTION__);       
         }              
     }
     
