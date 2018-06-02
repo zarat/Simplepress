@@ -64,8 +64,8 @@ class system extends core {
     /**
      * @todo Priority
      */
-    public final function add_action( $hook, $function ) {       
-        $this->hooks[$hook][] = $function;      
+    public final function add_action( $hook, $action ) {       
+        $this->hooks[$hook][] = $action;      
     }
     
     /**
@@ -79,13 +79,15 @@ class system extends core {
     /**
      * @todo Priority
      */
-    final function do_action( $hook, $params=false ) {
+    final function do_action( $hook ) {    
         if( isset( $this->hooks[$hook] ) ) { 
-            foreach( $this->hooks[$hook] as $action ) {
-                call_user_func( $action, $params );         
-            }          
-        }   
-    }  
+            if( is_array( $this->hooks[$hook][0] ) ) {  
+                call_user_func_array( $this->hooks[$hook][0][0], array( $this->hooks[$hook][0][1] ) );  
+            } else { 
+                call_user_func( $this->hooks[$hook][0] );
+            }                    
+        }           
+    }   
     
     function set_current_item($item) {
         $this->current_item = $item;
