@@ -23,11 +23,6 @@ class system extends core {
     private $hooks = false;
     
     /**
-     * Das Theme wird zur Laufzeit initiiert, kann mit Hilfe der theme/functions.php Hooks registrieren. 
-     */
-    private $theme = false;
-    
-    /**
      * @todo Priority
      */
     public final function add_action( $hook, $function ) {       
@@ -60,32 +55,7 @@ class system extends core {
         if( is_file( $theme_functions = ABSPATH . 'content' . DS . 'themes' . DS . $this->settings('site_theme') . DS . 'functions.php' ) ) {
             include $theme_functions;
         }
-    } 
-    
-    /**
-     * @deprecated siehe Hooks
-     */
-    private $positions = array( 'header', 'footer' );
-    
-    /**
-     * @deprecated siehe Hooks
-     */
-    final function set_include( $position, $include ) {
-        $this->positions[$position][] = $include;  
-    }
-    
-    /**
-     * @deprecated siehe Hooks
-     */
-    final function get_includes( $position ) {
-        if( isset( $this->positions[$position] ) ) {
-            foreach( $this->positions[$position] as $include ) {
-                $includes[] = $include;   
-            }   
-            return $includes;            
-        }   
-        return false; 
-    }      
+    }  
     
     /**
      * Die eigentliche Eintrittsfunktion
@@ -98,7 +68,7 @@ class system extends core {
         $this->theme->render();     
     }
     
-    private function setup_theme() {
+    final function setup_theme() {
         if(is_file($custom_theme_file = ABSPATH . 'content' . DS . 'themes' . DS . $this->settings('site_theme') . DS . 'theme.php')) {
             include $custom_theme_file;      
             $custom_theme = $this->settings('site_theme');                       
@@ -142,7 +112,7 @@ class system extends core {
     /**
      * @todo Prueft nur, welche Ordner in ../content/themes/* enthalten sind.
      */
-    function installed_themes() {
+    final function installed_themes() {
         $themes = null;     
         if ($files = opendir( ABSPATH . 'content' . DS . 'themes')) {     
             while (false !== ($file = readdir($files))) { 
@@ -158,7 +128,7 @@ class system extends core {
     /**
      * Uebersetzt einen String aus der Sprachdatei ../system/lang/*
      */
-    function _t($str) {    
+    final function _t($str) {    
         include ABSPATH . 'system' . DS . 'lang' . DS . 'lang.php';
         if( is_file( $langfile = ABSPATH . 'system' . DS . 'lang' . DS . 'lang-' . $this->settings('site_language') . '.php' ) ) {
             include $langfile;    
