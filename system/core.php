@@ -1,11 +1,7 @@
 <?php
 
 /**
- * Die Klasse Core sollte so selten wie moeglich angefasst werden.
- * 
  * @author Manuel Zarat
- * @date 05.01.2018
- * 
  */
 
 abstract class core {               
@@ -143,6 +139,49 @@ abstract class core {
             }
         }
         return (false !== $archive) ? $archive : false;
+    }
+    
+    /**
+     * @todo Prueft nur, welche Ordner in ../content/themes/* enthalten sind.
+     */
+    final function installed_themes() {
+        $themes = null;     
+        if ($files = opendir( ABSPATH . 'content' . DS . 'themes')) {     
+            while (false !== ($file = readdir($files))) { 
+                if ($file!='.' && $file!='..') { 
+                    $themes[] = $file;     
+                }              
+            }                  
+            closedir($files);               
+        }           
+        return $themes;          
+    }
+    
+    /**
+     * Parst den Querystring und gibt ihn als Array zurueck - sonst false
+     * Wenn ein Parameter uebergeben wird, wird dieser (wenn vorhanden) zurueckgegeben - sonst false
+     */
+    final function request($key=false) {
+        if($_SERVER['QUERY_STRING']) {
+            parse_str($_SERVER['QUERY_STRING'], $parameters);
+            if(false !== $key) {
+                if(!empty($parameters[$key])) {       
+                    /** 
+                    SQL Injection 
+                    @todo HOTFIX 
+                    */
+                    if($key == 'id') {
+                        return (int)$parameters[$key];
+                    } else {
+                        return $parameters[$key];
+                    }
+                } else {
+                    return false;            
+                }        
+            } else {  
+                return ($parameters) ? $parameters : false;    
+            }     
+        }   
     }
         
 }
