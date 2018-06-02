@@ -1,8 +1,7 @@
 <?php
 
 /**
- * @author Manuel Zarat
- * 
+ * @author Manuel Zarat 
  */
  
 echo "<div class='sp-sidebar-item'>";
