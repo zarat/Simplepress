@@ -86,7 +86,7 @@ abstract class core {
      */
     final function single( $config ) {
         extract( $config );       
-        $item = @$this->fetch_assoc( $this->query( "SELECT * FROM object WHERE id=$id" ) );
+        $item = @$this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$id" ) );
         if(isset($metadata) && $metas = $this->single_meta($item['id'])) {
             array_merge($item, array_column($metas, 'v', 'k'));
         }
@@ -101,9 +101,9 @@ abstract class core {
      */
     final function single_meta($item_id,$index=false) {
         if($index) {
-            $item_meta = $this->query("SELECT meta_id as id, meta_key as k, meta_value as v FROM object_meta WHERE meta_item_id=$item_id"); 
+            $item_meta = $this->query("SELECT meta_id as id, meta_key as k, meta_value as v FROM item_meta WHERE meta_item_id=$item_id"); 
         } else {
-            $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM object_meta WHERE meta_item_id=$item_id");
+            $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM item_meta WHERE meta_item_id=$item_id");
         }
         $metadata = false;
         while($metas = $this->fetch($item_meta)) {
