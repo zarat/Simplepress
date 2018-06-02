@@ -87,16 +87,16 @@ input{
     <div class="nav-container">
     <div>
     <label class="responsive_menu" for="responsive_menu">
-    <span>Menu</span>
+        <span>Menu</span>
     </label>
     <input id="responsive_menu" type="checkbox">
         <ul class="menu">    
             <li><a href="./?page=dashboard">Dashboard</a>
                 <ul>
-					<li><a href="./?page=edit_file">Theme Editor</a></li>
+			        <li><a href="./?page=edit_file">Theme Editor</a></li>
+			        <li><a href="./?page=menu_edit&menu_id=1">Menu Manager</a></li>
                 </ul>
-            </li>
-            <li><a href="./?page=menu_edit&menu_id=1">Navigation</a></li>        
+            </li> 
             <li><a href="#">Inhalte</a>
                 <ul>
                     <li><a href="./?page=item_list&type=page">Seiten</a></li>
