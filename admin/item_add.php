@@ -25,7 +25,7 @@ if(!empty($_POST['title'])) {
     $category = $_POST['category'];         
     $date = !empty($_POST['date']) ? strtotime(str_replace(".", "-", $_POST['date'])) : time();
         
-    $cfg = array("insert"=>"object (type, title, content, description, keywords, status, category, date)","values"=>"('$posttype','$title', '$text', '$description', '$keywords', 1, $category, '$date')");
+    $cfg = array("insert"=>"item (type, title, content, description, keywords, status, category, date)","values"=>"('$posttype','$title', '$text', '$description', '$keywords', 1, $category, '$date')");
     $system->insert($cfg);
     
     $last = $system->last_insert_id();
@@ -48,7 +48,7 @@ if(!empty($_POST['title'])) {
         
         echo '<p>' . $system->_t('item_add_category') . '</p>';
         echo "<p><select name=\"category\">";
-        $cfg = array('select'=>'*','from'=>'object','where'=>'type="category"');
+        $cfg = array('select'=>'*','from'=>'item','where'=>'type="category"');
         $a = $system->archive($cfg);
         for($i=0;$i<count($a);$i++) {
             if($result['category'] == $a[$i]['id']) {
