@@ -4,6 +4,9 @@
  * Wenn $_GET && $_POST uebergeben wurden, wird es gespeichert und dann angezeigt, sonst nur angezeigt.
  */
 
+echo "<script type=\"text/javascript\" src=\"https://cdn.ckeditor.com/4.5.10/standard/ckeditor.js\"></script>\n";
+echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
+
 echo "<div class=\"sp-content\">";
 
 echo '<h3>' . $system->_t('item_modify') . '</h3>';
