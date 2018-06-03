@@ -4,6 +4,8 @@
  * @author Manuel Zarat
  */
 
+echo "<!--BeginNoIndex-->\n";
+
 while( $archive->have_posts() ) {
 
     $item = $archive->the_post( $strip_tags=true, $content_length=200 );
@@ -16,5 +18,7 @@ while( $archive->have_posts() ) {
 }
 
 $archive->pagination();
+
+echo "<!--EndNoIndex-->\n";
 
 ?>
