@@ -102,7 +102,7 @@ abstract class core {
         extract($config);
         $item = $this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$config[id]" ) );
         if( null === $item ) { return false; };
-        if( $metadata && $metas = $this->single_meta($item['id'])) {
+        if( @$metadata && $metas = $this->single_meta($item['id'])) {
             foreach( $metas as $k => $v ) {
                 $item[$k] = $v;
             }
