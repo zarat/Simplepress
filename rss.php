@@ -1,10 +1,7 @@
 <?php 
 
 /**
- * Simplepress RSS Feed
- *
  * @author Manuel Zarat
- * 
  */
 
 header("Content-type: text/xml");
