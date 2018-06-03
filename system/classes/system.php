@@ -209,6 +209,33 @@ class system extends core {
         ob_end_clean();         
         return $content;               
     }
+    
+    final function sidebar() {         
+        $include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar.php"; 
+        $custom_include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar-" . $this->request('type') . ".php";            
+        if( is_file( $custom_include_file ) ) {                
+            include $custom_include_file;                    
+        } else if( is_file( $include_file ) ) {                
+            include $include_file;                   
+        } else {             
+            echo "<div class='sp-sidebar'>";                   
+                echo "<div class='sp-sidebar-item'>";
+                    echo "<div class='sp-sidebar-item-head'>Suche</div>";
+                    echo "<div class='sp-sidebar-item-box'>\n";
+                        echo "<div class='sp-sidebar-item-box-body'><div class='container'><form><input type='hidden' name='type' value='search'><input type='text' name='term'></form></div></div>\n";
+                    echo "</div>\n";
+                echo "</div>";                 
+                echo "<div class='sp-sidebar-item'>";
+                    echo "<div class='sp-sidebar-item-head'>Kategorien</div>";
+                    foreach($this->archive( array('select' => 'id,title','from' => 'item','where' => 'status=1 AND type="category"') ) as $cat) {
+                        echo "<div class='sp-sidebar-item-box'>\n";
+                            echo "<div class='sp-sidebar-item-box-head'><a href='../?type=category&id=$cat[id]'>$cat[title]</a></div>\n";
+                        echo "</div>\n";
+                    }
+                echo "</div>"; 
+            echo "</div>";                      
+        }                              
+    }
 
 }
 
