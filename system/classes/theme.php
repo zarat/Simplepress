@@ -142,23 +142,6 @@ class theme extends system {
     function before_sidebar() { }
     
     /**
-     * Sidebar
-     * 
-     * Sekundaerer Inhalt, meisstens Kategorien und letzte Artikel
-     * 
-     * @todo $system muss initiiert werden :S
-     * 
-     */
-    function sidebar() {     
-        $system = new system();    
-        if(is_file($sidebar = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar-" . $this->request('type') . ".php")) {                        
-            include $sidebar;                                
-        } else {                        
-            include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar.php";           
-        }                      
-    }
-    
-    /**
      * Wenn etwas unter dem ganzen Inhalt angezeigt werden soll, kommt es hierhin
      * 
      * @todo
