@@ -20,6 +20,12 @@ class simplepress extends theme {
         echo "<div style=\"clear:both;\"></div>";
     }
     
+    function footer() {
+        echo "<div class=\"sp-footer\" style=\"padding:10px;\">";
+        parent::footer();
+        echo "</div>";
+    }
+    
 }
 
 ?>
