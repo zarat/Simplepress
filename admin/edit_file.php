@@ -30,7 +30,7 @@ function getDirContents($dir, &$results = array()) {
         }        
     }
     return $results;    
-}
+}       
 
 echo "<div class=\"sp-content\">";
 echo '<h3>' . $system->_t('welcome_to_theme_edit') . '</h3>';
@@ -58,7 +58,7 @@ if(isset($_POST['filename']) && isset($_POST['filecontent'])) {
     echo '<form method="post">
         <div style="min-height:300px;">
             <input type="hidden" name="filename" value="' . $filename . '">
-            <p><textarea name="filecontent" style="min-height:300px;resize:none;">' . $filecontent . '</textarea></p>
+            <p><textarea name="filecontent" rows="20" cols="40" style="overflow-y:scroll;white-space: pre">'.($filecontent).'</textarea></p>
         </div>
         <input type="submit" name="save">
         <div style="clear:both;"></div>
@@ -78,13 +78,13 @@ if(isset($_POST['filename']) && isset($_POST['filecontent'])) {
     echo '<form method="post">
         <div style="min-height:300px;">
             <input type="text" name="filename" value="' . $filename . '">
-            <p><textarea name="filecontent" style="min-height:300px;resize:none;">' . $filecontent . '</textarea></p>
+            <p><textarea name="filecontent" rows="20" cols="40" style="overflow-y:scroll;white-space: pre">'.($filecontent).'</textarea></p>
         </div>
         <input type="submit" name="save">
         <div style="clear:both;"></div>
     </form>';
 
-} 
+}   
 
 echo '</div>';
 echo '<div class="sp-sidebar">';
