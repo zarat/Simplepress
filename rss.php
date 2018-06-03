@@ -34,7 +34,7 @@ foreach($rss as $row)    {
     echo "<title>" . html_entity_decode($row['title']) . "</title>";
     echo "<link>" . htmlspecialchars($item_url . "?type=" . $row['type'] . "&id=" . $row['id']) . "</link>";
     echo "<description>" . htmlspecialchars(substr(strip_tags(html_entity_decode($row['content'])),0,320)) . "</description>";
-    echo "<pubDate>" . date(DATE_RFC822, strtotime(gmdate("Y-m-d\TH:i:s\Z", $row['date']))) . "</pubDate>"; /** moderne RSS Feeds haben RFC822 konformes Datum! */
+    echo "<pubDate>" . date('r', $row['date']) . "</pubDate>"; /** moderne RSS Feeds haben RFC822 konformes Datum! */
     echo "</item>";
 
 }
