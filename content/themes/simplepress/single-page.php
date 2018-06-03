@@ -4,8 +4,6 @@
  * @author Manuel Zarat
  */
 
-echo "<div class='sp-content'>\n";
-
 if($item) { 
 
     echo "<div class ='sp-content-item-head'>" . $item['title'] . "</div>\n";
@@ -16,7 +14,5 @@ if($item) {
     echo "<div class ='sp-content-item-head'>" . $system->_t('no_items_to_display') . "</div>\n";
     
 }
-
-echo "</div>\n";
 
 ?>
