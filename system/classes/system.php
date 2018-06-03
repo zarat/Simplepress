@@ -100,7 +100,7 @@ class system extends core {
     /**
      * Main Path
      */ 
-    final function path() {            
+    function content() {            
         switch($this->request('type')) {
             case "post":
             case "page":
@@ -210,7 +210,7 @@ class system extends core {
         return $content;               
     }
     
-    final function sidebar() {         
+    function sidebar() {         
         $include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar.php"; 
         $custom_include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar-" . $this->request('type') . ".php";            
         if( is_file( $custom_include_file ) ) {                
