@@ -24,6 +24,11 @@ abstract class core {
         }                                                 
     }
     
+    final function auth($user, $pass) {
+        $user = $this->select( array( "select" => "*", "from" => "user", "where" => "email='$user' AND password='$pass'") );
+        return !empty( $user[0]['id'] ) ? $user[0]['id'] : false;
+    }
+    
     private function sql_escape_string($query) {
         return mysqli_real_escape_string($this->db, $query);    
     }        
