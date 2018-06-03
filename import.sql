@@ -59,3 +59,11 @@ INSERT INTO `settings` (`key`, `value`) VALUES
 ('site_description',	'Simplepress ist ein objektorientiertes CMS in PHP und SQL'),
 ('site_theme',	'simplepress'),
 ('site_language',	'de');
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `email` int(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `displayname` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
