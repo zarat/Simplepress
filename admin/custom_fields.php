@@ -6,10 +6,10 @@ function get_all_fields( $item_id ) {
     $system = new system();
     $all_fields = $system->single_meta( $item_id, $index = true );
     if($all_fields) {
-        foreach( $all_fields as $field) {
+        foreach( $all_fields as $k => $v) {
             echo "<form>";
-            echo "<p>" . $field['k'] . ": " . $field['v'] . "</p>";
-            echo "<a style=\"cursor:pointer;\" onclick=\"deletecustomfield('" . $field['meta_id'] . "','$item_id')\">entfernen</a>";
+            echo "<p>" . $k . ": " . $v . "</p>";
+            echo "<a style=\"cursor:pointer;\" onclick=\"deletecustomfield('" . $k . "',$item_id)\">entfernen</a>";
             echo "</form";
         }
     }
@@ -22,11 +22,12 @@ function add_field( $item_id, $field_key, $field_value ) {
     $system->insert( $config );
 }
 
-function delete_field( $field_id ) {
+function delete_field( $key, $item_id ) {
     $system = new system();
-    $item_id = $system->select( array( 'select' => '*', 'from' => 'item_meta', 'where' => 'meta_id=' . $field_id ) );
-    $system->delete( array( 'from' => 'item_meta', 'where' => 'meta_id=' . $field_id ) );
-    echo $item_id[0]['meta_item_id'];
+    $meta_item = $system->select( array( "select" => "*", "from" => "item_meta", "where" => "meta_key='" . $key . "' AND meta_item_id=" . $item_id ) );
+    $meta = $meta_item[0];
+    $system->delete( array( 'from' => 'item_meta', 'where' => 'meta_id=' . $meta['meta_id'] ) );
+    echo $item_id;
 } 
     
 if( isset( $_POST['item_id'] ) ) {
@@ -58,8 +59,9 @@ if( isset( $_POST['item_id'] ) ) {
             break;
             
         case "delete":
-            $field_id = @$_GET['field_id'];
-            delete_field( $field_id );
+            $key = @$_GET['key'];
+            $item_id = @$_GET['item_id'];
+            delete_field( $key, $item_id );
             break;
             
         default:
