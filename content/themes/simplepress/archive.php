@@ -2,14 +2,7 @@
 
 /**
  * @author Manuel Zarat
- * @date 05.01.2018
- * @license http://opensource.org/licenses/MIT
- * 
- * @todo search
- * 
  */
-
-echo "<div class='sp-content'>\n";
 
 while( $archive->have_posts() ) {
 
@@ -23,7 +16,5 @@ while( $archive->have_posts() ) {
 }
 
 $archive->pagination();
-
-echo "</div>\n\n";
 
 ?>
