@@ -1,7 +1,10 @@
 <?php
 
 /**
+ * Login script triple-alpha
+ *
  * @author Manuel Zarat
+ *
  */
 
 include "load.php";
@@ -47,31 +50,16 @@ $nav->html();
 
 <!-- Hier kommt der Login -->
 
-<?php if(!isset($_POST['formlogin'])) { ?>
+<?php
 
-<form action="login.php" method="post" name="frm">
-<center>
-<table cellspacing="4" cellpadding="4" style="">
-	<tr>
-		<td>Email</td>
-		<td><input type="text" name="formlogin" class="cssborder" autofocus></td>
-
-		<td>Passwort</td>
-		<td><input type="password" name="formpass" class="cssborder"></td>
-    <td><input type="submit" value="login" class="cssborder"></td>
-	</tr>
-</table>
-</center> 	 
-</form>
-
-<?php } else { 
+$system = new system();
+ 
+if( isset( $_POST['formlogin'] ) ) { 
 
     $formlogin = $_POST['formlogin'];
     $formpass = md5($_POST['formpass']);      
 
-    $system = new system();    
-
-    if( $user = $system->auth($formlogin,$formpass) ) {
+    if( $user = $system->login($formlogin,$formpass) ) {
     
     $token = md5( $user . time() );
     $cfg = array( "table" => "user", "set" => "token='$token' where id=" . $user );
@@ -88,15 +76,35 @@ $nav->html();
             document.cookie = name + \"=\" + value + \";\" + expires + \";path=/\";
         }
         setCookie('sp-uid','$token',1); 
+        setTimeout( function() { window.location = window.location; }, 1000);
         </script>";
-        
-        echo "Du wurdest erfolgreich angemeldet.";
         
     } else {
     
         echo "Anmeldeversuch gescheitert.";
         
     }
+
+} else {
+
+if( $user = $system->auth() ) {
+    echo "<h3>Hallo $user[displayname], du bist jetzt angemeldet</h3>";
+} else {
+    $form ='<form action="login.php" method="post" name="frm">'."\n";
+    $form.='<center>'."\n";
+    $form.='<table cellspacing="4" cellpadding="4" style="">'."\n";
+    $form.='	<tr>'."\n";
+    $form.='		<td>Email</td>'."\n";
+    $form.='		<td><input type="text" name="formlogin" class="cssborder" autofocus></td>'."\n";
+    $form.='		<td>Passwort</td>'."\n";
+    $form.='		<td><input type="password" name="formpass" class="cssborder"></td>'."\n";
+    $form.='    <td><input type="submit" value="login" class="cssborder"></td>'."\n";
+    $form.='	</tr>'."\n";
+    $form.='</table>'."\n";
+    $form.='</center> 	 '."\n";
+    $form.='</form>';
+    echo $form;
+}
 
 }
 
