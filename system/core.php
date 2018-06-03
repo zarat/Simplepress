@@ -115,7 +115,7 @@ abstract class core {
      */
     final function single_meta($item_id,$index=false) {
         if($index) {
-            $item_meta = $this->query("SELECT meta_id as id, meta_key as k, meta_value as v FROM item_meta WHERE meta_item_id=$item_id"); 
+            $item_meta = $this->query("SELECT meta_id, meta_key as k, meta_value as v FROM item_meta WHERE meta_item_id=$item_id"); 
         } else {
             $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM item_meta WHERE meta_item_id=$item_id");
         }
