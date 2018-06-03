@@ -48,11 +48,13 @@ private $sublevel = 0;
              * Adminlink bei letzter Iteration
              * 
              */
-            if($this->sublevel<1 && isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1) { 
+            if($this->sublevel<1 && $this->auth() ) { 
+            
                 echo str_repeat("\t", $this->sublevel) . "<li><a href='../admin'>Admin</a>\n";
                 echo "<ul>";
                 echo str_repeat("\t", $this->sublevel) . "<li><a href='../logout.php'>logout</a></li>\n";
                 echo "</ul></li>";
+                
             }       
             echo str_repeat("\t", $this->sublevel) . "</ul>\n";
             
