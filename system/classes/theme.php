@@ -15,7 +15,7 @@ class theme extends system {
          * Diese Funktion muss zuerst ausgefuehrt werden, da die Variablen im Header gebraucht werden. 
          * Inhalt wird in system gebuffert!
          */
-        $content = $this->path();
+        $content = $this->content();
         
         /**
          * Der unsichtbare Header holt sich jetzt die Daten, die davor gebuffert wurden.
