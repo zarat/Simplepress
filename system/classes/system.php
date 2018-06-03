@@ -5,20 +5,11 @@
  */
 
 class system extends core {
-    
-    /**
-     * @todo Header Hotfix
-     */
+
     private $current_item = false;    
 
-    /**
-     * Mit Hilfe von Hooks koennen zu bestimmten Punkten der Laufzeit - zuvor in theme/settings.php definierte - Funktionen aufgerufen werden.
-     */
     private $hooks = false;
-    
-    /**
-     * Main function
-     */
+
     final function init() { 
         $this->setup_theme();
         if($this->has_action(__FUNCTION__)) { 
