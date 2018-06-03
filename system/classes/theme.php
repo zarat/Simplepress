@@ -56,9 +56,9 @@ class theme extends system {
     function navigation( $id = 1 ) {
          $nav = new menu();
          $nav->config( array( 'id' => $id ) );
-         echo "<!--BeginNoIndex-->";
+         echo "<!--BeginNoIndex-->\n";
          echo $nav->html(); 
-         echo "<!--EndNoIndex-->";   
+         echo "<!--EndNoIndex-->\n";   
     }
     
     /**
