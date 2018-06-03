@@ -63,7 +63,7 @@ INSERT INTO `settings` (`key`, `value`) VALUES
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `email` int(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `displayname` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
