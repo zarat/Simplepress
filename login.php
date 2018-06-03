@@ -88,7 +88,7 @@ if( isset( $_POST['formlogin'] ) ) {
 } else {
 
 if( $user = $system->auth() ) {
-    echo "<h3>Hallo $user[displayname], du bist jetzt angemeldet</h3>";
+    echo "<h3>Hallo $user[displayname]</h3>\n<p>Du bist jetzt angemeldet - <a href='../admin'>zum Dashboard</a></p>";
 } else {
     $form ='<form action="login.php" method="post" name="frm">'."\n";
     $form.='<center>'."\n";
