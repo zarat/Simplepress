@@ -127,8 +127,18 @@ class system extends core {
                 $this->set_current_item($item);                 
                 if( is_file( $custom_include_file ) ) {                
                     include $custom_include_file;                    
-                } else {                
-                    include $include_file;                   
+                } else if( is_file( $include_file) ){                
+                    include $include_file;                  
+                } else {
+                    /**
+                     * @todo Kein Single Template vorhanden!
+                     */
+                    echo "<div class=\"sp-content\">\n";
+                    echo "<div class='sp-content-item'>\n";
+                    echo "<div class=\"sp-content-item-head\">" . $item['title']. "</div>\n";
+                    echo "<div class=\"sp-content-item-body\">" . $item['content']. "</div>\n";
+                    echo "</div>\n";
+                    echo "</div>\n\n";                              
                 }                                
             break;            
             case "archive":            
@@ -146,8 +156,21 @@ class system extends core {
                 }                                           
                 if( is_file( $custom_include_file ) ) {                
                     include $custom_include_file;                    
-                } else {                
-                    include $include_file;                   
+                } else if( is_file( $include_file ) ) {                
+                    include $include_file;                  
+                } else {
+                    /**
+                     * @todo Kein Single Template vorhanden!
+                     */
+                    echo "<div class='sp-content'>\n";
+                    while( $archive-> have_posts() ) {
+                        $item = $archive->the_post();
+                        echo "<div class='sp-content-item'>\n";
+                        echo "<div class='sp-content-item-head'><a href='../?type=$item[type]&id=$item[id]'>" . $item['title']. "</a></div>\n";
+                        echo "<div class='sp-content-item-body'>" . $item['content']. "</div>\n";
+                        echo "</div>\n";
+                    }
+                    echo "</div>\n\n";
                 }               
             break;                        
             default:             
@@ -159,8 +182,27 @@ class system extends core {
                 if( $latest->count_posts() < 1) { 
                     $this->error404(); 
                     break; 
+                }  
+                $include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";
+                $custom_include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "homepage.php";
+                if( is_file( $custom_include_file ) ) {                
+                    include $custom_include_file;                    
+                } else if( is_file( $include_file ) ) {                
+                    include $include_file;                   
+                } else {
+                    /**
+                     * @todo Kein Single Template vorhanden!
+                     */
+                    echo "<div class=\"sp-content\">\n";
+                    while( $latest-> have_posts() ) {
+                        $item = $latest->the_post();
+                        echo "<div class='sp-content-item'>\n";
+                        echo "<div class='sp-content-item-head'><a href='../?type=$item[type]&id=$item[id]'>" . $item['title']. "</a></div>\n";
+                        echo "<div class='sp-content-item-body'>" . $item['content']. "</div>\n";
+                        echo "</div>\n";
+                    }
+                    echo "</div>\n\n";
                 }                
-                include ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";                
             break;                    
         }        
         $content = ob_get_contents();         
