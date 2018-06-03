@@ -68,7 +68,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
         
         echo '<p>' . $system->_t('item_modify_category') . '</p>';
         echo "<p><select name=\"category\">";
-        $cfg = array('select'=>'*','from'=>'object','where'=>'type="category"');
+        $cfg = array('select'=>'*','from'=>'item','where'=>'type="category"');
         $a = $system->archive($cfg);
         for($i=0;$i<count($a);$i++) {
             if($result['category'] == $a[$i]['id']) {
