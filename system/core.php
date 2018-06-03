@@ -98,13 +98,16 @@ abstract class core {
      * Kann mit oder ohne Metadaten aufgerufen werden.
      * Dazu einen Index 'metadata' im Array(config) anlegen.
      */
-    final function single( $config ) {
-        extract( $config );       
-        $item = @$this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$id" ) );
-        if(isset($metadata) && $metas = $this->single_meta($item['id'])) {
-            $item = array_merge($item, $metas);
+    final function single( $config ) { 
+        extract($config);
+        $item = $this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$config[id]" ) );
+        if( null === $item ) { return false; };
+        if( $metadata && $metas = $this->single_meta($item['id'])) {
+            foreach( $metas as $k => $v ) {
+                $item[$k] = $v;
+            }
         }
-        return ($item) ? $item : false;
+        return is_array($item) ? $item : false;
     }
     
     /**
@@ -120,7 +123,7 @@ abstract class core {
             $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM item_meta WHERE meta_item_id=$item_id");
         }
         $metadata = false;
-        while($metas = $this->fetch($item_meta)) {
+        while($metas = $this->fetch_assoc($item_meta)) {
             $metadata[$metas['k']] = $metas['v'];
         }      
         return ($metadata) ? $metadata : false;
