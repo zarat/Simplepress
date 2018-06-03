@@ -22,7 +22,9 @@ class simplepress extends theme {
     
     function footer() {
         echo "<div class=\"sp-footer\" style=\"padding:10px;\">";
+        echo "<!--BeginNoIndex-->\n";
         parent::footer();
+        echo "<!--EndNoIndex-->\n";
         echo "</div>";
     }
     
