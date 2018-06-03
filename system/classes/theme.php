@@ -94,9 +94,6 @@ class theme extends system {
                 } else if( is_file( $include_file) ){                
                     include $include_file;                  
                 } else {
-                    /**
-                     * @todo Kein Single Template vorhanden!
-                     */
                     echo "<div class='sp-content-item'>\n";
                     echo "<div class=\"sp-content-item-head\">" . $item['title']. "</div>\n";
                     echo "<div class=\"sp-content-item-body\">" . $item['content']. "</div>\n";
@@ -121,9 +118,6 @@ class theme extends system {
                 } else if( is_file( $include_file ) ) {                
                     include $include_file;                  
                 } else {
-                    /**
-                     * @todo Kein Single Template vorhanden!
-                     */
                     while( $archive-> have_posts() ) {
                         $item = $archive->the_post();
                         echo "<div class='sp-content-item'>\n";
@@ -134,9 +128,6 @@ class theme extends system {
                 }               
             break;                        
             default:             
-                /**
-                 * Default wird ein Archiv der letzten Items (post) gezeigt.
-                 */
                 $latest = new archive();
                 $latest->archive_init();                
                 if( $latest->count_posts() < 1) { 
@@ -150,9 +141,6 @@ class theme extends system {
                 } else if( is_file( $include_file ) ) {                
                     include $include_file;                   
                 } else {
-                    /**
-                     * @todo Kein Single Template vorhanden!
-                     */
                     while( $latest-> have_posts() ) {
                         $item = $latest->the_post();
                         echo "<div class='sp-content-item'>\n";
