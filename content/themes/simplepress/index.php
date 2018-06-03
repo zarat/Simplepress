@@ -4,6 +4,8 @@
  * @author Manuel Zarat
  */
 
+echo "<!--BeginNoIndex-->\n";
+
 while( $latest->have_posts() ) {
 
     $item = $latest->the_post( $strip_tags=true, $content_length=200 );
@@ -16,5 +18,7 @@ while( $latest->have_posts() ) {
 }
 
 $latest->pagination();
+
+echo "<!--EndNoIndex-->\n";
 
 ?>
