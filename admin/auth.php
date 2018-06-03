@@ -1,14 +1,14 @@
 <?php
 
 /**
- * 
- * Authentifizierung fuer den Adminbereich. 
- * 
+ * @author Manuel Zarat
  */
+require_once "../config.php";
+require_once "../load.php";
 
-session_start();
+$system = new system();
 
-if ($_SESSION["loggedin"] != "1"){
+if( !$system->auth() ) {
 	header("Location: ../login.php"); /* Redirect browser */  
 	exit; 
 }
