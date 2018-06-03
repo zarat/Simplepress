@@ -22,8 +22,8 @@ if(isset($_GET['page'])){
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 
-<link href="../content/themes/simplepress/css/menu.css" rel="stylesheet" type="text/css" />
-<link href="../content/themes/simplepress/css/style.css" rel="stylesheet" type="text/css" />
+<link href="./css/menu.css" rel="stylesheet" type="text/css" />
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="./js/jquery.js"></script>
 <script type="text/javascript" src="./js/admin.js"></script>
