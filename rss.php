@@ -25,7 +25,7 @@ echo "<title>" . $system->settings('site_title') . " > Updates</title>";
 echo "<link>" . $channel_url . "</link>";
 echo "<description>" . html_entity_decode($system->settings('site_description')) . "</description>";
 
-$cfg = array("select"=>"*","from"=>"object","where"=>"type='post' AND status=1 ORDER BY id DESC");
+$cfg = array("select"=>"*","from"=>"item","where"=>"type='post' AND status=1 ORDER BY id DESC");
 $rss = $system->archive($cfg);
     
 foreach($rss as $row)    {
