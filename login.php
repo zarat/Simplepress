@@ -61,9 +61,10 @@ if( isset( $_POST['formlogin'] ) ) {
 
     if( $user = $system->login($formlogin,$formpass) ) {
     
-    $token = md5( $user . time() );
-    $cfg = array( "table" => "user", "set" => "token='$token' where id=" . $user );
-    $system->update( $cfg );    
+        $token = md5( $user . time() );
+        $cfg = array( "table" => "user", "set" => "token='$token' where id=" . $user );
+        $system->update( $cfg );
+        
         /**
          * Cookie clientseitig setzen wg Zeitzonen Offset
          */
@@ -74,22 +75,19 @@ if( isset( $_POST['formlogin'] ) ) {
             d.setTime(d.getTime() + (hours*60*60*1000));
             var expires = \"expires=\" + d.toUTCString();
             document.cookie = name + \"=\" + value + \";\" + expires + \";path=/\";
+            window.location = \"../admin\";
         }
         setCookie('sp-uid','$token',1); 
-        setTimeout( function() { window.location = window.location; }, 1000);
         </script>";
         
     } else {
     
-        echo "Anmeldeversuch gescheitert.";
+        echo "<script>window.location = window.location</script>";
         
     }
 
 } else {
 
-if( $user = $system->auth() ) {
-    echo "<h3>Hallo $user[displayname]</h3>\n<p>Du bist jetzt angemeldet - <a href='../admin'>zum Dashboard</a></p>";
-} else {
     $form ='<form action="login.php" method="post" name="frm">'."\n";
     $form.='<center>'."\n";
     $form.='<table cellspacing="4" cellpadding="4" style="">'."\n";
@@ -104,7 +102,6 @@ if( $user = $system->auth() ) {
     $form.='</center> 	 '."\n";
     $form.='</form>';
     echo $form;
-}
 
 }
 
