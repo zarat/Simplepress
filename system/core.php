@@ -24,11 +24,20 @@ abstract class core {
         }                                                 
     }
     
-    final function auth($user, $pass) {
-        $user = $this->select( array( "select" => "*", "from" => "user", "where" => "email='$user' AND password='$pass'") );
+    final function login($uid, $pass) {
+        $user = $this->select( array( "select" => "*", "from" => "user", "where" => "email='$uid' AND password='$pass'") );
         return !empty( $user[0]['id'] ) ? $user[0]['id'] : false;
     }
-    
+    final function logout() {
+        $token = $_COOKIE['sp-uid'];
+        $this->update( array( "table" => "user", "set" => "token='' where token='$token'" ) );
+    }
+    final function auth() {
+        $token = $_COOKIE['sp-uid'];
+        $user = $this->select( array( "select" => "*", "from" => "user", "where" => "token='$token'") );
+        return !empty( $user[0]['id'] ) ? $user[0] : false;
+    } 
+     
     private function sql_escape_string($query) {
         return mysqli_real_escape_string($this->db, $query);    
     }        
