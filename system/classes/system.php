@@ -120,7 +120,7 @@ class system extends core {
             case "single":            
                 $include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php"; 
                 $custom_include_file = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";                                                
-                if( ( $item = $this->single( array('type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true) ) ) == false ) { 
+                if( ($item = $this->single( array('type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true) ) ) === false ) {
                     $this->error404(); 
                     break; 
                 }                
