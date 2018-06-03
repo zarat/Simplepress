@@ -51,7 +51,9 @@ $nav->html();
 <div class="sp-main-body">
 <div class='sp-content'>
 
-<?php session_destroy(); ?>
+<?php 
+$system->logout(); 
+?>
 
 <script type="text/javascript"> 
 setTimeout(window.location.replace("admin"), 2000);
