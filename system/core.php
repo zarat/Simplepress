@@ -79,8 +79,7 @@ abstract class core {
     }
  
     /**
-     * Gibt ein assoziatives Array mit Einstellungen aus der Tabelle 'settings' zurück.
-     * 
+     * Gibt ein assoziatives Array mit Einstellungen aus der Tabelle 'settings' zurück. 
      * Wenn der Parameter key angegeben wurde, wird nur der jeweilige Datensatz ausgegeben.
      */
     final function settings($key = false) { 
@@ -113,8 +112,8 @@ abstract class core {
     /**
      * Ein assoziatives Array aller Metadaten zu einem Item.
      * 
-     * Wird der Parameter index auf true gesetzt, wird die jeweilige ID des Metatags mit ausgegeben. 
-     * In dem Fall kann es allerdngs nicht mehr an ein Item eangehängt werden.
+     * Wird der Parameter index auf true gesetzt, wird die jeweilige ID in Array mit ausgegeben. 
+     * In dem Fall kann es nicht mehr an ein Item eangehängt werden! 
      */
     final function single_meta($item_id,$index=false) {
         if($index) {
@@ -128,14 +127,7 @@ abstract class core {
         }      
         return ($metadata) ? $metadata : false;
     }
-    
-    /**
-     * Gibt ein Array mit Ergebnissen aus einer Tabelle aus.
-     * 
-     * Wird fuer das Menue verwendet.
-     * 
-     * @deprecated
-     */
+
     final function archive($config) {
         extract($config);
         $archive = false;
@@ -165,16 +157,14 @@ abstract class core {
     /**
      * Parst den Querystring und gibt ihn als Array zurueck - sonst false
      * Wenn ein Parameter uebergeben wird, wird dieser (wenn vorhanden) zurueckgegeben - sonst false
+     * 
+     * @todo SQL injection fix
      */
     final function request($key=false) {
         if($_SERVER['QUERY_STRING']) {
             parse_str($_SERVER['QUERY_STRING'], $parameters);
             if(false !== $key) {
                 if(!empty($parameters[$key])) {       
-                    /** 
-                     * SQL Injection 
-                     * @todo HOTFIX 
-                     */
                     if($key == 'id') {
                         return (int)$parameters[$key];
                     } else {
