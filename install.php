@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Automatisches Installationsscript
  * @author Manuel Zarat
  */
 
-if(!empty($_POST['host']) && !empty($_POST['user']) && !empty($_POST['password']) && !empty($_POST['database']) && !empty($_POST['adminpass']) && !empty($_POST['adminlogin'])) {
+if(!empty($_POST['host']) && !empty($_POST['user']) && !empty($_POST['password']) && !empty($_POST['database']) && !empty($_POST['adminemail']) && !empty($_POST['adminpass']) && !empty($_POST['admindisplayname'])) {
 
 $dbhost = $_POST['host'];
 $dbuser = $_POST['user'];
 $dbpass = $_POST['password'];
 $dbname = $_POST['database']; 
 
-$site_name = !empty($_POST['site_name']) ? $_POST['site_name'] : $_SERVER['SERVER_NAME'];
+$adminemail = $_POST['adminemail'];
+$adminpass = md5($_POST['adminpass']);
+$admindisplayname = $_POST['admindisplayname']; 
 
-$admin_login = $_POST['adminlogin'];
-$admin_pass = $_POST['adminpass'];
+$site_name = !empty($_POST['site_name']) ? $_POST['site_name'] : $_SERVER['SERVER_NAME'];
 
 $conn = new mysqli($dbhost, $dbuser, $dbpass);
 
@@ -49,9 +49,6 @@ $dbhost = "' . $dbhost . '";
 $dbuser = "' . $dbuser . '";
 $dbpass = "' . $dbpass . '";
 $dbname = "' . $dbname . '";
-
-$adminlogin = "' . $admin_login . '";
-$adminpass = "' . $admin_pass . '";
 ';
 
 $config .= "?";
@@ -59,7 +56,10 @@ $config .= ">";
 
 $configfile_tmp = fopen($configfile, 'w') or die('could not write config file: ' . $configfile);
 fwrite($configfile_tmp, $config);
-fclose($configfile_tmp);   
+fclose($configfile_tmp); 
+
+$query = "INSERT INTO user (id,email,password,displayname) VALUES (1, '$adminemail', '$adminpass', '$admindisplayname')";  
+$conn->query($query) or die('Could not create admin user, please reinstall!');
 
 } else {
 
@@ -76,8 +76,10 @@ Sollte die Datenbank bereits bestehen, wird</p>
     <input type="text" name="password" placeholder="Passwort"><br /><br />
     <input type="text" name="database" placeholder="Datenbank"><br /><br /><br />
     <input type="text" name="site_name" placeholder="Titel deiner Seite"><br /><br />
-    <input type="text" name="adminlogin" placeholder="Administrator Username"><br /><br />
+    
+    <input type="text" name="adminemail" placeholder="Administrator Email"><br /><br />
     <input type="text" name="adminpass" placeholder="Administrator Passwort"><br /><br />
+    <input type="text" name="admindisplayname" placeholder="Dein Anzeigename"><br /><br />
     <input type="submit" value="Installation starten">
 </form>
 
