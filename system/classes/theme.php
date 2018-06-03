@@ -217,6 +217,19 @@ class theme extends system {
         echo "</body>\n";
         echo "</html>";
     }
+  
+    /**
+     * @todo Nach system() auslagern
+     */
+    final function error404() {            
+        if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404-" . $this->request('type') . ".php") ) {        
+            include $errorfile;            
+        } else if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404.php") ) {        
+            include $errorfile;            
+        } else {
+            echo "<div class='sp-content'><div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div></div>";            
+        }                             
+    }
     
     /**
      * Diese Funktion setzt im Prinzip alles zusammen und gibt es aus. 
@@ -231,19 +244,6 @@ class theme extends system {
         $this->sidebar();       
         $this->footer();
         $this->html_footer();            
-    }
-    
-    /**
-     * @todo Nach system() auslagern
-     */
-    final function error404() {            
-        if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404-" . $this->request('type') . ".php") ) {        
-            include $errorfile;            
-        } else if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404.php") ) {        
-            include $errorfile;            
-        } else {
-            echo "<div class='sp-content'><div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div></div>";            
-        }                             
     }
 
 }
