@@ -70,9 +70,9 @@ abstract class core {
     }
     final function select($config) {
         extract($config);
-        $arr = false;
+        $arr = array();
         $query = $this->query( "SELECT $select FROM $from WHERE $where" );
-        while( $row = $this->fetch( $query ) ) {
+        while( $row = $this->fetch_assoc( $query ) ) {
             $arr[] = $row;
         }
         return ( $arr ) ? $arr : false;
@@ -102,7 +102,7 @@ abstract class core {
         extract( $config );       
         $item = @$this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$id" ) );
         if(isset($metadata) && $metas = $this->single_meta($item['id'])) {
-            array_merge($item, array_column($metas, 'v', 'k'));
+            $item = array_merge($item, $metas);
         }
         return ($item) ? $item : false;
     }
@@ -121,7 +121,7 @@ abstract class core {
         }
         $metadata = false;
         while($metas = $this->fetch($item_meta)) {
-            $metadata[] = $metas;
+            $metadata[$metas['k']] = $metas['v'];
         }      
         return ($metadata) ? $metadata : false;
     }
