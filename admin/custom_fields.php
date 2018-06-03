@@ -8,8 +8,8 @@ function get_all_fields( $item_id ) {
     if($all_fields) {
         foreach( $all_fields as $field) {
             echo "<form>";
-            echo "<p>" . $field['k'] . " - " . $field['v'] . "</p>";
-            echo "<a style=\"cursor:pointer;\" onclick=\"deletecustomfield('" . $field['id'] . "','$item_id')\">entfernen</a>";
+            echo "<p>" . $field['k'] . ": " . $field['v'] . "</p>";
+            echo "<a style=\"cursor:pointer;\" onclick=\"deletecustomfield('" . $field['meta_id'] . "','$item_id')\">entfernen</a>";
             echo "</form";
         }
     }
