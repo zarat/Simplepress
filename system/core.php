@@ -33,10 +33,10 @@ abstract class core {
         $this->update( array( "table" => "user", "set" => "token='' where token='$token'" ) );
     }
     final function auth() {
-        $token = $_COOKIE['sp-uid'];
-        $user = $this->select( array( "select" => "*", "from" => "user", "where" => "token='$token'") );
+        $token = @$_COOKIE['sp-uid'];
+        $user = $token ? $this->select( array( "select" => "*", "from" => "user", "where" => "token='$token'") ) : false;
         return !empty( $user[0]['id'] ) ? $user[0] : false;
-    } 
+    }  
      
     private function sql_escape_string($query) {
         return mysqli_real_escape_string($this->db, $query);    
