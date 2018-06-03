@@ -67,7 +67,7 @@ function savecustomfield(item_id) {
     document.getElementById('customfieldValue').value = "";    
 }
 
-function deletecustomfield(field_id) {
+function deletecustomfield(key, item_id) {
     var customfieldsList = document.getElementById('customfieldsList');
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange=function() {
@@ -75,7 +75,7 @@ function deletecustomfield(field_id) {
             getcustomfields(xmlhttp.responseText);
         }
     }
-    xmlhttp.open("GET","../admin/custom_fields.php?action=delete&field_id=" + field_id, true);
+    xmlhttp.open("GET","../admin/custom_fields.php?action=delete&key=" + key + "&item_id=" + item_id, true);
     xmlhttp.send();
 }
 
