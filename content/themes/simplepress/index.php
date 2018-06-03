@@ -2,10 +2,7 @@
 
 /**
  * @author Manuel Zarat
- * 
  */
-
-echo "<div class='sp-content'>\n\n";
 
 while( $latest->have_posts() ) {
 
@@ -19,7 +16,5 @@ while( $latest->have_posts() ) {
 }
 
 $latest->pagination();
-
-echo "</div>\n";
 
 ?>
