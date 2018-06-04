@@ -28,12 +28,22 @@ class simplepress extends theme {
     
 }
 
-function custom_function( $customcontent = false ) {
-    $content = "ordinary content";
-    if( $customcontent ) { $content = $customcontent . $content; }
-    echo $content;    
-}
-
-$this->add_action('init', 'custom_function', 'extra' );
-
+/*
+ * Custom functions
+ *
+ * Man kann innerhalb eines Themes eigene "Custon functions" definieren, die sich an verschiedenen Punkten waehrend dem Seitenaufbau
+ * ausfuehren lassen.
+ *
+ * function custom_function( $customcontent = false ) {
+ *    $content = "ordinary content";
+ *    if( $customcontent ) { $content = $customcontent; }
+ *    echo $content;    
+ * }
+ * 
+ * Aufruf mit
+ * $this->add_action('init', 'custom_function', 'custom content' );
+ * 
+ * oder ohne Parametern
+ * $this->add_action('init', 'custom_function', 'custom content' );
+ */
 ?>
