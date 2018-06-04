@@ -77,6 +77,7 @@ class system extends core {
     
     /**
      * Ruft alle registrierten Actions eines Hooks auf.
+     * Wurde eine Action ohne Parameter registriert, wird ihr eine Referenz auf $this uebergeben.
      */
     final function do_action( $hook ) {        
         if( isset( $this->hooks[$hook] ) ) {         
