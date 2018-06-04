@@ -5,6 +5,7 @@
  */
 
 require_once "../load.php";
+require_once "auth.php";
 
 function get_all_fields( $item_id ) {
     $system = new system();
