@@ -1,14 +1,7 @@
 /**
- * Simplepress Default Stylesheet
- * 
  * @author Manuel Zarat
- * 
  */
- 
-/**
- * Document styling
- * 
- */
+
 @charset "utf-8";
 @font-face {
     font-family: 'Sans Serif';
@@ -20,12 +13,9 @@ html, body {
     margin:0;
     -ms-text-size-adjust:100%;
     -webkit-text-size-adjust:100%;
+    font-size: 18px;
 }
 
-/**
- * Basic styling
- * 
- */
 h1,h2,h3,.h1,.h2,.h3{
     font-family:inherit;
     font-weight:500;
