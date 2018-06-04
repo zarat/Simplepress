@@ -55,8 +55,17 @@ class system extends core {
     /**
      * @todo Priority
      */
-    public final function add_action( $hook, $action ) {       
-        $this->hooks[$hook][] = $action;      
+    public final function add_action( $hook, $action = false, $params = false ) {       
+        if( !$action ) {
+            $this->hooks[$hook] = array();
+            return true; 
+        }
+        if( $params ) { 
+            $this->hooks[$hook][] = array( $action, $params ); 
+        } else {
+            $this->hooks[$hook][] = $action;
+        } 
+        return true;  
     }
     
     /**
@@ -70,13 +79,13 @@ class system extends core {
     /**
      * @todo Priority
      */
-    final function do_action( $hook ) {    
-        if( isset( $this->hooks[$hook] ) ) { 
-            if( is_array( $this->hooks[$hook][0] ) ) {  
-                call_user_func_array( $this->hooks[$hook][0][0], array( $this->hooks[$hook][0][1] ) );  
-            } else { 
-                call_user_func( $this->hooks[$hook][0] );
-            }                    
+    final function do_action( $hook ) {        
+        if( isset( $this->hooks[$hook] ) ) {         
+            if( is_array( $this->hooks[$hook][0] ) ) {              
+                call_user_func_array( $this->hooks[$hook][0][0], array( $this->hooks[$hook][0][1] ) );                  
+            } else {             
+                call_user_func( $this->hooks[$hook][0] );                
+            }                                
         }           
     }   
     
