@@ -1,22 +1,11 @@
 <?php
 
 /**
- *
- * Bearbeiten de Theme Dateien.
- * 
- * GET->file sagt, welche Datei bearbeitet werden soll.
- *
- * POST->[] wird gespeichert und danach nochmal ausgegeben.
- *
+ * @author Manuel Zarat
  */
  
 require_once "../load.php";
 
-/**
- *
- * Rekursives Auslesen eines Verzeichnisses
- * 
- */
 function getDirContents($dir, &$results = array()) {
     $files = scandir($dir);
     foreach($files as $key => $value){    
