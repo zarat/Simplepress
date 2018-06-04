@@ -28,4 +28,12 @@ class simplepress extends theme {
     
 }
 
+function custom_function( $customcontent = false ) {
+    $content = "ordinary content";
+    if( $customcontent ) { $content = $customcontent . $content; }
+    echo $content;    
+}
+
+$this->add_action('init', 'custom_function', 'extra' );
+
 ?>
