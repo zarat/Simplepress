@@ -5,6 +5,7 @@
  */
 
 require_once "../load.php";
+require_once "auth.php";
 
 $system = new system();
 
