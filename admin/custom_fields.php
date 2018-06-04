@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author Manuel Zarat
+ */
+
 require_once "../load.php";
 
 function get_all_fields( $item_id ) {
@@ -42,37 +46,27 @@ if( isset( $_POST['item_id'] ) ) {
 
 } elseif( isset($_GET['action']) ) { 
 
-    $action = $_GET['action'];
-    
-    switch ( $action ) {
-    
+    $action = $_GET['action'];    
+    switch ( $action ) {   
         case "get":
             $item_id = @$_GET['item_id'];
             get_all_fields( $item_id );
-            break;
-            
+            break;            
         case"add":
             $item_id = @$_GET['item_id'];
             $field_key = @$_GET['field_key'];
             $field_value = @$_GET['field_value'];
             add_field( $item_id, $field_key, $field_value );
-            break;
-            
+            break;            
         case "delete":
             $key = @$_GET['key'];
             $item_id = @$_GET['item_id'];
             delete_field( $key, $item_id );
-            break;
-            
+            break;            
         default:
-            break;
-    
+            break;    
     }
 
-} else {
-
-    echo "Error: You havent pushed parameters!";
-
-}
+} 
 
 ?>
