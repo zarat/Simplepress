@@ -53,7 +53,7 @@ class system extends core {
     }
     
     /**
-     * @todo Priority
+     * Regtistriert eine Action, die bei Aufruf eines Hooks getriggert wird.
      */
     public final function add_action( $hook, $action = false, $params = false ) {       
         if( !$action ) {
@@ -69,22 +69,21 @@ class system extends core {
     }
     
     /**
-     * Prueft, ob Hooks fuer eine Funktion registriert wurden
-     * 
+     * Prueft, ob Hooks zu einer bestimmten Action registriert wurden.
      */
     final function has_action( $hook ) {
         return isset( $this->hooks[$hook] );
     }
     
     /**
-     * @todo Priority
+     * Ruft alle registrierten Actions eines Hooks auf.
      */
     final function do_action( $hook ) {        
         if( isset( $this->hooks[$hook] ) ) {         
             if( is_array( $this->hooks[$hook][0] ) ) {              
                 call_user_func_array( $this->hooks[$hook][0][0], array( $this->hooks[$hook][0][1] ) );                  
             } else {             
-                call_user_func( $this->hooks[$hook][0] );                
+                call_user_func( $this->hooks[$hook][0], $this );                
             }                                
         }           
     }   
