@@ -29,10 +29,7 @@ class simplepress extends theme {
 }
 
 /*
- * Custom functions
- *
- * Man kann innerhalb eines Themes eigene "Custon functions" definieren, die sich an verschiedenen Punkten waehrend dem Seitenaufbau
- * ausfuehren lassen.
+ * Beispiel einer Custom function
  *
  * function custom_function( $customcontent = false ) {
  *    $content = "ordinary content";
