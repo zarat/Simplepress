@@ -7,40 +7,50 @@
 class simplepress extends theme {
 
     function content() {
-        $content = "<div class=\"sp-content\">";
-        $content .= parent::content();
-        $content .= "</div>";
-        return $content;
+        echo "<div class='sp-content'>\n";
+        parent::content();
+        echo "</div>\n";
     }
     
-    function sidebar() {
-        echo "<div class=\"sp-sidebar\">";
+    function sidebar() { 
+        echo "<div class='sp-sidebar'>\n";
         parent::sidebar();
-        echo "</div>";
-        echo "<div style=\"clear:both;\"></div>";
+        $this->random_items();
+        echo "</div>\n";
+        echo "<div style=\"clear:both;\"></div>\n";
     }
     
     function footer() {
-        echo "<div class=\"sp-footer\" style=\"padding:10px;\">";
         parent::footer();
-        echo "</div>";
+    }
+    
+    function random_items() {
+        $posts = $this->archive( array( "select" => "*", "from" => "item", "where" => "status=1 AND type='post' order by rand() limit 5" ) );
+        echo "<div class='sp-sidebar-item'>\n";
+        echo "<div class='sp-sidebar-item-head'>Weiterlesen</div>\n";
+        foreach( $posts as $post ) {
+            echo "<div class='sp-sidebar-item-box'>\n";
+            echo "<div class='sp-sidebar-item-box-head'><a href='../?type=post&id=$post[id]'>" . $post['title'] . "</a></div>\n";
+            if( preg_match( "/^.{1,150}\b/s", $post['content'], $match ) ) {
+                        $post['content'] = $match[0];
+            }
+            echo "<div class='sp-sidebar-item-box-body'>$post[content]</div>\n";
+            echo "</div>\n";       
+        }
+        echo "</div>\n";
     }
     
 }
 
 /*
  * Beispiel einer Custom function
- *
- * function custom_function( $customcontent = false ) {
- *    $content = "ordinary content";
- *    if( $customcontent ) { $content = $customcontent; }
- *    echo $content;    
- * }
- * 
- * Aufruf mit
- * $this->add_action('init', 'custom_function', 'custom content' );
- * 
- * oder ohne Parametern
- * $this->add_action('init', 'custom_function', 'custom content' );
  */
+function custom_function( $customcontent = false ) {
+    $content = "ordinary content";
+    if( $customcontent ) { $content = $customcontent; }
+    echo $content;    
+}
+
+//$this->add_action('init', 'custom_function', 'custom content' );
+
 ?>
