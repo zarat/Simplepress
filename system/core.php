@@ -19,6 +19,8 @@ abstract class core {
     /**
      * Im Konstruktor wird entweder die Konfiguration geladene und fall keine vorhanden ist
      * wird die Installation gestartet.
+     *
+     * @todo final weg damit er ueberschrieben werden kann?
      * 
      * @return void
      */
