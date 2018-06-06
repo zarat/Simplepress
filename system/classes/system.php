@@ -116,7 +116,7 @@ class system extends core {
      * Hier wird der primaere Inhalt generiert und als Array($result) an system/theme uebergeben.
      * Diese Funktion sollte nur ausgeben was es wirklich gibt um dem Theme das filtern abzunehmen. 
      */
-    function get_the_content() {     
+    function get_the_content() {         
         switch( $this->request( 'type' ) ) {        
             case "post":
             case "page":            
@@ -130,72 +130,65 @@ class system extends core {
             default:            
                 $this->view = "default"; 
                 break;                
-        } 
-        
+        }         
         $item = false;
-        $result = false;
-                                             
-        switch( $this->view ) { 
-             
+        $result = false;                                             
+        switch( $this->view ) {              
             /**
              * Hier wird ein einzelnes Item angezeigt.
              * Ist kein Inhalt vorhanden wird ein Dummyitem erzeugt.
              */
-            case "single":                        
-                $item = $this->single( array('type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true) );                                               
-                if( !$item['id'] ) {                 
+            case "single":                                    
+                $item = $this->single( array('type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true) );                                                               
+                if( !$item ) {                 
                     $item = array("id" => 0, "title" => "404 gefunden", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" );                                                                                
-                }
-                $this->set_current_item($item);                                
+                }                
+                $this->set_current_item($item);                                                                
                 $result['content'] = $item;               
-                $result['view'] = "single";                                                                           
-            break;
-             
+                $result['view'] = "single";
+            break;             
             /**
              * Hier wird ein Archiv angezeigt.
              */
-            case "archive":                                                                        
-                if( $this->request( 'id' ) ) {                                
+            case "archive":                                                                                    
+                if( $this->request( 'id' ) ) {                                                
                     $item = $this->single( array( 'id' => $this->request( 'id' ) ) );                    
-                    $this->set_current_item( $item );                
-                } elseif( $this->request( 'term' ) ) {                            
+                    $this->set_current_item( $item );                                    
+                } elseif( $this->request( 'term' ) ) {                                            
                     $item = array("id" => 0, "title" => "Ergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" );                    
-                    $this->set_current_item( $item ) ;                               
-                }              
+                    $this->set_current_item( $item ) ;                                                  
+                }                              
                 $archive = new archive();                
-                $archive->archive_init();                                                
+                $archive->archive_init();                                                                
                 /**
                  * Wenn ein Archiv Inhalt hat, wird er ausgelesen. 
                  */
-                $items = false;
-                if( $archive->items ) {                
+                $items = false;                                
+                if( $archive->items ) {                                
                     foreach( $archive->items as $item ) {                    
                         $items[] = $item;                        
-                    }                                     
-                } else {
+                    }                                                         
+                } else {               
                     $items[] = array("id" => 0, "type" => "error", "title" => "Test", "description" => "", "content" => "Error 404", "keywords" => "" );
-                    $result['error'] = "error on archive";
-                }                                              
+                    $result['error'] = "error on archive";                    
+                }                                                              
                 $result['content'] = $items;                
-                $result['view'] = "archive";                                                                          
-            break; 
-                                               
-            default:                         
+                $result['view'] = "archive";                                                                                          
+            break;                                                
+            default:                                        
                 $latest = new archive();                
-                $latest->archive_init();                                 
-                $posts = false;                               
+                $latest->archive_init();                                                 
+                $items = false;                                               
                 foreach( $latest->items as $item ) {                
-                    $posts[] = $item;                    
-                }                                              
+                    $items[] = $item;                    
+                }                                                              
                 if( $latest->count_items() < 1 ) {                 
                     $this->error404();                    
                     break;                    
-                } 
-                $this->set_current_item($posts);  
+                }                   
                 $result['view'] = "default"; 
-                $result['content'] = $posts;                 
-            break; 
-            
+                $result['content'] = $items;                 
+            break;             
         }               
         return $result;  
     }
