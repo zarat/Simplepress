@@ -22,4 +22,15 @@ echo "<div class='sp-sidebar-item'>";
     }
 echo "</div>";
 
+$conf = array('select' => '*','from' => 'item','where' => 'status=1 AND type="post" order by rand() limit 5');
+
+echo "<div class='sp-sidebar-item'>";
+    echo "<div class='sp-sidebar-item-head'>Weiterlesen</div>";
+    foreach($this->archive($conf) as $post) {
+        echo "<div class='sp-sidebar-item-box'>\n";
+            echo "<div class='sp-sidebar-item-box-head'><a href='../?type=post&id=$post[id]'>$post[title]</a></div>\n";
+        echo "</div>\n";
+    }
+echo "</div>";
+
 ?>
