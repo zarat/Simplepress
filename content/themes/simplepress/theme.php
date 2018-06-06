@@ -6,6 +6,11 @@
 
 class simplepress extends theme {
 
+    function header() {
+        echo "<div class=\"sp-main-wrapper\">\n";
+        parent::header();
+    }
+    
     function content() {
         echo "<div class=\"sp-content\">";
         parent::content();
@@ -15,14 +20,19 @@ class simplepress extends theme {
     function sidebar() {
         echo "<div class=\"sp-sidebar\">";
         parent::sidebar();
-        echo "</div>";
-        echo "<div style=\"clear:both;\"></div>";
+        echo "</div>\n";
+        echo "<div style=\"clear:both;\"></div>\n";
     }
     
     function footer() {
-        echo "<div class=\"sp-footer\" style=\"padding:10px;\">";
+        echo "\n<div class=\"sp-footer\" style=\"padding:10px;\">";
         parent::footer();
-        echo "</div>";
+        echo "</div>\n";
+    }
+    
+    function html_footer() {
+        echo "</div>\n";
+        parent::html_footer();
     }
     
 }
