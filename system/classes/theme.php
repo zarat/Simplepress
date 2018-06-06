@@ -104,7 +104,10 @@ class theme extends system {
         } else if( $data['view'] == "single" ) {              
             $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php";
             $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";                
-            if( is_file( $template ) ) {            
+            if( is_file( $custom_template ) ) {            
+                $item = $data['content'];
+                include $custom_template;                
+            } else if( is_file( $template ) ) {            
                 $item = $data['content'];
                 include $template;                
             } else {                                              
