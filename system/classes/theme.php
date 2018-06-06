@@ -126,11 +126,14 @@ class theme extends system {
                     $latest = $data['content'];
                     include $template;                
                 } else {                                              
-                    $post = $data['content'];                    
-                    echo "<div class='sp-content-item'>\n";
-                        echo "<div class='sp-content-item-head'>$post[title]</div>\n";
-                        echo "<div class='sp-content-item-body'>$post[content]</div>\n";
-                    echo "</div>\n";             
+                    while( $data['content']->have_items() ) {
+                        $post = $data['content']->the_item();
+                        $post['content'] = strip_tags( preg_replace("/[^ ]*$/", '', substr( $post['content'], 0, 150 ) ) );                    
+                        echo "<div class='sp-content-item'>\n";
+                            echo "<div class='sp-content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
+                            echo "<div class='sp-content-item-body'>$post[content]</div>\n";
+                        echo "</div>\n"; 
+                    }           
                 }        
             } 
         }                                                                        
