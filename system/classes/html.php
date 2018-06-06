@@ -11,7 +11,7 @@
  * @since 06/2018 
  */
 
-class html {
+class html extends system {
 
     protected $limit_reached = false, $length_total = 0, $length_max = 25, $removements = array();
 
