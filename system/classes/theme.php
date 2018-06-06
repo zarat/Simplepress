@@ -141,21 +141,21 @@ class theme extends system {
      * 
      * @return html
      */
-    function sidebar() { 
-        echo "<div class='sp-sidebar-item'>\n";
-            echo "<div class='sp-sidebar-item-head'>Suche</div>\n";
-            echo "<div class='sp-sidebar-item-box'>\n";
-                echo "<div class='sp-sidebar-item-box-body'><div class='container'><form><input type='hidden' name='type' value='search'><input type='text' name='term'></form></div></div>\n";
-            echo "</div>\n";
-        echo "</div>\n";                        
-        echo "<div class='sp-sidebar-item'>\n";
-            echo "<div class='sp-sidebar-item-head'>Kategorien</div>\n";
-            foreach($this->archive( array('select' => 'id,title','from' => 'item','where' => 'status=1 AND type="category"') ) as $cat) {
+    function sidebar() {     
+        $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar.php";
+        $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "sidebar-" . $this->request('type') . ".php";                
+        if( is_file( $custom_template ) ) {            
+            include $custom_template;                
+        } else if( is_file( $template ) ) {            
+            include $template;                
+        } else {
+            echo "<div class='sp-sidebar-item'>\n";
+                echo "<div class='sp-sidebar-item-head'>Suche</div>\n";
                 echo "<div class='sp-sidebar-item-box'>\n";
-                    echo "<div class='sp-sidebar-item-box-head'><a href='../?type=category&id=$cat[id]'>$cat[title]</a></div>\n";
+                    echo "<div class='sp-sidebar-item-box-body'><div class='container'><form><input type='hidden' name='type' value='search'><input type='text' name='term'></form></div></div>\n";
                 echo "</div>\n";
-            }
-        echo "</div>\n";
+            echo "</div>\n";                        
+        }
     }
     
     /**
