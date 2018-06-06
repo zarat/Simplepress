@@ -1,7 +1,14 @@
 <?php
 
 /**
+ * Simplepress Archiv
+ *
+ * Ein Archiv aller Items
+ *
  * @author Manuel Zarat
+ * @version 0.2.0
+ * @link https://github.com/zarat/simplepress   
+ * @since 06/2018 
  */
 
 class archive extends system {
@@ -12,7 +19,14 @@ private $last = 0;
 private $item_count = 0;
 
 public $items = [];
-
+    
+    /**
+     * Wird aufgerufen nachdem das Objekt erzeugt wurde. Eventuell den Kontruktor aus Core ueberschreiben?
+     * 
+     * @see core->__construct()
+     * 
+     * @return void
+     */
     function archive_init() {    
         if( !empty( $this->request( 'last' ) ) ) {         
             $this->last = $this->request( 'last' );            
@@ -24,6 +38,8 @@ public $items = [];
      * Fuellt das Array(posts) mit den gefundenen Items
      * 
      * @todo Suche & Blaettern
+     * 
+     * @return void
      */
     final function fill_items() {     
         if( $this->request( 'type' ) && $this->request( 'type' ) == 'category' ) {        
@@ -48,10 +64,20 @@ public $items = [];
         $this->post_count = sizeof( $this->items );   
     }
 
+    /**
+     * Zaehlt wieviele Items i mErgebnis vorhanden sind.
+     * 
+     * @return int Anzahl an Items
+     */
     function count_items() { 
         return ($this->items);        
     }
 
+    /**
+     * Prueft, ob noch weitere Items vorhanden sind die AUF DIESER SEITE angezeigt werden!
+     * 
+     * @return bool true|false
+     */
     function have_items() {                    
         if( $this->displayed_this_page >= $this->max_per_page ) {                
             $this->is_page_limit = true;                        
@@ -60,10 +86,26 @@ public $items = [];
         return ( count($this->items) > 0) ? true : false;            
     }
     
+    /**
+     * Prueft, ob noch weitere Items NACH DEN AUF DIESER SEITE AUSZUGEBENDEN vorhanden sind.
+     * Wenn ja wird ein Link zum blaettern angezeigt.
+     * 
+     * @see $this->pagination()
+     * 
+     * @return bool true|false
+     */
     function more() {    
         return ( count($this->items) > 0) ? true : false;        
     }
 
+    /**
+     * Gibt das ktuelle Item im Loop zurueck.
+     * 
+     * @param bool $strip_tags Sollen HTML Tags entfernt werden?
+     * @param int $content_length Auf wie viele Zeichen soll der Inhalt gekuerzt werden.
+     * 
+     * @return array()|bool Das Item als Array oder false
+     */
     function the_item( $strip_tags = false, $content_length = false ) {            
         if( $this->more() ) {        
             $post = array_pop( $this->items );                    
@@ -83,6 +125,11 @@ public $items = [];
         return false;               
     }
 
+    /**
+     * Zeigt Links zu der naechsten Seite eines Archives an.
+     * 
+     * @return html 
+     */
     function pagination() {      
         if( $this->more() ) {                       
             if( $this->request( 'type' ) == 'category' ) {                                      
