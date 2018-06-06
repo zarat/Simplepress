@@ -63,9 +63,9 @@ class theme extends system {
      * 
      * @return html
      */
-    function navigation( $id = 1 ) {
+    function navigation() {
          $nav = new menu();
-         $nav->config( array( 'id' => $id ) );
+         $nav->config( array( 'id' => 1 ) );
          echo $nav->html();   
     }
     
