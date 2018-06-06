@@ -160,7 +160,7 @@ class system extends core {
      * 
      * @return array Der Inhalt
      */
-    function get_the_content() {         
+    function get_the_content() {                
         switch( $this->request( 'type' ) ) {        
             case "post":
             case "page":            
@@ -174,7 +174,7 @@ class system extends core {
             default:            
                 $this->view = "default"; 
                 break;                
-        }         
+        }                 
         $item = false;
         $result = false;                                             
         switch( $this->view ) {              
@@ -191,37 +191,31 @@ class system extends core {
                 if( $this->request( 'id' ) ) {                                                
                     $item = $this->single( array( 'id' => $this->request( 'id' ) ) );                    
                     $this->set_current_item( $item );                                    
-                } elseif( $this->request( 'term' ) ) {                                            
+                }
+                elseif( $this->request( 'term' ) ) {                                            
                     $item = array("id" => 0, "title" => "Ergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" );                    
                     $this->set_current_item( $item ) ;                                                  
-                }                              
+                }          
                 $archive = new archive();                
-                $archive->archive_init();                                                                
-                $items = false;                                
+                $archive->archive_init();                                                                                                                                
                 if( $archive->items ) {                                
-                    foreach( $archive->items as $item ) {                    
-                        $items[] = $item;                        
-                    }                                                         
+                     $result['content'] = $archive;                                                         
                 } else {               
-                    $items[] = array("id" => 0, "type" => "error", "title" => "Test", "description" => "", "content" => "Error 404", "keywords" => "" );
-                    $result['error'] = "error on archive";                    
-                }                                                              
-                $result['content'] = $items;                
+                    $item = array("id" => 0, "type" => "error", "title" => "Test", "description" => "", "content" => "Error 404", "keywords" => "" );
+                    $result['error'] = "error on archive";
+                    $result['content'] = $item;                    
+                }                                                                              
                 $result['view'] = "archive";                                                                                          
             break;                                                
             default:                                        
                 $latest = new archive();                
-                $latest->archive_init();                                                 
-                $items = false;                                               
-                foreach( $latest->items as $item ) {                
-                    $items[] = $item;                    
-                }                                                              
+                $latest->archive_init();                                                                                                                                                             
                 if( $latest->count_items() < 1 ) {                 
                     $this->error404();                    
                     break;                    
                 }                   
                 $result['view'] = "default"; 
-                $result['content'] = $items;                 
+                $result['content'] = $latest;                 
             break;             
         }               
         return $result;  
