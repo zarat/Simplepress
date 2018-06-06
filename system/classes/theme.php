@@ -89,7 +89,7 @@ class theme extends system {
                 echo "\n<!--BeginNoIndex-->\n";
                 //echo "<div class=\"sp-content\">";
                 foreach( $content['content'] as $post ) {  
-                    $post['content'] = strip_tags( html::trim( $post['content'], 100) );               
+                    $post['content'] = html::trim( strip_tags( $post['content'] ), 150);               
                     echo "<div class='sp-content-item'>\n";
                         echo "<div class='sp-content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
                         echo "<div class='sp-content-item-body'>$post[content]</div>\n";
