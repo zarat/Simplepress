@@ -9,16 +9,14 @@ class theme extends system {
     /**
      * Der HTML Header ist der im Browser unsichtbare Bereich der die ganzen Metatags & Co einbindet
      */
-    final function html_header() { 
-            
+    final function html_header() {             
         echo "<!DOCTYPE html>\n<html>\n";
         echo "<head>\n";
 
         /**
          * Wenn ein Item abgefragt wurde, werden hier bereits die Metatags geaendert und muessen davor beschafft werden. 
          */
-        $item = $this->get_current_item();        
-        
+        $item = $this->get_current_item();                
         $title = @$item['title'] ? $this->settings( 'site_title' ) . " - " . $item['title'] :$this->settings( 'site_title' );
         $keywords = @$item['keywords'] ? $item['keywords'] : $this->settings( 'site_keywords' );
         $description = @$item['description'] ? $item['description'] : $this->settings( 'site_description' );
@@ -32,8 +30,7 @@ class theme extends system {
         echo "<link rel='stylesheet' href='../content/themes/" . $this->settings( 'site_theme' ) . "/css/style.css'>\n";
         echo "<link rel='stylesheet' href='../content/themes/" . $this->settings( 'site_theme' ) . "/css/menu.css'>\n";              
         echo "</head>\n";
-        echo "<body>\n";
-        
+        echo "<body>\n";        
     }
 
     /**
@@ -66,20 +63,15 @@ class theme extends system {
      * @todo Logik nach system() auslagern
      */
     function content() {                        
-        $content = $this->get_the_content(); 
-                       
-        if( isset( $content['error'] ) ) { 
-        
+        $content = $this->get_the_content();                        
+        if( isset( $content['error'] ) ) {         
             //echo "<div class=\"sp-content\">";   
                 echo "<div class='sp-content-item'>\n";
                         echo "<div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div>\n";
                 echo "</div>\n";
-            //echo "</div>";
-                                    
-        } else { 
-                           
-            if( $content['view'] == "archive" || $content['view'] == "default" ) {  
-                      
+            //echo "</div>";                                    
+        } else {                            
+            if( $content['view'] == "archive" || $content['view'] == "default" ) {                        
                 echo "\n<!--BeginNoIndex-->\n";
                 //echo "<div class=\"sp-content\">";
                 foreach( $content['content'] as $post ) {  
@@ -90,22 +82,17 @@ class theme extends system {
                     echo "</div>\n";                        
                 }
                 //echo "</div>\n";
-                echo "<!--EndNoIndex-->\n"; 
-                               
-            } else if( $content['view'] == "single" ) {  
-                          
+                echo "<!--EndNoIndex-->\n";                                
+            } else if( $content['view'] == "single" ) {                            
                 $post = $content['content'];  
                 //echo "<div class='sp-content'>\n";                  
                     echo "<div class='sp-content-item'>\n";
                         echo "<div class='sp-content-item-head'>$post[title]</div>\n";
                         echo "<div class='sp-content-item-body'>$post[content]</div>\n";
                     echo "</div>\n";
-                //echo "</div>\n"; 
-                                          
-            }
-                    
-        }
-                                           
+                //echo "</div>\n";                                          
+            }                    
+        }                                           
     }
     
     /**
@@ -154,11 +141,11 @@ class theme extends system {
      * Sie kann im Custom Theme ueberschrieben werden.     
      */
     function render() {
-        //$content = $this->content();        
+        $this->get_the_content();                
         $this->html_header();
         $this->header();
         $this->navigation();
-        $this->content(); //echo $content;
+        $this->content(); //
         $this->sidebar();       
         $this->footer();
         $this->html_footer();            
