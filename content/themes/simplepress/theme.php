@@ -11,6 +11,19 @@ class simplepress extends theme {
         parent::header();
     }
     
+    function navigation() {
+        $nav = new menu();
+        $nav->config( array( 
+            "id" => 1, 
+            "ul" => "submenu", 
+            "li" => "li" 
+        ) );
+        echo $nav->html( array( 
+            "before" => "<div class=\"nav-container\"><label class=\"responsive_menu\" for=\"responsive_menu\"><span>Menu</span></label><input id=\"responsive_menu\" type=\"checkbox\">", 
+            "after" => "</div>"
+        ) );
+    }
+    
     function content() {
         echo "<div class=\"sp-content\">";
         parent::content();
