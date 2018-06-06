@@ -89,7 +89,7 @@ class theme extends system {
             if( $data['view'] == "archive" || $data['view'] == "default" ) {                                    
                 while( $data['content']->have_items() ) {
                     $post = $data['content']->the_item(); 
-                    $post['content'] = html::trim( strip_tags( $post['content'] ), 150);  
+                    $post['content'] = preg_replace("/[^ ]*$/", '', substr($post['content'], 0, 150));  
                     echo "<div class='sp-content-item'>\n";
                         echo "<div class='sp-content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
                         echo "<div class='sp-content-item-body'>$post[content]</div>\n";
