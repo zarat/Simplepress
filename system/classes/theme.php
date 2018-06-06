@@ -1,26 +1,31 @@
 <?php
 
-/** 
+/**
+ * Simplepress Theme
+ *
+ * Grundlegendes Theme zur Ausgabe
+ *
  * @author Manuel Zarat
+ * @version 0.2.0
+ * @link https://github.com/zarat/simplepress   
+ * @since 06/2018 
  */
 
 class theme extends system {
   
     /**
-     * Der HTML Header ist der im Browser unsichtbare Bereich der die ganzen Metatags & Co einbindet
+     * Der HTML-Header ist der im Browser unsichtbare Bereich der die ganzen Metatags & Co einbindet.
+     * Er braucht die Informationen zum aktuell angezeigten Item schon vor der eigentlichen Ausgabe des Inhaltes.
+     * 
+     * @return html
      */
     final function html_header() {             
         echo "<!DOCTYPE html>\n<html>\n";
         echo "<head>\n";
-
-        /**
-         * Wenn ein Item abgefragt wurde, werden hier bereits die Metatags geaendert und muessen davor beschafft werden. 
-         */
         $item = $this->get_current_item();                
         $title = @$item['title'] ? $this->settings( 'site_title' ) . " - " . $item['title'] :$this->settings( 'site_title' );
         $keywords = @$item['keywords'] ? $item['keywords'] : $this->settings( 'site_keywords' );
-        $description = @$item['description'] ? $item['description'] : $this->settings( 'site_description' );
-        
+        $description = @$item['description'] ? $item['description'] : $this->settings( 'site_description' );        
         echo "<title>" . $title . "</title>\n";                
         echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />\n";
         echo "<meta name='viewport' content='width=device-width, initial-scale=1.0' />\n";        
@@ -35,6 +40,8 @@ class theme extends system {
 
     /**
      * Der Header ist der sichtbare, oberste Bereich der Seite.
+     * 
+     * @return html
      */
     function header() {
         echo "<div class=\"sp-main-wrapper\">";
@@ -49,7 +56,9 @@ class theme extends system {
      * Z.b eine Liste mit Kategorien oder den neuesten Items.
      * Diese haben ja nicht unbedingt mit dem aktuellen Context zu tun.
      * 
-     * @todo multiple menues - Wenn man eine ID uebergibt kann man eine andere laden
+     * @param integer $id Die ID des Menues in der Datenbank
+     * 
+     * @return html
      */
     function navigation( $id = 1 ) {
          $nav = new menu();
@@ -60,7 +69,12 @@ class theme extends system {
     }
     
     /**
-     * @todo Logik nach system() auslagern
+     * Der eigentliche "Primaere Inhalt", der seinen Inhalt aber von $system->get_the_content() bekommt um die Infos im html_header ui haben.
+     * 
+     * @see $this->html_header()
+     * @see $system->get_the_content()
+     * 
+     * @return html
      */
     function content() {                        
         $content = $this->get_the_content();                        
@@ -96,7 +110,9 @@ class theme extends system {
     }
     
     /**
-     * default sidebar
+     * Eine Default Sidebar (sekundaerer Inhalt)
+     * 
+     * @return html
      */
     function sidebar() { 
         echo "\n<!--BeginNoIndex-->\n";                                        
@@ -121,6 +137,8 @@ class theme extends system {
     
     /**
      * Der Footer ist der sichtbare, unterste Bereich der Seite.
+     * 
+     * @return html
      */
     function footer() {    
         //echo "<div class=\"sp-footer\" style=\"padding:10px;\">";
@@ -129,7 +147,9 @@ class theme extends system {
     }
     
     /**
-     * Der HTML Footer steht im HTML ganz unten und schliesst es auch.
+     * Der HTML Footer steht im HTML ganz unten, ist "unsichtbar" und schliesst es auch.
+     * 
+     * @return html
      */
     final function html_footer() {    
         echo "</body>\n";
@@ -152,7 +172,12 @@ class theme extends system {
     }
     
     /**
-     * @todo Nach system() auslagern
+     * Wenn nichts gefunden wurde muss ein Fehler ausgegeben werden. 
+     * Wird derzeit in system->get_the_content() erledigt.
+     * 
+     * @see system->get_the_content()
+     *
+     * @todo 404 nicht gefunden Fehler
      */
     final function error404() {            
         ob_start();
