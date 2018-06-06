@@ -76,36 +76,43 @@ class theme extends system {
      * 
      * @return html
      */
-    function content() {                        
-        $content = $this->get_the_content();                        
-        if( isset( $content['error'] ) ) {         
+    function content() {                                
+        $data = $this->get_the_content();                                
+        if( isset( $data['error'] ) ) {         
             //echo "<div class=\"sp-content\">";   
                 echo "<div class='sp-content-item'>\n";
                         echo "<div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div>\n";
                 echo "</div>\n";
             //echo "</div>";                                    
-        } else {                            
-            if( $content['view'] == "archive" || $content['view'] == "default" ) {                        
+        } else {                                    
+            if( $data['view'] == "archive" || $data['view'] == "default" ) {                                    
                 echo "\n<!--BeginNoIndex-->\n";
                 //echo "<div class=\"sp-content\">";
-                foreach( $content['content'] as $post ) {  
-                    $post['content'] = html::trim( strip_tags( $post['content'] ), 150);               
+                while( $data['content']->have_items() ) {
+                
+                    $post = $data['content']->the_item(); 
+                     
+                    $post['content'] = html::trim( strip_tags( $post['content'] ), 150);  
+                                 
                     echo "<div class='sp-content-item'>\n";
                         echo "<div class='sp-content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
                         echo "<div class='sp-content-item-body'>$post[content]</div>\n";
-                    echo "</div>\n";                        
-                }
+                    echo "</div>\n"; 
+                                           
+                }                
+                $data['content']->pagination();
                 //echo "</div>\n";
-                echo "<!--EndNoIndex-->\n";                                
-            } else if( $content['view'] == "single" ) {                            
-                $post = $content['content'];  
+                echo "<!--EndNoIndex-->\n";                                                
+            } else if( $data['view'] == "single" ) {                                        
+                $post = $data['content'];  
                 //echo "<div class='sp-content'>\n";                  
                     echo "<div class='sp-content-item'>\n";
                         echo "<div class='sp-content-item-head'>$post[title]</div>\n";
                         echo "<div class='sp-content-item-body'>$post[content]</div>\n";
                     echo "</div>\n";
-                //echo "</div>\n";                                          
-            }                    
+                //echo "</div>\n";
+                                                          
+            }                                
         }                                           
     }
     
