@@ -5,7 +5,7 @@
  *
  * HTML Bearbeitung
  * 
- * Usage: html::trim('<p>Lorem ipsum dolor sit amet</p>', 10);
+ * Usage: <pre>html::trim('<p>Lorem ipsum dolor sit amet</p>', 10);</pre>
  *
  * @author Manuel Zarat
  * @version 0.2.0
