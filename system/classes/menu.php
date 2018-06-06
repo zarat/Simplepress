@@ -27,7 +27,6 @@ private $sublevel = 0;
      */
     function config($config) {
         $this->menu_id = $config['id'];
-        $this->div = isset($config['div']) ? $config['div'] : "nav-container";
         $this->ul = isset($config['ul']) ? $config['ul'] : "submenu";
         $this->li = isset($config['li']) ? $config['li'] : "li";
     }
@@ -72,15 +71,13 @@ private $sublevel = 0;
      * 
      * @return html
      */
-    public function html() {        
-        echo "<div class=\"$this->div\">\n";        
-        echo "<label class=\"responsive_menu\" for=\"responsive_menu\">";        
-        echo "<span>Menu</span>";        
-        echo "</label>\n";        
-        echo "<input id=\"responsive_menu\" type=\"checkbox\">\n";         
-        $this->items();                          
-        echo "</div>\n";        
+    public function html( $config ) {        
+        extract( $config );                   
+        echo $before;            
+        $this->items();
+        echo $after;                                          
     }
     
 }
+
 ?>
