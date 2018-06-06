@@ -35,7 +35,7 @@ foreach($rss as $row)    {
     echo "<item>";
     echo "<title>" . html_entity_decode($row['title']) . "</title>";
     echo "<link>" . htmlspecialchars($item_url . "?type=" . $row['type'] . "&id=" . $row['id']) . "</link>";
-    echo "<description>" . htmlspecialchars( strip_tags( html::trim( $row['content'], 100) ) ) . "</description>";
+    echo "<description>" . htmlspecialchars( strip_tags( preg_replace("/[^ ]*$/", '', substr($row['content'], 0, 150) ) ) ) . "</description>";
     echo "<pubDate>" . date('r', $row['date']) . "</pubDate>"; /** moderne RSS Feeds haben RFC822 konformes Datum! */
     echo "</item>";
 
