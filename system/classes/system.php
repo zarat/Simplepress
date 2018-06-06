@@ -1,8 +1,14 @@
 <?php
 
 /**
+ * Simplepress System
+ *
+ * Grundlegende Aktionen im System
+ *
  * @author Manuel Zarat
- * 
+ * @version 0.2.0
+ * @link https://github.com/zarat/simplepress   
+ * @since 06/2018 
  */
 
 class system extends core {
@@ -10,8 +16,7 @@ class system extends core {
     /**
      * Diese Variablen sind privat, damit nur ueber vorgegebene Methoden darauf zugegriffen werden kann. 
      */
-    private $current_item = false; 
-       
+    private $current_item = false;        
     private $hooks = false;
 
     /**
@@ -19,7 +24,11 @@ class system extends core {
      * Sie setzt das Theme auf und triggert den ersten Hook. 
      * Am Ende wird dann das Theme gerendert.
      * 
-     * @todo Theme rendern auslagern 
+     * @todo Theme rendern auslagern
+     * 
+     * @param false
+     * 
+     * @return void
      */
     final function init() {     
         $this->setup_theme();        
@@ -32,7 +41,11 @@ class system extends core {
     /**
      * Startet das installierte Theme. 
      * Falls kein oder ein kaputtes Theme installiert ist, wird das integrierte Default Theme genutzt. 
-     * Danach wird ein Hook aufgerufen. 
+     * Danach wird ein Hook aufgerufen.
+     * 
+     * @param false
+     * 
+     * @return void
      */
     final function setup_theme() {   
         if(is_file($custom_theme_file = ABSPATH . 'content' . DS . 'themes' . DS . $this->settings('site_theme') . DS . 'theme.php')) {        
@@ -50,6 +63,10 @@ class system extends core {
     /**
      * Uebersetzt einen String aus der Sprachdatei system/lang/* 
      * Ist eine eigene Sprachdatei vorhanden, wird diese genutzt - ansonsten die Default Sprachdatei. 
+     * 
+     * @param string $str Der zu uebersetzende String
+     * 
+     * @return string uebersetzer_string|fehlerstring
      */
     final function _t($str) {        
         include ABSPATH . 'system' . DS . 'lang' . DS . 'lang.php';        
@@ -60,7 +77,14 @@ class system extends core {
     }
     
     /**
-     * Regtistriert eine Action, die bei Aufruf eines Hooks getriggert wird. 
+     * Regtistriert eine Custom Funktion, die bei Aufruf eines Hooks getriggert wird.
+     * Wenn keine $action angegeben wird, werden alle Actions auf dem Hook entfernt.
+     * 
+     * @param string $hook Der Hook bei dem die Custom Funktion aufgerufen werden soll
+     * @param string $action Die Custom Funktion, die aufgerufen werden soll
+     * @param string|array params optional Die Parameter, mit der die Custom Funktion aufgerufen werden soll
+     * 
+     * @return bool success|error
      */
     public final function add_action( $hook, $action = false, $params = false ) {          
         if( !$action ) {        
@@ -76,15 +100,23 @@ class system extends core {
     }
     
     /**
-     * Prueft, ob Actions zu einem bestimmten Hook registriert wurden. 
+     * Prueft, ob Cunstom Funktionen zu einem bestimmten Hook registriert wurden. 
+     * 
+     * @param string $hook Der zu pruefende Hook
+     * 
+     * @return bool success|error
      */
     final function has_action( $hook ) {    
         return isset( $this->hooks[$hook] );        
     }
     
     /**
-     * Ruft alle registrierten Actions zu einem bestimmten Hooks auf. 
-     * Wurde eine Action ohne Parameter registriert, wird ihr eine Referenz auf $this uebergeben. 
+     * Ruft alle registrierten Custom Funktionen zu einem bestimmten Hooks auf. 
+     * Wurde eine Custom Funktion ohne Parameter registriert, wird ihr eine Referenz auf $this uebergeben. 
+     * 
+     * @param string $hook Der zu pruefende Hook
+     * 
+     * @return void
      */
     final function do_action( $hook ) {            
         if( isset( $this->hooks[$hook] ) ) {                 
@@ -98,7 +130,13 @@ class system extends core {
     
     /**
      * Wenn aktuell ein Item oder ein Archiv ausgegeben wird, werden die Informationen im Header gebraucht. 
-     * Dazu werden sie vorher hier abgelegt. 
+     * Dazu werden sie vorher hier abgelegt.
+     * 
+     * Indexseiten und Suchergebnisse sind KEINE ITEMS - dazu muessen eigene erstellt werden!
+     * 
+     * @param array $item Das aktuelle Item
+     * 
+     * @return void
      */
     function set_current_item( $item ) {    
         $this->current_item = $item;        
@@ -107,6 +145,10 @@ class system extends core {
     /**
      * Mit dieser Funktion holt sich der HTML Header die benoetigten Informationen zum aktuell angezeigten Inhalt 
      * um die entsprechenden Metadaten auzuliefern. 
+     * 
+     * Indexseiten und Suchergebnisse sind KEINE ITEMS - dazu muessen eigene erstellt werden!
+     * 
+     * @return array Das aktuelle Item
      */
     function get_current_item() {    
         return $this->current_item;        
@@ -115,6 +157,8 @@ class system extends core {
     /**
      * Hier wird der primaere Inhalt generiert und als Array($result) an system/theme uebergeben.
      * Diese Funktion sollte nur ausgeben was es wirklich gibt um dem Theme das filtern abzunehmen. 
+     * 
+     * @return array Der Inhalt
      */
     function get_the_content() {         
         switch( $this->request( 'type' ) ) {        
@@ -134,10 +178,6 @@ class system extends core {
         $item = false;
         $result = false;                                             
         switch( $this->view ) {              
-            /**
-             * Hier wird ein einzelnes Item angezeigt.
-             * Ist kein Inhalt vorhanden wird ein Dummyitem erzeugt.
-             */
             case "single":                                    
                 $item = $this->single( array('type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true) );                                                               
                 if( !$item ) {                 
@@ -147,9 +187,6 @@ class system extends core {
                 $result['content'] = $item;               
                 $result['view'] = "single";
             break;             
-            /**
-             * Hier wird ein Archiv angezeigt.
-             */
             case "archive":                                                                                    
                 if( $this->request( 'id' ) ) {                                                
                     $item = $this->single( array( 'id' => $this->request( 'id' ) ) );                    
@@ -160,9 +197,6 @@ class system extends core {
                 }                              
                 $archive = new archive();                
                 $archive->archive_init();                                                                
-                /**
-                 * Wenn ein Archiv Inhalt hat, wird er ausgelesen. 
-                 */
                 $items = false;                                
                 if( $archive->items ) {                                
                     foreach( $archive->items as $item ) {                    
@@ -195,6 +229,8 @@ class system extends core {
     
     /**
      * Hier wird der sekundaere Inhalt generiert. 
+     * 
+     * @todo Sekundaerer Inhalt/Sidebar
      */
     function get_the_sidebar() { }
 
