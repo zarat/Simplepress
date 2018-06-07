@@ -12,44 +12,78 @@ include "load.php";
 require ("config.php"); 
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//DE">
 <html>
 <head>
 	<title>Login</title>
-  <link href="../content/themes/simplepress/css/menu.css" rel="stylesheet" type="text/css" />
-  <link href="../content/themes/simplepress/css/style.css" rel="stylesheet" type="text/css" />
+    <style>
+    body {
+      background: #2d343d;
+    }
+    
+    .login {
+      margin: 20px auto;
+      width: 300px;
+      padding: 30px 25px;
+      background: white;
+      border: 1px solid #c4c4c4;
+    }
+    
+    h1.login-title {
+      margin: -28px -25px 25px;
+      padding: 15px 25px;
+      line-height: 30px;
+      font-size: 25px;
+      font-weight: 300;
+      color: #ADADAD;
+      text-align:center;
+      background: #f7f7f7;
+     
+    }
+    
+    .login-input {
+      width: 285px;
+      height: 50px;
+      margin-bottom: 25px;
+      padding-left:10px;
+      font-size: 15px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .login-input:focus {
+        border-color:#6e8095;
+        outline: none;
+      }
+    .login-button {
+      width: 100%;
+      height: 50px;
+      padding: 0;
+      font-size: 20px;
+      color: #fff;
+      text-align: center;
+      background: #f0776c;
+      border: 0;
+      border-radius: 5px;
+      cursor: pointer; 
+      outline:0;
+    }
+    
+    .login-lost
+    {
+      text-align:center;
+      margin-bottom:0px;
+    }
+    
+    .login-lost a
+    {
+      color:#666;
+      text-decoration:none;
+      font-size:13px;
+    }
+    </style>
 </head>
-
 <body>
-
-<div class="sp-main-wrapper">
-
-<!-- HTML Header -->
-    <div class="sp-main-header"> 
-
-        <div class="sp-main-header-logo">
-
-            <h1>SimplePress</h1>
-            <h4>Einfaches, kostenloses Blog CMS</h4>
-    
-        </div>
-    
-    </div>
-<!-- HTML Header Ende -->
-
-<?php
-$nav = new menu();
-$nav->config(array("id" => 1));
-$nav->html();
-?>
-
-
-<div class="sp-main-body">
-<div class='sp-content'>
-
-<!-- Hier kommt der Login -->
-
 <?php
 
 $system = new system();
@@ -86,45 +120,19 @@ if( isset( $_POST['formlogin'] ) ) {
         
     }
 
-} else {
+} else { 
 
-    $form ='<form action="login.php" method="post" name="frm">'."\n";
-    $form.='<center>'."\n";
-    $form.='<table cellspacing="4" cellpadding="4" style="">'."\n";
-    $form.='	<tr>'."\n";
-    $form.='		<td>Email</td>'."\n";
-    $form.='		<td><input type="text" name="formlogin" class="cssborder" autofocus></td>'."\n";
-    $form.='		<td>Passwort</td>'."\n";
-    $form.='		<td><input type="password" name="formpass" class="cssborder"></td>'."\n";
-    $form.='    <td><input type="submit" value="login" class="cssborder"></td>'."\n";
-    $form.='	</tr>'."\n";
-    $form.='</table>'."\n";
-    $form.='</center> 	 '."\n";
-    $form.='</form>';
-    echo $form;
+$form ='<form method="post" class="login" action="login.php" name="frm">'."\n";
+$form.='    <h1 class="login-title">Simplepress Login</h1>'."\n";
+$form.='    <input type="text" class="login-input" name="formlogin" placeholder="Email Adress" autofocus>'."\n";
+$form.='    <input type="password" class="login-input" name="formpass" placeholder="Password">'."\n";
+$form.='    <input type="submit" value="Lets Go" class="login-button">'."\n";
+$form.='  <p class="login-lost"><a href="">Forgot Password?</a></p>'."\n";
+$form.='</form>';
+echo $form;
 
-}
+} 
 
 ?>
-
-</div>
-
-<div class='sp-sidebar'>
-
-    <div class="sp-sidebar-item-box">
-        <div class="sp-sidebar-item-box-head">Hinweis</div>
-        <div class="sp-sidebar-item-box-body">Achte immer darauf, das dir keiner beim anmelden zusieht!</div>
-    </div>
-
-</div>
-
-<div style='clear:both;'></div><!-- Der Footer -->
-
-<div class="sp-footer" style="padding:10px;"></div>
-
-</div>
-
-</div> 
-
 </body>
 </html>
