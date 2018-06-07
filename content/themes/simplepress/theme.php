@@ -1,14 +1,21 @@
 <?php
 
 /**
+ * Ein Beispieltheme
+ *
  * @author Manuel Zarat
  */
 
 class simplepress extends theme {
 
     function header() {
-        echo "<div class=\"sp-main-wrapper\">\n";
-        parent::header();
+        echo "<div class='sp-main-wrapper'>\n";
+        echo "<div class='sp-main-header'>\n";
+            echo "<div class='sp-main-header-logo'>\n";
+                echo "<h1>".$this->settings('site_title')."</h1>\n";
+                echo "<h4>".$this->settings('site_subtitle')."</h4>\n";
+            echo "</div>\n";
+        echo "</div>";
     }
     
     function navigation() {
