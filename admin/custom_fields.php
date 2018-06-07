@@ -13,7 +13,7 @@ function get_all_fields( $item_id ) {
     if($all_fields) {
         foreach( $all_fields as $k => $v) {
             echo "<form>";
-            echo "<p>" . $k . ": " . $v . "</p>";
+            echo "<p>" . $v[0] . ": " . $v[1] . "</p>";
             echo "<a style=\"cursor:pointer;\" onclick=\"deletecustomfield('" . $k . "',$item_id)\">entfernen</a>";
             echo "</form";
         }
@@ -29,9 +29,7 @@ function add_field( $item_id, $field_key, $field_value ) {
 
 function delete_field( $key, $item_id ) {
     $system = new system();
-    $meta_item = $system->select( array( "select" => "*", "from" => "item_meta", "where" => "meta_key='" . $key . "' AND meta_item_id=" . $item_id ) );
-    $meta = $meta_item[0];
-    $system->delete( array( 'from' => 'item_meta', 'where' => 'meta_id=' . $meta['meta_id'] ) );
+    $system->delete( array( 'from' => 'item_meta', 'where' => 'meta_id=' . $key ) );
     echo $item_id;
 } 
     
