@@ -45,8 +45,8 @@ class theme extends system {
      * @return html
      */
     function header() {
-        echo "<div class='sp-main-header'>\n";
-            echo "<div class='sp-main-header-logo'>\n";
+        echo "<div class='main-header'>\n";
+            echo "<div class='main-header-logo'>\n";
                 echo "<h1>".$this->settings('site_title')."</h1>\n";
                 echo "<h4>".$this->settings('site_subtitle')."</h4>\n";
             echo "</div>\n";
@@ -80,8 +80,8 @@ class theme extends system {
     function content() {                                
         $data = $this->get_the_content();  
         if( !empty( $data['error'] ) ) {                    
-            echo "<div class='sp-content-item'>\n";
-                    echo "<div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div>\n";
+            echo "<div class='content-item'>\n";
+                    echo "<div class='content-item-head'>" . $this->_t('no_items_to_display') . "</div>\n";
             echo "</div>\n";                                               
         } else {                                                                       
             if( $data['view'] == "archive" ) {            
@@ -97,9 +97,9 @@ class theme extends system {
                     while( $data['content']->have_items() ) {
                         $post = $data['content']->the_item(); 
                         $post['content'] = strip_tags( preg_replace("/[^ ]*$/", '', substr( $post['content'], 0, 150 ) ) );  
-                        echo "<div class='sp-content-item'>\n";
-                            echo "<div class='sp-content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
-                            echo "<div class='sp-content-item-body'>$post[content]</div>\n";
+                        echo "<div class='content-item'>\n";
+                            echo "<div class='content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
+                            echo "<div class='content-item-body'>$post[content]</div>\n";
                         echo "</div>\n";                                                
                     }                
                     $data['content']->pagination();                 
@@ -115,9 +115,9 @@ class theme extends system {
                     include $template;                
                 } else {                                              
                     $post = $data['content'];                    
-                    echo "<div class='sp-content-item'>\n";
-                        echo "<div class='sp-content-item-head'>$post[title]</div>\n";
-                        echo "<div class='sp-content-item-body'>$post[content]</div>\n";
+                    echo "<div class='content-item'>\n";
+                        echo "<div class='content-item-head'>$post[title]</div>\n";
+                        echo "<div class='content-item-body'>$post[content]</div>\n";
                     echo "</div>\n";             
                 }                                                                     
             } else if( $data['view'] == "default" ) {        
@@ -129,9 +129,9 @@ class theme extends system {
                     while( $data['content']->have_items() ) {
                         $post = $data['content']->the_item();
                         $post['content'] = strip_tags( preg_replace("/[^ ]*$/", '', substr( $post['content'], 0, 150 ) ) );                    
-                        echo "<div class='sp-content-item'>\n";
-                            echo "<div class='sp-content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
-                            echo "<div class='sp-content-item-body'>$post[content]</div>\n";
+                        echo "<div class='content-item'>\n";
+                            echo "<div class='content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
+                            echo "<div class='content-item-body'>$post[content]</div>\n";
                         echo "</div>\n"; 
                     }           
                 }        
@@ -152,10 +152,10 @@ class theme extends system {
         } else if( is_file( $template ) ) {            
             include $template;                
         } else {
-            echo "<div class='sp-sidebar-item'>\n";
-                echo "<div class='sp-sidebar-item-head'>Suche</div>\n";
-                echo "<div class='sp-sidebar-item-box'>\n";
-                    echo "<div class='sp-sidebar-item-box-body'><div class='container'><form><input type='hidden' name='type' value='search'><input type='text' name='term'></form></div></div>\n";
+            echo "<div class='sidebar-item'>\n";
+                echo "<div class='sidebar-item-head'>Suche</div>\n";
+                echo "<div class='sidebar-item-box'>\n";
+                    echo "<div class='sidebar-item-box-body'><div class='container'><form><input type='hidden' name='type' value='search'><input type='text' name='term'></form></div></div>\n";
                 echo "</div>\n";
             echo "</div>\n";                        
         }
@@ -210,7 +210,7 @@ class theme extends system {
         } else if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404.php") ) {        
             include $errorfile;            
         } else {
-            echo "<div class='sp-content'><div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div></div>";            
+            echo "<div class='content'><div class='content-item-head'>" . $this->_t('no_items_to_display') . "</div></div>";            
         } 
         $result = ob_get_contents();
         ob_end_clean();
