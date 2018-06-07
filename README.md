@@ -5,7 +5,7 @@ Es soll moderne Standards strikt umsetzen, dabei aber möglichst modular und erw
 
 **Status**: early alpha
 
-**Demo**: https://simplepress.ml https://x-stream.ml
+**Demo**: https://simplepress.ml und jetzt neu auch https://x-stream.ml (stolzdreinschau)
 
 **Documentation**: https://dev.simplepress.ml
 
