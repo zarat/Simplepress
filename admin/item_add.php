@@ -9,9 +9,13 @@ if( !@$_GET['type'] && !@$_POST['title'] ) { die("sorry, wrong query."); }
 $posttype = $_GET['type'];
 
 echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
-echo "<script type=\"text/javascript\" src=\"https://cdn.ckeditor.com/4.5.10/standard/ckeditor.js\"></script>\n";
+echo "<link href=\"../admin/css/suneditor.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+echo "<script type=\"text/javascript\" src=\"../admin/js/suneditor.js\"></script>\n";
 echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
 
+/**
+ * SP Content Anfang
+ */
 echo "<div class=\"sp-content\">";
 
 echo '<h3>' . $system->_t('item_add') . '</h3>';
@@ -34,13 +38,17 @@ if(!empty($_POST['title'])) {
 	
 } else {
 
-    $system->_t('item_add'); // add new item
-
-    echo "<form method=\"post\">";
+    /**
+     * FORM Anfang
+     */
+    echo "<form id=\"frm\" method=\"post\">";
     
     echo '<p>' . $system->_t('item_add_title') . ' <a onclick="toggle(\'more\');" href="#">weitere Optionen</a></p>'; 
     echo "<p><input name=\"title\" type=\"text\"></p>";
     
+    /**
+     * DIV More Anfang
+     */
     echo "<div id=\"more\" style=\"display:none;\">";
     
         echo '<p>' . $system->_t('item_modify_date') . '</p>'; 
@@ -65,25 +73,38 @@ if(!empty($_POST['title'])) {
         echo '<p>' . $system->_t('item_add_description') . '</p>'; 
         echo "<p><input name=\"description\" type=\"text\"></p>";
     
-    echo "</div>"; // close #more
+    /**
+     * DIV More Ende
+     */
+    echo "</div>";
     
     echo '<p>' . $system->_t('item_add_content') . '</p>';
-    echo "<p><textarea cols=\"40\" rows=\"20\" name=\"text\" id=\"ckeditor\" class=\"ckeditor\"></textarea></p>";
+    echo "<p><textarea cols=\"40\" rows=\"20\" name=\"text\" id=\"editor\"></textarea></p>";
     
-    echo "<p><input type=\"submit\" value=\"speichern\"></p>";
+    echo "<p><a style=\"cursor:pointer;\" onclick=\"sun_save();\">Item speichern</a></p>";
     
-    echo "<div style=\"clear:both;\"></div>";
-    
+    /**
+     * FORM Ende
+     */
     echo "</form>";
 
 }
 
+/**
+ * SP Content Ende
+ */
 echo "</div>";
 
-?> 
+echo "<div style=\"clear:both;\"></div>";
 
+?> 
 <script>
-window.onload = function({
-      document.getElementById("datepicker").datepicker();
+var suneditor = SUNEDITOR.create('editor', {
+    //imageUploadUrl:"upload.php"
 });
+document.getElementById("datepicker").datepicker();
+function sun_save() {
+    suneditor.save();
+    document.getElementById('frm').submit();
+};
 </script>
