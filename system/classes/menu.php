@@ -71,11 +71,15 @@ private $sublevel = 0;
      * 
      * @return html
      */
-    public function html( $config ) {        
-        extract( $config );                   
-        echo $before;            
+    public function html( $config = false ) {        
+        if( $config ) {
+            extract( $config );                   
+            echo $before ? $before : "";            
+        }
         $this->items();
-        echo $after;                                          
+        if( $config ) {                   
+            echo $after ? $after : "";            
+        }                                        
     }
     
 }
