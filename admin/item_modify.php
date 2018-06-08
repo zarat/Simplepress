@@ -162,15 +162,17 @@ echo "</div>\n";
  
 ?>
 
+<div id="original" style="display:none;"><?php echo $text; ?></div>
+
 <script>
   var editor = window.jswriter.init({
     element: document.getElementById('pell'),
     defaultParagraphSeparator: 'p',
     styleWithCSS: false,
-    inco: "<?php echo $text; ?>",
+    inco: document.getElementById('original').innerHTML,
     onChange: function (html) {
       document.getElementById('text-output').innerHTML = html
-      document.getElementById('html-output').textContent = html
+      //document.getElementById('html-output').textContent = html
     }
   })  
 
