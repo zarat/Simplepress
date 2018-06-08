@@ -182,7 +182,7 @@ var init = function init(settings) {
         content.textContent = decodeHtml( settings.inco );
         content.innerHTML = decodeHtml( settings.inco ); 
   }
-  document.getElementById('text-output').innerHTML = content.textContent;
+  document.getElementById('text-output').innerHTML = content.innerHTML;
   
   content.oninput = function (_ref) {
     var firstChild = _ref.target.firstChild;
