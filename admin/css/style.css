@@ -103,8 +103,7 @@ a:hover {
      * 
      */
     .sp-content {width:100%;float:left;}
-    .sp-content-item {padding:10px;}
-    .sp-content-item:hover{background:yellow;}   
+    .sp-content-item {padding:10px;}  
     .sp-content-item-head {font-size:20px;border-bottom:1px solid silver;margin-bottom:10px;}        
     .sp-content-item-body {}
     
@@ -114,7 +113,6 @@ a:hover {
      */
     .sp-sidebar{width:100%;float:left;}    
     .sp-sidebar-item{padding:10px;}
-    .sp-sidebar-item:hover{background:yellow;}
     .sp-sidebar-item-head{font-size:20px;border-bottom:1px solid silver;margin-bottom:10px;}    
     .sp-sidebar-item-body{}
     
