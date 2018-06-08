@@ -50,10 +50,9 @@ public $items = [];
             $where .= " AND type='post' ";
         }
         if ( $this->request( 'last' ) ) {
-            $where .= " AND id < " . $this->request( 'last' );
+            $where .= " AND date < " . $this->request( 'last' );
         } 
-        $where .= " ORDER BY date ASC";
-           
+        $where .= " ORDER BY date ASC";   
         $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => $where ) );
         $this->post_count = sizeof( $this->items );   
     }
@@ -103,7 +102,8 @@ public $items = [];
     function the_item( $strip_tags = false, $content_length = false ) {            
         if( $this->more() ) {        
             $post = array_pop( $this->items );                    
-            $this->last = $post['id'];            
+            $this->last = $post['id']; 
+            $this->last_timestamp = $post['date'];           
             $this->displayed_this_page++; 
             if($strip_tags ) {             
                 $post['content'] = strip_tags($post['content']);                 
@@ -127,9 +127,9 @@ public $items = [];
     function pagination() {      
         if( $this->more() ) {                       
             if( $this->request( 'type' ) == 'category' ) {                                      
-                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a rel='nofollow' href='../?type=category&id=" . $this->request( 'id' ) . "&last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";                                                                
+                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a rel='nofollow' href='../?type=category&id=" . $this->request( 'id' ) . "&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a></div></div>";                                                                
             } else {                
-                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a rel='nofollow' href='../?last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";           
+                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a rel='nofollow' href='../?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a></div></div>";           
             }                              
         }                            
     }
