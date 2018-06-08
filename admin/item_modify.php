@@ -15,7 +15,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     $keywords = htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8');    
     $description = htmlentities($_POST['description'], ENT_QUOTES, 'utf-8');
     $text = $_POST['text'];
-    $category = $_POST['category'];
+    $category = !empty( $_POST['category'] ) ? $_POST['category'] : 0;
 
     if(!isset($_POST['date'])) {
         $date = time();
@@ -23,7 +23,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
         $date = strtotime( ( $_POST['date'] ) );
     } 
     
-    $cfg = array("table" => "item","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category', date=$date WHERE id=$id");
+    $cfg = array("table" => "item","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category=$category, date=$date WHERE id=$id");
     $system->update($cfg);
     
     $it = $system->single(array('id' => $id));
@@ -55,10 +55,11 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     $date = date("d.m.Y", $result['date']);
     
     $link = "../?type=$result[type]&id=$result[id]";
-    
+
+    echo "<script type=\"text/javascript\" src=\"../admin/js/admin.js\"></script>\n";    
     echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
-    echo "<link href=\"../admin/css/suneditor.css\" rel=\"stylesheet\" type=\"text/css\">\n";
-    echo "<script type=\"text/javascript\" src=\"../admin/js/suneditor.js\"></script>\n";
+    echo "<link href=\"../admin/css/jswriter.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+    echo "<script type=\"text/javascript\" src=\"../admin/js/jswriter.js\"></script>\n";
     echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
                                         
     /**
@@ -75,7 +76,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     echo "<form id=\"frm\" method=\"post\">";
     
         echo '<p>' . $system->_t('item_modify_title') . ' <a onclick="toggle(\'more\');" href="#">weitere Optionen</a> - <a href="' . $link . '">ansehen</a></p>'; 
-        echo "<p><input name=\"title\" type=\"text\" value=\"$title\"></p>";
+        echo "<p><input name=\"title\" type=\"text\" value=\"$title\" id=\"title\"></p>";
         
         /**
          * DIV MORE ANFANG
@@ -83,10 +84,10 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
         echo "<div id=\"more\" style=\"display:none;\">";
         
             echo '<p>' . $system->_t('item_modify_date') . '</p>'; 
-            echo "<p><input type=\"text\" name=\"date\" class=\"datepicker\" value=\"$date\"></p>";
+            echo "<p><input type=\"text\" name=\"date\" class=\"datepicker\" value=\"$date\" id=\"date\"></p>";
             
             echo '<p>' . $system->_t('item_modify_category') . '</p>';
-            echo "<p><select name=\"category\">";
+            echo "<p><select name=\"category\" id=\"category\">";
             $cfg = array('select'=>'*','from'=>'item','where'=>'type="category"');
             $a = $system->archive($cfg);
             for($i=0;$i<count($a);$i++) {
@@ -99,10 +100,10 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
             echo "</select></p>";
             
             echo '<p>' . $system->_t('item_modify_keywords') . '</p>'; 
-            echo "<p><input name=\"keywords\" type=\"text\" value=\"$keywords\"></p>";
+            echo "<p><input name=\"keywords\" type=\"text\" value=\"$keywords\" id=\"keywords\"></p>";
             
             echo '<p>' . $system->_t('item_modify_description') . '</p>'; 
-            echo "<p><input name=\"description\" type=\"text\" value=\"$description\"></p>";    
+            echo "<p><input name=\"description\" type=\"text\" value=\"$description\" id=\"description\"></p>";    
         
         /**
          * DIV MORE ENDE
@@ -110,9 +111,10 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
         echo "</div>";
         
         echo '<p>' . $system->_t('item_modify_content') . '</p>';
-        echo "<p><textarea cols=\"40\" rows=\"20\" name=\"text\" id=\"editor\" style=\"width:100% !important;\">$text</textarea></p>";
+        echo "<p><div id=\"pell\" class=\"pell\"></div></p>";
+        echo "<div id=\"text-output\"></div>";
         
-        echo "<p><a style=\"cursor:pointer;\" onclick=\"sun_save();\">Item speichern</a></p>";
+        echo "<p><a style=\"cursor:pointer;\" onclick=\"save();\">Item speichern</a></p>";
     
     echo "</form>\n"; 
     
@@ -159,15 +161,27 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 echo "</div>\n"; 
  
 ?>
+
 <script>
-var suneditor = SUNEDITOR.create('editor', {
-    //imageUploadUrl:"upload.php"
-});
-document.getElementById("datepicker").datepicker();
-function sun_save() {
-    suneditor.save();
-    document.getElementById('frm').submit();
-};
+  var editor = window.jswriter.init({
+    element: document.getElementById('pell'),
+    defaultParagraphSeparator: 'p',
+    styleWithCSS: false,
+    inco: "<?php echo $text; ?>",
+    onChange: function (html) {
+      document.getElementById('text-output').innerHTML = html
+      document.getElementById('html-output').textContent = html
+    }
+  })  
+
+  function save() {
+    var title = document.getElementById('title').value;
+    var date = document.getElementById('date').value;
+    var keywords = document.getElementById('keywords').value;
+    var description = document.getElementById('description').value;
+    var content = document.getElementById('text-output').innerHTML;
+    ajaxpost( "../admin/?page=item_modify&id=<?php echo $res_id; ?>", "title=" + title + "&date=" + date + "&keywords=" + keywords + "&description=" + description + "&text=" + content );
+  }
 </script>
 
 <?php } ?>
