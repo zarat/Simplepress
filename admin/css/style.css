@@ -119,8 +119,6 @@ div{
         width:1000px;
         background:white;
         margin:0px auto;
-        margin-top:20px;
-        margin-bottom:20px;
         box-shadow: 0 0 2px 2px silver;
     }
     .sp-main-header{
@@ -132,62 +130,43 @@ div{
      * Content
      * 
      */
+     
     .sp-content {
-         width:750px;
+         width:800px;
          float:left;
          padding:10px;
-         clear:both;
-    }
+    }    
     .sp-content-item {
-         margin-bottom:10px;
+
     }
     .sp-content-item-head {
-         font-size:24px;
-         padding:10px;
-         background:none;
-    }
-    .sp-content-item-head-secondary {
-         padding:10px;
-         color:grey;
-         border-top:1px solid silver;
+        font-size:20px;
+        border-bottom:1px solid silver;
+        margin-bottom:10px;
     }
     .sp-content-item-body {
-         padding:10px;
     }
+    
     /**
      * SIDEBAR 
      * 
      */
     .sp-sidebar{
-         width:250px;
-         float:right;
+         width:200px;
+         float:left;
          padding:10px;
     }
     .sp-sidebar-item{
-         margin-bottom:10px;
+
     }
     .sp-sidebar-item-head{
-         font-size:24px;
-         background:none;
-         padding:10px;
+        font-size:20px;
+        border-bottom:1px solid silver;
+        margin-bottom:10px;
     }
     .sp-sidebar-item-body{
-         background:none;
     }
-    .sp-sidebar-item-box-head{
-        font-weight:bold;
-        padding:10px;
-    }
-    .sp-sidebar-item-box-head-secondary {
-        padding:10px;
-        padding-top:0px;
-        color:grey;
-        border-top:1px solid silver;
-    }
-    .sp-sidebar-item-box-body {
-        padding:10px;
-        color:grey;
-    }
+    
     /**
      * Footer
      * 
@@ -197,6 +176,7 @@ div{
         display:block;
         box-shadow: 0 0 2px 2px silver;
     }
+    
 }
 /* MIN 1000px ENDE */
 
