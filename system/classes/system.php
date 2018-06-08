@@ -201,9 +201,7 @@ class system extends core {
                 if( $archive->items ) {                                
                      $result['content'] = $archive;                                                         
                 } else {               
-                    $item = array("id" => 0, "type" => "error", "title" => "Test", "description" => "", "content" => "Error 404", "keywords" => "" );
-                    $result['error'] = "error on archive";
-                    $result['content'] = $item;                    
+                    $result['error'] = "error on archive";                  
                 }                                                                              
                 $result['view'] = "archive";                                                                                          
             break;                                                
