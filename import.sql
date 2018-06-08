@@ -34,8 +34,8 @@ CREATE TABLE `item` (
 
 INSERT INTO `item` (`id`, `type`, `title`, `keywords`, `description`, `content`, `date`, `status`, `category`) VALUES
 (1,	'category',	'Allgemein',	'homepage,blog,simplepress', 'Allgemeine Themen', '',	1491560699,	1,	1),
-(2,	'page',	'About',	'homepage,blog,simplepress',	'',	'<p>Seiten wie diese werden nicht automatisch in hierarchischen Archiven angelegt. Du kannst sie im Men&uuml;manager anordnen.</p>',	1515507779,	1,	1),
-(3,	'post',	'Dein neuer Blog',	'',	'',	'<p>Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im <a href="../admin">Adminbereich</a> bearbeiten oder wieder entfernen kannst. Sieh dich dort am besten gleich mal um und dann auf ans bloggen!</p>',	1515107311,	1,	1);
+(2,	'page',	'About',	'homepage,blog,simplepress',	'',	'Seiten wie diese werden nicht automatisch in hierarchischen Archiven angelegt. Du kannst sie im Men&uuml;manager anordnen.',	1515507779,	1,	1),
+(3,	'post',	'Dein neuer Blog',	'',	'',	'Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im <a href="../admin">Adminbereich</a> bearbeiten oder wieder entfernen kannst. Sieh dich dort am besten gleich mal um und dann auf ans bloggen!',	1515107311,	1,	1);
 
 DROP TABLE IF EXISTS `item_meta`;
 CREATE TABLE `item_meta` (
