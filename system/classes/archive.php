@@ -52,7 +52,7 @@ public $items = [];
         if ( $this->request( 'last' ) ) {
             $where .= " AND id < " . $this->request( 'last' );
         } 
-        $where .= " ORDER BY id ASC";
+        $where .= " ORDER BY date ASC";
            
         $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => $where ) );
         $this->post_count = sizeof( $this->items );   
