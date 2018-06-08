@@ -160,8 +160,10 @@ class system extends core {
      * 
      * @return array Der Inhalt
      */
-    function get_the_content() {                
-        switch( $this->request( 'type' ) ) {        
+    function get_the_content() { 
+                   
+        switch( $this->request( 'type' ) ) {   
+             
             case "post":
             case "page":            
                 $this->view = "single"; 
@@ -174,46 +176,104 @@ class system extends core {
             default:            
                 $this->view = "default"; 
                 break;                
-        }                 
+        }    
+                     
         $item = false;
-        $result = false;                                             
-        switch( $this->view ) {              
-            case "single":                                    
-                $item = $this->single( array('type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true) );                                                               
+        $result = false; 
+                                                    
+        switch( $this->view ) {  
+                    
+            case "single": 
+                                               
+                /**
+                 * Entsprechendes Item holen
+                 */
+                $item = $this->single( array('type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true) );
+                 
+                /**
+                 * Wenn keines vorhanden ist, setze ein Dummyitem und einen error trigger
+                 */
                 if( !$item ) {                 
-                    $item = array("id" => 0, "title" => "404 gefunden", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" );                                                                                
-                }                
-                $this->set_current_item($item);                                                                
+                    $item = array("id" => 0, "title" => "404 gefunden", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" ); 
+                    $result['error'] = "error on single";                                                                               
+                } 
+                
+                /**
+                 * Entweder das Dummy Item oder das echte fuer den header
+                 */
+                $this->set_current_item($item); 
+                                                                               
                 $result['content'] = $item;               
                 $result['view'] = "single";
-            break;             
-            case "archive":                                                                                    
+                
+            break;   
+                      
+            case "archive":
+                
+                /**
+                 * Wenn ID, dann Category
+                 */
                 if( $this->request( 'id' ) ) {                                                
-                    $item = $this->single( array( 'id' => $this->request( 'id' ) ) );                    
-                    $this->set_current_item( $item );                                    
+                    $item = $this->single( array( 'id' => $this->request( 'id' ) ) );                                                       
                 }
+                
+                /**
+                 * Wenn term dann suchen
+                 */
                 elseif( $this->request( 'term' ) ) {                                            
-                    $item = array("id" => 0, "title" => "Ergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" );                    
-                    $this->set_current_item( $item ) ;                                                  
-                }          
+                    $item = array("id" => 0, "title" => "Ergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" );                                                                      
+                } 
+                
+                /**
+                 * Archiv bilden
+                 */
                 $archive = new archive();                
-                $archive->archive_init();                                                                                                                                
-                if( $archive->items ) {                                
-                     $result['content'] = $archive;                                                         
-                } else {               
-                    $result['error'] = "error on archive";                  
-                }                                                                              
-                $result['view'] = "archive";                                                                                          
-            break;                                                
-            default:                                        
+                $archive->archive_init();
+                
+                /**
+                 * Wenn Ergebnisse vorhanden sind setze result[content] fuer theme und current_item fuer header
+                 */
+                if( $archive->items ) { 
+                                                               
+                     $result['content'] = $archive;
+                     $this->set_current_item( array("id" => 0, "title" => "Ergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" ) );                                                         
+                
+                /**
+                 * Sind keine vorhanden..
+                 */
+                } else {  
+                 
+                    /**
+                     * Sind keine Ergebnisse vorhanden setze ein Dummyitem auf result[content] und den error trigger
+                     */
+                    $item = array("id" => 0, "title" => "404 gefunden", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" );
+                    $result['content'] = $item;        
+                    $result['error'] = "error on archive";
+                                      
+                }  
+                                                                                            
+                $result['view'] = "archive"; 
+                                                                                                         
+            break;   
+                                                         
+            default:
+                                                   
                 $latest = new archive();                
-                $latest->archive_init();                                                                                                                                                             
-                if( $latest->count_items() < 1 ) {                 
-                    $this->error404();                    
-                    break;                    
-                }                   
+                $latest->archive_init();  
+                                                                                                                                                                           
+                if( !$latest->items ) {  
+                    
+                    $item = array("id" => 0, "title" => "Ergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" );
+                    $result['content'] = $item;
+                    $result['error'] = "error on default";               
+                    
+                } else {
+                    $result['content'] = $latest;
+                } 
+                                 
                 $result['view'] = "default"; 
-                $result['content'] = $latest;                 
+                //$result['content'] = $latest; 
+                                
             break;             
         }               
         return $result;  
