@@ -2249,9 +2249,9 @@ SUNEDITOR.defaultLang = {
             this.contentWindow.document.body.setAttribute("contenteditable", true);
 
             if (element.value.length > 0) {
-                this.contentWindow.document.body.innerHTML = '<p>' + element.value + '</p>';
+                this.contentWindow.document.body.innerHTML = element.value;
             } else {
-                this.contentWindow.document.body.innerHTML = '<p>&#65279</p>';
+                //this.contentWindow.document.body.innerHTML = '<p>&#65279</p>';
             }
         });
 
