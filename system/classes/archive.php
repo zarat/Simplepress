@@ -40,26 +40,21 @@ public $items = [];
      * 
      * @return void
      */
-    final function fill_items() {     
-        if( $this->request( 'type' ) && $this->request( 'type' ) == 'category' ) {        
-            if( $this->request( 'last' ) ) {   
-                $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY date ASC") );                             
-            } else {                                   
-                $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY date ASC") );                           
-            }            
-        } elseif( $this->request( 'type' ) && $this->request( 'type' ) == 'search' ) {             
-            if( $this->request( 'last' ) ) {                      
-                $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) AND id < " . $this->request( 'last' ) . " ORDER BY date ASC") );                             
-            } else {                   
-                $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ORDER BY date ASC") );               
-            }                                            
-        } else {  
-            if( $this->request( 'last' ) ) {    
-                $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type='post' AND id < " . $this->request( 'last' ) . " ORDER BY date ASC") );                  
-            } else {  
-                $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type='post' ORDER BY date ASC") );                
-            }  
-        }  
+    final function fill_items() {                       
+        $where = "status=1"; 
+        if ( $this->request( 'type' ) == 'category' ) {
+            $where .= " AND type IN ('page','post') AND category=" . $this->request( 'id' );
+        } else if( $this->request( 'type' ) == 'search' ) {
+            $where .= " AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ";
+        } else {
+            $where .= " AND type='post' ";
+        }
+        if ( $this->request( 'last' ) ) {
+            $where .= " AND id < " . $this->request( 'last' );
+        } 
+        $where .= " ORDER BY id ASC";
+           
+        $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => $where ) );
         $this->post_count = sizeof( $this->items );   
     }
 
