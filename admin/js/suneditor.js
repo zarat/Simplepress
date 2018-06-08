@@ -1440,6 +1440,7 @@ SUNEDITOR.defaultLang = {
              */
             toggleFrame: function () {
                 if (!this._variable.wysiwygActive) {
+                
                     var ec = {"&amp;": "&", "&nbsp;": "\u00A0", /*"&quot;": "\"", */"&lt;": "<", "&gt;": ">"};
                     var code_html = context.element.code.value.replace(/&[a-z]+;/g, function (m) {
                         return (typeof ec[m] === "string") ? ec[m] : m;
@@ -1449,6 +1450,7 @@ SUNEDITOR.defaultLang = {
                     context.element.code.style.display = "none";
                     context.element.wysiwygElement.style.display = "block";
                     this._variable.wysiwygActive = true;
+                    
                 }
                 else {
                     context.element.code.value = context.element.wysiwygWindow.document.body.innerHTML.trim().replace(/<\/p>(?=[^\n])/gi, "<\/p>\n");
@@ -1987,7 +1989,7 @@ SUNEDITOR.defaultLang = {
     };
 
     /**
-     * ↓↓↓↓↓↓ Create Suneditor ↓↓↓↓↓↓
+     * â†“â†“â†“â†“â†“â†“ Create Suneditor â†“â†“â†“â†“â†“â†“
      */
     SUNEDITOR.lang = SUNEDITOR.lang || SUNEDITOR.defaultLang;
 
@@ -2249,9 +2251,9 @@ SUNEDITOR.defaultLang = {
             this.contentWindow.document.body.setAttribute("contenteditable", true);
 
             if (element.value.length > 0) {
-                this.contentWindow.document.body.innerHTML = '<p>' + element.value + '</p>';
+                this.contentWindow.document.body.innerHTML = '' + element.value + '';
             } else {
-                this.contentWindow.document.body.innerHTML = '<p>&#65279</p>';
+                //this.contentWindow.document.body.innerHTML = '<p>&#65279</p>';
             }
         });
 
