@@ -32,8 +32,12 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
 
     echo "<div class=\"sp-content\">\n";
-    echo '<h3>' . $system->_t('item_modify') . '</h3>\n';       
-    echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?type=" . $it['type']. "&id=$id'>hier ansehen</a> oder <a href='../admin/?page=item_modify&id=$id'>weiter bearbeiten</a>.";
+    echo "<div class=\"sp-content-item\">\n";
+    echo "<div class=\"sp-content-item-head\">" . $system->_t('item_modify') . "</div>\n";
+    echo "<div class=\"sp-content-item-body\">\n";   
+    echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?type=" . $it['type']. "&id=$id'>hier ansehen</a>, <a href='../admin/?page=item_modify&id=$id'>weiter bearbeiten</a> oder <a href=\"../admin/?page=item_add&type=$it[type]\">neu anlegen</a>.";
+    echo "</div>\n";
+    echo "</div>\n";
     echo "</div>\n";     	
 
 } else {	
