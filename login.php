@@ -127,7 +127,7 @@ $form.='    <h1 class="login-title">Simplepress Login</h1>'."\n";
 $form.='    <input type="text" class="login-input" name="formlogin" placeholder="Email Adress" autofocus>'."\n";
 $form.='    <input type="password" class="login-input" name="formpass" placeholder="Password">'."\n";
 $form.='    <input type="submit" value="Lets Go" class="login-button">'."\n";
-$form.='  <p class="login-lost"><a href="">Forgot Password?</a></p>'."\n";
+$form.='  <p class="login-lost"><a href="../">Zur Homepage</a></p>'."\n";
 $form.='</form>';
 echo $form;
 
