@@ -31,6 +31,7 @@ SUNEDITOR.plugin.formatBlock = {
             '       <li><button type="button" class="btn_edit" style="height:23px;" data-value="h4"><h4>Header 4</h4></button></li>' +
             '       <li><button type="button" class="btn_edit" style="height:19px;" data-value="h5"><h5>Header 5</h5></button></li>' +
             '       <li><button type="button" class="btn_edit" style="height:15px;" data-value="h6"><h6>Header 6</h6></button></li>' +
+            '       <li><button type="button" class="btn_edit" style="height:15px;" data-value="pre"><pre>pre</pre></button></li>' +
             '   </ul>' +
             '</div>';
 
