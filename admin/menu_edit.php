@@ -11,77 +11,91 @@ require_once '../load.php';
 <link rel="stylesheet" type="text/css" href="./menumanager/style.css">
 
 <div class ="sp-content">
+
+    <div class="sp-content-item">
     
-    <h3><?php echo $system->_t('welcome_to_menu_edit'); ?></h3>
-    <p><?php echo $system->_t('menu_edit_description'); ?></p>
+        <div class="sp-content-item-head"><?php echo $system->_t('welcome_to_menu_edit'); ?></div>
 
-    <div id="load"></div>
-
-    <input type="text" id="label" placeholder="Label" required> 
-    <input type="text" id="link" placeholder="Link" required>
-    <button id="submit">add</button>
-    <input type="hidden" id="id">
-    <br /><br />
-
-    <div class="cf nestable-lists">
-        <div class="dd" id="nestable">
-
-<?php
-
-$system = new system();
-
-$menu = $system->archive( array( "select" => "*", "from" => 'menu', "where" => "menu_id=$_GET[menu_id] order by sort") );
- 
-$ref = [];
-$items = [];
-
-foreach($menu as $data) {
-
-    $thisRef = &$ref[$data['id']];
-    $thisRef['parent'] = $data['parent'];
-    $thisRef['label'] = $data['label'];
-    $thisRef['link'] = $data['link'];
-    $thisRef['id'] = $data['id'];
-
-   if($data['parent'] == 0) {
-        $items[$data['id']] = &$thisRef;
-   } else {
-        $ref[$data['parent']]['child'][$data['id']] = &$thisRef;
-   }
-
-}
- 
- 
-function get_menu($items,$class = 'dd-list') {
-    $html = "<ol class=\"".$class."\" id=\"menu-id\">";
-    foreach($items as $key=>$value) {
-        $html.= '<li class="dd-item dd3-item" data-id="'.$value['id'].'" >
-                    <div class="dd-handle dd3-handle"></div>
-                    <div class="dd3-content"><span id="label_show'.$value['id'].'">'.$value['label'].'</span> 
-                        <span class="span-right"> 
-                            <a class="edit-button" id="'.$value['id'].'" label="'.$value['label'].'" link="'.$value['link'].'" >edit</a>
-                            <a class="del-button" id="'.$value['id'].'">delete</a>
-                        </span> 
-                    </div>';
-        if(array_key_exists('child',$value)) {
-            $html .= get_menu($value['child'],'child');
-        }
-            $html .= "</li>";
-    }
-    $html .= "</ol>";
-    return $html;
-}
- 
-print get_menu($items);
-
-?>
-
+        <div class="sp-content-item-body">
+        
+            <div id="load"></div>
+        
+            <input type="text" id="label" placeholder="Label" required> 
+            <input type="text" id="link" placeholder="Link" required>
+            <button id="submit">add</button>
+            <input type="hidden" id="id">
+            <br /><br />
+        
+            <div class="cf nestable-lists">
+            
+                <div class="dd" id="nestable">
+        
+                    <?php
+                    
+                    $system = new system();
+                    
+                    $menu = $system->archive( array( "select" => "*", "from" => 'menu', "where" => "menu_id=$_GET[menu_id] order by sort") );
+                     
+                    $ref = [];
+                    $items = [];
+                    
+                    foreach($menu as $data) {
+                    
+                        $thisRef = &$ref[$data['id']];
+                        $thisRef['parent'] = $data['parent'];
+                        $thisRef['label'] = $data['label'];
+                        $thisRef['link'] = $data['link'];
+                        $thisRef['id'] = $data['id'];
+                    
+                       if($data['parent'] == 0) {
+                            $items[$data['id']] = &$thisRef;
+                       } else {
+                            $ref[$data['parent']]['child'][$data['id']] = &$thisRef;
+                       }
+                    
+                    }
+                     
+                     
+                    function get_menu($items,$class = 'dd-list') {
+                        $html = "<ol class=\"".$class."\" id=\"menu-id\">";
+                        foreach($items as $key=>$value) {
+                            $html.= '<li class="dd-item dd3-item" data-id="'.$value['id'].'" >
+                                        <div class="dd-handle dd3-handle"></div>
+                                        <div class="dd3-content"><span id="label_show'.$value['id'].'">'.$value['label'].'</span> 
+                                            <span class="span-right"> 
+                                                <a class="edit-button" id="'.$value['id'].'" label="'.$value['label'].'" link="'.$value['link'].'" >edit</a>
+                                                <a class="del-button" id="'.$value['id'].'">delete</a>
+                                            </span> 
+                                        </div>';
+                            if(array_key_exists('child',$value)) {
+                                $html .= get_menu($value['child'],'child');
+                            }
+                                $html .= "</li>";
+                        }
+                        $html .= "</ol>";
+                        return $html;
+                    }
+                     
+                    print get_menu($items);
+                    
+                    ?>
+        
+                </div>
+                
+            </div>
+            
         </div>
-    </div>
 
     <input type="hidden" id="nestable-output">
-
+    
+    </div>
+    
 </div>
+    
+<div class="sp-sidebar">
+</div>
+    
+<div style="clear:both;"></div>
 
 <script src="./menumanager/jquery.nestable.js"></script>
 
