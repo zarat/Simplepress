@@ -34,9 +34,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     echo "<div class=\"sp-content\">\n";
     echo '<h3>' . $system->_t('item_modify') . '</h3>\n';       
     echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?type=" . $it['type']. "&id=$id'>hier ansehen</a> oder <a href='../admin/?page=item_modify&id=$id'>weiter bearbeiten</a>.";
-    echo "</div>\n"; 
-    
-          	
+    echo "</div>\n";     	
 
 } else {	
 		
@@ -55,21 +53,25 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     
     $link = "../?type=$result[type]&id=$result[id]";
     
+    echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
+    echo "<link href=\"../admin/css/suneditor.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+    echo "<script type=\"text/javascript\" src=\"../admin/js/suneditor.js\"></script>\n";
+    echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
+                                        
     /**
      * Content Anfang
      */
     echo "<div class=\"sp-content\">\n";
     
-    echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
-    echo "<link href=\"../admin/css/suneditor.css\" rel=\"stylesheet\" type=\"text/css\">\n";
-    echo "<script type=\"text/javascript\" src=\"../admin/js/suneditor.js\"></script>\n";
-    echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
+    echo "<div class=\"sp-content-item\">\n";
+
+    echo "<div class='sp-content-item-head'>" . $system->_t('item_modify') . "</div>";
     
-    echo '<h3>' . $system->_t('item_modify') . '</h3>';
+    echo "<div class='sp-content-item-body'>"; // Content Item Body Anfang
     
     echo "<form id=\"frm\" method=\"post\">";
     
-        echo '<p>' . $system->_t('item_modify_title') . ' - <a onclick="toggle(\'more\');" href="#">weitere Optionen</a> - <a href="' . $link . '">ansehen</a></p>'; 
+        echo '<p>' . $system->_t('item_modify_title') . ' <a onclick="toggle(\'more\');" href="#">weitere Optionen</a> - <a href="' . $link . '">ansehen</a></p>'; 
         echo "<p><input name=\"title\" type=\"text\" value=\"$title\"></p>";
         
         /**
@@ -109,7 +111,11 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
         
         echo "<p><a style=\"cursor:pointer;\" onclick=\"sun_save();\">Item speichern</a></p>";
     
-    echo "</form>\n";
+    echo "</form>\n"; 
+    
+    echo "</div>"; // content item body ende
+    
+    echo "</div>";
    
     /**
      * Content Ende
@@ -118,15 +124,17 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     
     echo "<div class=\"sp-sidebar\">\n";
     
-        echo "<div class=\"sp-sidebar-item-head\">Custom fields</div>\n";
-        
         echo "<div class=\"sp-sidebar-item\">\n";
+    
+            echo "<div class=\"sp-sidebar-item-head\">Custom fields</div>\n";
         
             echo "<div class=\"sp-sidebar-item-body\">\n";
             
             echo "
-            <input type=\"text\" id=\"customfieldKey\" placeholder=\"Keyword\">
-            <input type=\"text\" id=\"customfieldValue\" placeholder=\"Value\">
+            <p>Custom Key</p>
+            <p><input type=\"text\" id=\"customfieldKey\" placeholder=\"Keyword\"></p>
+            <p>Custom Value</p>
+            <p><input type=\"text\" id=\"customfieldValue\" placeholder=\"Value\"></p>
             <a style=\"cursor:pointer;\" onclick=\"savecustomfield('" . $id . "')\">Feld hinzuf&uuml;gen</a>
             <br>
             <div id=\"customfieldsList\"></div>
@@ -137,11 +145,11 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
             window.setTimeout(customfields, 2000);
             </script>";
             
-            echo "</div>\n";
+            echo "</div>\n"; // sidebar item body ende
         
-        echo "</div>\n";
+        echo "</div>\n"; // sidebar item ende
         
-     echo "</div>\n";
+     echo "</div>\n"; // sidebar ende
      
      echo "<div style=\"clear:both;\"></div>\n";
 
