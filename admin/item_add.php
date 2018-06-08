@@ -14,7 +14,7 @@ if(!empty($_POST['title'])) {
     $keywords = htmlentities($_POST['keywords']);
     $description = htmlentities($_POST['description']);
     $text = $_POST['text'];   
-    $category = $_POST['category'];         
+    $category = !empty($_POST['category']) ? $_POST['category'] : 0;         
     $date = !empty($_POST['date']) ? strtotime(str_replace(".", "-", $_POST['date'])) : time();
         
     $cfg = array("insert"=>"item (type, title, content, description, keywords, status, category, date)","values"=>"('$posttype','$title', '$text', '$description', '$keywords', 1, $category, '$date')");
@@ -27,9 +27,10 @@ if(!empty($_POST['title'])) {
 } else {
 
 echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
-echo "<link href=\"../admin/css/suneditor.css\" rel=\"stylesheet\" type=\"text/css\">\n";
-echo "<script type=\"text/javascript\" src=\"../admin/js/suneditor.js\"></script>\n";
 echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
+echo "<script type=\"text/javascript\" src=\"../admin/js/admin.js\"></script>\n";
+echo "<link href=\"../admin/css/jswriter.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+echo "<script type=\"text/javascript\" src=\"../admin/js/jswriter.js\"></script>\n";
 
 /**
  * SP Content Anfang
@@ -54,7 +55,7 @@ echo "<div class=\"sp-content\">";
     echo "<form id=\"frm\" method=\"post\">";
     
     echo '<p>' . $system->_t('item_add_title') . ' <a onclick="toggle(\'more\');" href="#">weitere Optionen</a></p>'; 
-    echo "<p><input name=\"title\" type=\"text\"></p>";
+    echo "<p><input name=\"title\" type=\"text\" id=\"title\"></p>";
     
     /**
      * DIV More Anfang
@@ -62,10 +63,10 @@ echo "<div class=\"sp-content\">";
     echo "<div id=\"more\" style=\"display:none;\">";
     
         echo '<p>' . $system->_t('item_modify_date') . '</p>'; 
-        echo "<p><input type=\"text\" name=\"date\" class=\"datepicker\"></p>";
+        echo "<p><input type=\"text\" name=\"date\" class=\"datepicker\" id=\"date\"></p>";
         
         echo '<p>' . $system->_t('item_add_category') . '</p>';
-        echo "<p><select name=\"category\">";
+        echo "<p><select name=\"category\" id=\"category\">";
         $cfg = array('select'=>'*','from'=>'item','where'=>'type="category"');
         $a = $system->archive($cfg);
         for($i=0;$i<count($a);$i++) {
@@ -78,20 +79,21 @@ echo "<div class=\"sp-content\">";
         echo "</select></p>";
         
         echo '<p>' . $system->_t('item_add_keywords') . '</p>'; 
-        echo "<p><input name=\"keywords\" type=\"text\"></p>";
+        echo "<p><input name=\"keywords\" type=\"text\" id=\"keywords\"></p>";
         
         echo '<p>' . $system->_t('item_add_description') . '</p>'; 
-        echo "<p><input name=\"description\" type=\"text\"></p>";
+        echo "<p><input name=\"description\" type=\"text\"  id=\"description\"></p>";
     
     /**
      * DIV More Ende
      */
     echo "</div>";
     
-    echo '<p>' . $system->_t('item_add_content') . '</p>';
-    echo "<p><textarea cols=\"40\" rows=\"20\" name=\"text\" id=\"editor\"></textarea></p>";
+        echo '<p>' . $system->_t('item_modify_content') . '</p>';
+        echo "<p><div id=\"pell\" class=\"pell\"></div></p>";
+        echo "<div id=\"text-output\"></div>";
     
-    echo "<p><a style=\"cursor:pointer;\" onclick=\"sun_save();\">Item speichern</a></p>";
+    echo "<p><a style=\"cursor:pointer;\" onclick=\"save();\">Item speichern</a></p>";
     
     /**
      * FORM Ende
@@ -118,13 +120,24 @@ echo "</div>";
 echo "<div style=\"clear:both;\"></div>";
 
 ?> 
+
 <script>
-var suneditor = SUNEDITOR.create('editor', {
-    //imageUploadUrl:"upload.php"
-});
-document.getElementById("datepicker").datepicker();
-function sun_save() {
-    suneditor.save();
-    document.getElementById('frm').submit();
-};
+  var editor = window.jswriter.init({
+    element: document.getElementById('pell'),
+    defaultParagraphSeparator: 'p',
+    styleWithCSS: false,
+    onChange: function (html) {
+      document.getElementById('text-output').innerHTML = html
+      document.getElementById('html-output').textContent = html
+    }
+  })  
+
+  function save() {
+    var title = document.getElementById('title').value;
+    var date = document.getElementById('date').value;
+    var keywords = document.getElementById('keywords').value;
+    var description = document.getElementById('description').value;
+    var content = document.getElementById('text-output').innerHTML;
+    ajaxpost("../admin/?page=item_add&type=<?php echo $posttype; ?>", "title=" + title + "&date=" + date + "&keywords=" + keywords + "&description=" + description + "&text=" + content );
+  }
 </script>
