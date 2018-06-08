@@ -16,13 +16,12 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     $description = htmlentities($_POST['description'], ENT_QUOTES, 'utf-8');
     $text = $_POST['text'];
     $category = $_POST['category'];
-    $date = isset($_POST['date']) ? strtotime(str_replace(".", "-", $_POST['date'])) : date();
-    
+
     if(!isset($_POST['date'])) {
         $date = time();
     } else {
-        $date = strtotime( str_replace( ".", "-", $_POST['date'] ) );
-    } 	
+        $date = strtotime( ( $_POST['date'] ) );
+    } 
     
     $cfg = array("table" => "item","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category', date=$date WHERE id=$id");
     $system->update($cfg);
