@@ -42,7 +42,7 @@ echo "<table id=\"item_list\" class=\"display\" cellspacing=\"0\" width=\"100%\"
 <tfoot></tfoot>\n    
 <tbody>\n";
 
-$cfg = array("select"=>"*","from"=>"item","where"=>"type='$type' ORDER BY id DESC");
+$cfg = array("select"=>"*","from"=>"item","where"=>"type='$type' ORDER BY date DESC");
 $results = $system->archive($cfg);
 
 if(false !== $results) {
