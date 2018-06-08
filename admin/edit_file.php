@@ -21,9 +21,25 @@ function getDirContents($dir, &$results = array()) {
     return $results;    
 }       
 
+/**
+ * SP Content Start
+ */
 echo "<div class=\"sp-content\">";
-echo '<h3>' . $system->_t('welcome_to_theme_edit') . '</h3>';
-echo '<p>' . $system->_t('theme_edit_description') . '</p>'; 
+
+/**
+ * SP Content Item Start
+ */
+echo "<div class=\"sp-content-item\">";
+
+/**
+ * SP Content Item Head 
+ */
+echo "<div class=\"sp-content-item-head\">" . $system->_t('welcome_to_theme_edit') . "</div>"; 
+
+/**
+ * SP Content Item Body Start
+ */
+echo "<div class=\"sp-content-item-body\">";
 
 $aktuelles_theme = $system->settings('site_theme');
 $filepath = dirname('..' . DS . 'content' . DS . 'themes' . DS . $aktuelles_theme . DS);
@@ -73,10 +89,32 @@ if(isset($_POST['filename']) && isset($_POST['filecontent'])) {
         <div style="clear:both;"></div>
     </form>';
 
-}   
+} 
 
-echo '</div>';
+/**
+ * SP Content Item Body Ende
+ */
+echo "</div>";
+
+/**
+ * SP Content Item Ende
+ */
+echo "</div>";  
+
+/**
+ * SP Content Ende
+ */
+echo "</div>";
+
+/**
+ * Sidebar Anfang
+ */
 echo '<div class="sp-sidebar">';
+
+/**
+ * Sidebar Item Anfang
+ */
+echo '<div class="sp-sidebar-item">';
 
 $allfilesindir = getDirContents('../content/themes/'. $system->settings('site_theme') );
 
@@ -86,6 +124,14 @@ foreach($allfilesindir as $file) {
     
 }
 
+/**
+ * Sidebar Item Ende
+ */
+echo "</div>";
+
+/**
+ * Sidebar Ende
+ */
 echo "</div>";
 
 ?>
