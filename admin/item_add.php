@@ -14,7 +14,7 @@ if(!empty($_POST['title'])) {
     $keywords = htmlentities($_POST['keywords']);
     $description = htmlentities($_POST['description']);
     $text = $_POST['text'];   
-    $category = $_POST['category'];         
+    $category = !empty($_POST['category']) ? $_POST['category'] : 0;         
     $date = !empty($_POST['date']) ? strtotime(str_replace(".", "-", $_POST['date'])) : time();
         
     $cfg = array("insert"=>"item (type, title, content, description, keywords, status, category, date)","values"=>"('$posttype','$title', '$text', '$description', '$keywords', 1, $category, '$date')");
