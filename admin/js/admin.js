@@ -52,6 +52,7 @@ function savecustomfield(item_id) {
         key: customfieldKey,
         val: customfieldValue,
     }
+    
     var xmlhttp = new XMLHttpRequest();    
     xmlhttp.onreadystatechange=function() {
         if (xmlhttp.readyState==4 && xmlhttp.status==200) {
@@ -90,24 +91,3 @@ function setCustomfieldStatus(id,status) {
 }
 
 /* CUSTOM FIELDS ENDE */
-
-function ajaxget( url, params ) {
-    var xmlhttp = new XMLHttpRequest();    
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-            //getcustomfields(xmlhttp.responseText);
-        }
-    }        
-    xmlhttp.open("GET", url + "?" + params ,true);
-    xmlhttp.send();
-}
-function ajaxpost( url, params ) {
-    var xmlhttp = new XMLHttpRequest();    
-    xmlhttp.onreadystatechange=function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-        }
-    }        
-    xmlhttp.open("POST", url, true);
-    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xmlhttp.send( params );
-}
