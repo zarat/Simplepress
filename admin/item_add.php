@@ -8,18 +8,6 @@ if( !@$_GET['type'] && !@$_POST['title'] ) { die("sorry, wrong query."); }
 
 $posttype = $_GET['type'];
 
-echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
-echo "<link href=\"../admin/css/suneditor.css\" rel=\"stylesheet\" type=\"text/css\">\n";
-echo "<script type=\"text/javascript\" src=\"../admin/js/suneditor.js\"></script>\n";
-echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
-
-/**
- * SP Content Anfang
- */
-echo "<div class=\"sp-content\">";
-
-echo '<h3>' . $system->_t('item_add') . '</h3>';
-
 if(!empty($_POST['title'])) { 
 
     $title = htmlentities($_POST['title']);
@@ -37,6 +25,28 @@ if(!empty($_POST['title'])) {
     echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?type=$posttype&id=". $last . "'>hier ansehen</a> oder <a href='../admin/?page=item_modify&id=" . $last . "'>weiter bearbeiten</a>.";
 	
 } else {
+
+echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
+echo "<link href=\"../admin/css/suneditor.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+echo "<script type=\"text/javascript\" src=\"../admin/js/suneditor.js\"></script>\n";
+echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
+
+/**
+ * SP Content Anfang
+ */
+echo "<div class=\"sp-content\">";
+
+    /**
+     * SP Content Item Anfang
+     */
+    echo "<div class=\"sp-content-item\">";
+
+    echo "<div class='sp-content-item-head'>" . $system->_t('item_add') . "</div>";
+
+    /**
+     * SP Content Item Body Anfang
+     */
+    echo "<div class=\"sp-content-item-body\">";
 
     /**
      * FORM Anfang
@@ -89,6 +99,16 @@ if(!empty($_POST['title'])) {
     echo "</form>";
 
 }
+
+/**
+ * SP Content Item Body Ende
+ */
+echo "</div>";
+
+/**
+ * SP Content Item Ende
+ */
+echo "</div>";
 
 /**
  * SP Content Ende
