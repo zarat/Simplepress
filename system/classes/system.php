@@ -214,14 +214,21 @@ class system extends core {
                  * Wenn ID, dann Category
                  */
                 if( $this->request( 'id' ) ) {                                                
-                    $item = $this->single( array( 'id' => $this->request( 'id' ) ) );                                                       
+                    $item = $this->single( array( 'id' => $this->request( 'id' ) ) ); 
+                    if( !$item ) { 
+                        $result['error'] = "error on archive";
+                        $this->set_current_item( array("id" => 0, "title" => "404 - Kategorie nicht gefunden", "description" => "", "keywords" => "" ) );                        
+                    } else {
+                        $this->set_current_item( $item );
+                    }                                                     
                 }
                 
                 /**
                  * Wenn term dann suchen
                  */
                 elseif( $this->request( 'term' ) ) {                                            
-                    $item = array("id" => 0, "title" => "Ergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" );                                                                      
+                    $item = array("id" => 0, "title" => "Sucheergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" ); 
+                    $this->set_current_item( $item );                                                                     
                 } 
                 
                 /**
@@ -229,27 +236,20 @@ class system extends core {
                  */
                 $archive = new archive();                
                 $archive->archive_init();
-                
-                /**
-                 * Wenn Ergebnisse vorhanden sind setze result[content] fuer theme und current_item fuer header
-                 */
-                if( $archive->items ) { 
-                                                               
-                     $result['content'] = $archive;
-                     $this->set_current_item( array("id" => 0, "title" => "Ergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" ) );                                                         
-                
-                /**
-                 * Sind keine vorhanden..
-                 */
-                } else {  
-                 
+
+                if( $archive->items ) {               
+                    /**
+                     * Wenn Ergebnisse vorhanden sind setze result[content] fuer theme und current_item fuer header
+                     */                                                          
+                    $result['content'] = $archive;
+                    $this->set_current_item( array("id" => 0, "title" => "", "description" => "", "keywords" => "" ) );                                                                              
+                } else {                   
                     /**
                      * Sind keine Ergebnisse vorhanden setze ein Dummyitem auf result[content] und den error trigger
                      */
                     $item = array("id" => 0, "title" => "404 gefunden", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" );
                     $result['content'] = $item;        
-                    $result['error'] = "error on archive";
-                                      
+                    $result['error'] = "error on archive";                                      
                 }  
                                                                                             
                 $result['view'] = "archive"; 
