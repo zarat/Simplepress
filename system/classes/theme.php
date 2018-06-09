@@ -77,62 +77,99 @@ class theme extends system {
      * 
      * @return html
      */
-    function content() {                                
-        $data = $this->get_the_content();  
-        if( !empty( $data['error'] ) ) {                    
+    function content() {     
+                               
+        $data = $this->get_the_content(); 
+         
+        if( !empty( $data['error'] ) ) {   
+                         
             echo "<div class='sp-content-item'>\n";
                     echo "<div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div>\n";
-            echo "</div>\n";                                               
-        } else {                                                                       
-            if( $data['view'] == "archive" ) {            
+            echo "</div>\n"; 
+                                                          
+        } else {   
+                                                                            
+            if( $data['view'] == "archive" ) { 
+                       
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive.php";
-                $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $this->request('type') . ".php";                
-                if( is_file( $custom_template ) ) {            
+                $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $this->request('type') . ".php"; 
+                               
+                if( is_file( $custom_template ) ) { 
+                           
                     $archive = $data['content'];
-                    include $custom_template;                
-                } else if( is_file( $template ) ) {            
+                    include $custom_template;   
+                                 
+                } else if( is_file( $template ) ) {
+                            
                     $archive = $data['content'];
-                    include $template;                
-                } else {            
+                    include $template;   
+                                 
+                } else {       
+                     
                     while( $data['content']->have_items() ) {
-                        $post = $data['content']->the_item(); 
-                        $post['content'] = strip_tags( preg_replace("/[^ ]*$/", '', substr( $post['content'], 0, 150 ) ) );  
+                    
+                        $item = $data['content']->the_item(); 
+                        $item['content'] = strip_tags( preg_replace("/[^ ]*$/", '', substr( $item['content'], 0, 150 ) ) );  
                         echo "<div class='sp-content-item'>\n";
-                            echo "<div class='sp-content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
-                            echo "<div class='sp-content-item-body'>$post[content]</div>\n";
-                        echo "</div>\n";                                                
-                    }                
-                    $data['content']->pagination();                 
-                }                                                         
-            } else if( $data['view'] == "single" ) {              
+                            echo "<div class='sp-content-item-head'><a href=\"../?type=$item[type]&id=$item[id]\">$item[title]</a></div>\n";
+                            echo "<div class='sp-content-item-body'>$item[content]</div>\n";
+                        echo "</div>\n";  
+                                                                      
+                    }  
+                                  
+                    $data['content']->pagination();   
+                                  
+                }   
+                                                                      
+            } else if( $data['view'] == "single" ) { 
+                         
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php";
                 $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";                
-                if( is_file( $custom_template ) ) {            
+                
+                if( is_file( $custom_template ) ) {
+                            
                     $item = $data['content'];
-                    include $custom_template;                
-                } else if( is_file( $template ) ) {            
+                    html_entity_decode( $item['content'] );
+                    include $custom_template; 
+                                   
+                } else if( is_file( $template ) ) { 
+                           
                     $item = $data['content'];
-                    include $template;                
-                } else {                                              
-                    $post = $data['content'];                    
+                    html_entity_decode( $item['content'] );
+                    include $template;    
+                                
+                } else {              
+                                                
+                    $item = $data['content'];
+                    $item['content'] = html_entity_decode( $item['content'] );                    
                     echo "<div class='sp-content-item'>\n";
-                        echo "<div class='sp-content-item-head'>$post[title]</div>\n";
-                        echo "<div class='sp-content-item-body'>$post[content]</div>\n";
-                    echo "</div>\n";             
-                }                                                                     
-            } else if( $data['view'] == "default" ) {        
-                $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";                
-                if( is_file( $template ) ) {            
+                        echo "<div class='sp-content-item-head'>" . $item['title'] . "</div>\n";
+                        echo "<div class='sp-content-item-body'>" . $item['content'] . "</div>\n";
+                    echo "</div>\n"; 
+                                
+                }  
+                                                                                   
+            } else if( $data['view'] == "default" ) {  
+                  
+                $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";
+                                
+                if( is_file( $template ) ) {    
+                        
                     $latest = $data['content'];
-                    include $template;                
-                } else {                                              
+                    include $template;   
+                                 
+                } else {           
+                                                   
                     while( $data['content']->have_items() ) {
+                    
                         $post = $data['content']->the_item();
+                        html_entity_decode( $post['content'] );
                         $post['content'] = strip_tags( preg_replace("/[^ ]*$/", '', substr( $post['content'], 0, 150 ) ) );                    
                         echo "<div class='sp-content-item'>\n";
                             echo "<div class='sp-content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
                             echo "<div class='sp-content-item-body'>$post[content]</div>\n";
                         echo "</div>\n"; 
+                        
                     }           
                 }        
             } 
