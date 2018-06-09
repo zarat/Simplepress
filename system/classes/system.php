@@ -161,7 +161,10 @@ class system extends core {
      * @return array Der Inhalt
      */
     function get_the_content() { 
-                   
+        
+        /**
+         * Views sagen aus, was gerade angezeigt wird. Ein einzelnes Item, ein Archiv oder nichts spezielles.
+         */
         switch( $this->request( 'type' ) ) {   
              
             case "post":
@@ -187,52 +190,72 @@ class system extends core {
                                                
                 /**
                  * Entsprechendes Item holen
-                 */
-                $item = $this->single( array('type' => $this->request('type'), 'id' => $this->request('id'), 'metadata' => true) );
-                 
-                /**
                  * Wenn keines vorhanden ist, setze ein Dummyitem und einen error trigger
                  */
+                $item = $this->single( array( 'id' => $this->request('id'), 'metadata' => true ) );
                 if( !$item ) {                 
-                    $item = array("id" => 0, "title" => "404 gefunden", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" ); 
+                    $item = array( "title" => "404", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) ); 
                     $result['error'] = "error on single";                                                                               
                 } 
                 
                 /**
-                 * Entweder das Dummy Item oder das echte fuer den header
+                 * Entweder das Dummy Item oder das echte fuer den header und das theme setzen
                  */
                 $this->set_current_item($item); 
-                $item['content'] = html_entity_decode( $item['content']);                                                               
+                
+                /**
+                 * Fucking encoding
+                 * 
+                 * @todo
+                 */
+                $item['content'] = html_entity_decode( $item['content'] );
+                
+                /**
+                 * Ergebnisse fuer theme setzen.
+                 */
                 $result['content'] = $item;               
                 $result['view'] = "single";
                 
             break;   
                       
             case "archive":
-                
+            
                 /**
-                 * Wenn ID, dann Category
+                 * Wenn der Parameter search gesetzt ist, dann suchen wir etwas
                  */
-                if( $this->request( 'id' ) ) {                                                
-                    $item = $this->single( array( 'id' => $this->request( 'id' ) ) ); 
-                    if( !$item ) { 
-                        $result['error'] = "error on archive";
-                        $this->set_current_item( array("id" => 0, "title" => "404 - Kategorie nicht gefunden", "description" => "", "keywords" => "" ) );                        
-                    } else {
-                        $this->set_current_item( $item );
-                    }                                                     
-                }
-                
-                /**
-                 * Wenn term dann suchen
-                 */
-                elseif( $this->request( 'term' ) ) {                                            
-                    $item = array("id" => 0, "title" => "Sucheergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" ); 
-                    $this->set_current_item( $item );                                                                     
+                if( $this->request( 'type' ) && $this->request( 'type' ) == "search" ) {
+                                                            
+                    $item = array( "title" => "Suchergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ) ); 
+                    
+                    $this->set_current_item( $item );
+                                                                                         
                 } 
                 
                 /**
-                 * Archiv bilden
+                 * Archive sind besonders, sie sollen naemlich andere Items nach bestimmten Eigenschaften gruppieren koennen (siehe Taxonomy)
+                 * Derzeit nur Kategorien und evtl Tags.
+                 * 
+                 * @todo
+                 */
+                else if( $this->request( 'type' ) && $this->request( 'type' ) == "category" ) {
+                                                                
+                    $item = $this->single( array( 'id' => $this->request( 'id' ) ) ); 
+                    
+                    if( !$item ) { 
+                    
+                        $this->set_current_item( array( "title" => "404", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) ) ); 
+                        $result['error'] = "error on archive"; 
+                                              
+                    } else {
+                    
+                        $this->set_current_item( $item );
+                        
+                    }   
+                                                                      
+                } else { }
+                
+                /**
+                 * Jetzt das Archiv bilden
                  */
                 $archive = new archive();                
                 $archive->archive_init();
@@ -242,14 +265,17 @@ class system extends core {
                      * Wenn Ergebnisse vorhanden sind setze result[content] fuer theme und current_item fuer header
                      */                                                          
                     $result['content'] = $archive;
-                    $this->set_current_item( array("id" => 0, "title" => "", "description" => "", "keywords" => "" ) );                                                                              
+                                                                              
                 } else {                   
                     /**
                      * Sind keine Ergebnisse vorhanden setze ein Dummyitem auf result[content] und den error trigger
                      */
-                    $item = array("id" => 0, "title" => "404 gefunden", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" );
-                    $result['content'] = $item;        
-                    $result['error'] = "error on archive";                                      
+                    $item = array("id" => 0, "title" => "404", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" ); 
+                           
+                    $result['error'] = "error on archive"; 
+                    
+                    $this->set_current_item( $item );
+                                                         
                 }  
                                                                                             
                 $result['view'] = "archive"; 
@@ -263,7 +289,7 @@ class system extends core {
                                                                                                                                                                            
                 if( !$latest->items ) {  
                     
-                    $item = array("id" => 0, "title" => "Ergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ), "keywords" => "" );
+                    $item = array("id" => 0, "title" => "404", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" );
                     $result['content'] = $item;
                     $result['error'] = "error on default";               
                     
