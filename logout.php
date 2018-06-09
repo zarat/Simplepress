@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 include "load.php";
 
 $formpass=NULL;
@@ -56,7 +54,7 @@ $system->logout();
 ?>
 
 <script type="text/javascript"> 
-setTimeout(window.location.replace("admin"), 2000);
+setTimeout(window.location.replace("../login.php"), 1000);
 </script>
 
 <p>Du bist jetzt abgemeldet. Zum <a href='admin'>LOGIN</a></p>
