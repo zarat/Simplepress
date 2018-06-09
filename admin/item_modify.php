@@ -11,11 +11,11 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     $id = $_GET['id'];
     
     //$title = htmlentities($_POST['title'], ENT_QUOTES, 'utf-8');      
-    $title = htmlentities($_POST['title']);
-    $keywords = htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8');    
-    $description = htmlentities($_POST['description'], ENT_QUOTES, 'utf-8');
-    $text = $_POST['text'];
-    $category = $_POST['category'];
+    $title = !empty( $_POST['title'] ) ? htmlentities($_POST['title'], ENT_QUOTES, 'utf-8') : "";
+    $keywords = !empty( $_POST['keywords'] ) ? htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8') : "";  
+    $description = !empty( $_POST['description'] ) ? htmlentities($_POST['description'], ENT_QUOTES, 'utf-8') : "";
+    $text = !empty( $_POST['text'] ) ? htmlentities($_POST['text'], ENT_QUOTES, 'utf-8') : "";
+    $category = !empty( $_POST['category'] ) ? $_POST['category'] : 0;
 
     if(!isset($_POST['date'])) {
         $date = time();
@@ -23,7 +23,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
         $date = strtotime( ( $_POST['date'] ) );
     } 
     
-    $cfg = array("table" => "item","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category='$category', date=$date WHERE id=$id");
+    $cfg = array("table" => "item","set" => "title='$title',keywords='$keywords', description='$description', content='$text', category=$category, date=$date WHERE id=$id");
     $system->update($cfg);
     
     $it = $system->single(array('id' => $id));
@@ -110,7 +110,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
         echo "</div>";
         
         echo '<p>' . $system->_t('item_modify_content') . '</p>';
-        echo "<p><textarea cols=\"40\" rows=\"20\" name=\"text\" id=\"editor\" style=\"width:100% !important;\">$text</textarea></p>";
+        echo "<p><textarea cols=\"40\" rows=\"20\" name=\"text\" id=\"editor\" style=\"width:100% !important;\">".html_entity_decode($text)."</textarea></p>";
         
         echo "<p><a style=\"cursor:pointer;\" onclick=\"sun_save();\">Item speichern</a></p>";
     
