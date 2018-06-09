@@ -1,7 +1,9 @@
 Simplepress ist ein Content management system in PHP mit Datenbankanbindung zum Erstellen von dynamischen Webseiten. 
 Es soll moderne Standards strikt umsetzen, dabei aber möglichst modular und erweiterbar bleiben. Welche Lizenz vergeben wird steht noch offen (help wanted). 
 
-**Theme support** Standard Theme Ordner kopieren, im Adminbereich aktivieren und Source bearbeiten! Code ist ziemlich selbsterklärend.
+**WYSIWYG** Zum Bearbeiten von Texten mit visuellem Onlineeditor.
+
+**Theme support** Theme Ordner kopieren, im Adminbereich aktivieren und Source bearbeiten! Code ist ziemlich selbsterklärend.
 
 **Status**: early alpha
 
