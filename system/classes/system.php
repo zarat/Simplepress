@@ -202,7 +202,7 @@ class system extends core {
                  * Entweder das Dummy Item oder das echte fuer den header
                  */
                 $this->set_current_item($item); 
-                                                                               
+                $item['content'] = html_entity_decode( $item['content']);                                                               
                 $result['content'] = $item;               
                 $result['view'] = "single";
                 
