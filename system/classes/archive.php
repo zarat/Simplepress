@@ -105,8 +105,11 @@ public $items = [];
             $this->last = $post['id']; 
             $this->last_timestamp = $post['date'];           
             $this->displayed_this_page++; 
+            
+            $post['content'] = html_entity_decode( $post['content'] );
+            
             if($strip_tags ) {             
-                $post['content'] = strip_tags($post['content']);                 
+                $post['content'] = strip_tags( $post['content'] );                 
             }                    
             if($content_length) {            
                 $line=$post['content'];                
