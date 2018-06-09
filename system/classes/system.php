@@ -194,7 +194,7 @@ class system extends core {
                  */
                 $item = $this->single( array( 'id' => $this->request('id'), 'metadata' => true ) );
                 if( !$item ) {                 
-                    $item = array( "title" => "404", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) ); 
+                    $item = array( "title" => "404", "content" => $this->_t( 'no_items_to_display' ) ); 
                     $result['error'] = "error on single";                                                                               
                 } 
                 
@@ -222,37 +222,42 @@ class system extends core {
             
                 /**
                  * Wenn der Parameter search gesetzt ist, dann suchen wir etwas
+                 * Einfach nur das Header Item setzen..
                  */
-                if( $this->request( 'type' ) && $this->request( 'type' ) == "search" ) {
-                                                            
-                    $item = array( "title" => "Suchergebnisse zu: " . $this->request( 'term' ), "description" => "Suchergebnisse zu: " . $this->request( 'term' ) ); 
-                    
-                    $this->set_current_item( $item );
+                if( $this->request( 'type' ) == "search" ) {
+                                                                                             
+                    $this->set_current_item( array( "title" => "Suchergebnisse zu: " . $this->request( 'term' ), "content" => "Suchergebnisse zu: " . $this->request( 'term' ) ) );
                                                                                          
                 } 
                 
                 /**
                  * Archive sind besonders, sie sollen naemlich andere Items nach bestimmten Eigenschaften gruppieren koennen (siehe Taxonomy)
-                 * Derzeit nur Kategorien und evtl Tags.
+                 * Derzeit nur Kategorien..
                  * 
                  * @todo
                  */
-                else if( $this->request( 'type' ) && $this->request( 'type' ) == "category" ) {
+                if( $this->request( 'type' ) == "category" ) {
                                                                 
                     $item = $this->single( array( 'id' => $this->request( 'id' ) ) ); 
                     
                     if( !$item ) { 
                     
+                        /**
+                         * Wenn es die Kategorie nicht gibt, ein Dumy fuer den header bilden
+                         */
                         $this->set_current_item( array( "title" => "404", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) ) ); 
                         $result['error'] = "error on archive"; 
                                               
                     } else {
                     
+                        /**
+                         * sonst einfach die Kategorie selbst als Header Item setzen. (Meta)
+                         */
                         $this->set_current_item( $item );
                         
                     }   
                                                                       
-                } else { }
+                }
                 
                 /**
                  * Jetzt das Archiv bilden
@@ -260,22 +265,20 @@ class system extends core {
                 $archive = new archive();                
                 $archive->archive_init();
 
-                if( $archive->items ) {               
+                if( $archive->items ) {  
+                             
                     /**
                      * Wenn Ergebnisse vorhanden sind setze result[content] fuer theme und current_item fuer header
                      */                                                          
                     $result['content'] = $archive;
                                                                               
-                } else {                   
+                } else { 
+                                  
                     /**
-                     * Sind keine Ergebnisse vorhanden setze ein Dummyitem auf result[content] und den error trigger
-                     */
-                    $item = array("id" => 0, "title" => "404", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" ); 
-                           
+                     * Sind keine Ergebnisse vorhanden setze nur! den error trigger
+                     */                            
                     $result['error'] = "error on archive"; 
-                    
-                    $this->set_current_item( $item );
-                                                         
+
                 }  
                                                                                             
                 $result['view'] = "archive"; 
@@ -289,7 +292,7 @@ class system extends core {
                                                                                                                                                                            
                 if( !$latest->items ) {  
                     
-                    $item = array("id" => 0, "title" => "404", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) , "keywords" => "" );
+                    $item = array( "title" => "404", "content" => $this->_t( 'no_items_to_display' ) );
                     $result['content'] = $item;
                     $result['error'] = "error on default";               
                     
