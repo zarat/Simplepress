@@ -1,7 +1,6 @@
-Simplepress ist ein Content management system in PHP mit Datenbankanbindung zum Erstellen von dynamischen Webseiten. 
-Es soll moderne Standards strikt umsetzen, dabei aber möglichst modular und erweiterbar bleiben. Welche Lizenz vergeben wird steht noch offen (help wanted). 
+Simplepress ist ein Content management system in PHP mit Datenbankanbindung zum Erstellen von dynamischen Webanwendungen ohne Programmierkenntnisse um auch ungeübten Personen den Einstieg zu erleichtern.
 
-**WYSIWYG** Zum Bearbeiten von Texten mit einem visuellem Onlineeditor.
+**WYSIWYG Editor** Zum Bearbeiten von Texten mit einem visuellem Onlineeditor.
 
 **Theme support** Zum schnellen wechseln des Designs. Infos folgen.
 
