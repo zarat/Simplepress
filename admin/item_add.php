@@ -10,14 +10,19 @@ $posttype = $_GET['type'];
 
 if(!empty($_POST['title'])) { 
 
-    $title = htmlentities($_POST['title']);
-    $keywords = htmlentities($_POST['keywords']);
-    $description = htmlentities($_POST['description']);
-    $text = $_POST['text'];   
-    $category = !empty($_POST['category']) ? $_POST['category'] : 0;         
-    $date = !empty($_POST['date']) ? strtotime(str_replace(".", "-", $_POST['date'])) : time();
+    $title = !empty( $_POST['title'] ) ? htmlentities($_POST['title'], ENT_QUOTES, 'utf-8') : "";
+    $keywords = !empty( $_POST['keywords'] ) ? htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8') : "";  
+    $description = !empty( $_POST['description'] ) ? htmlentities($_POST['description'], ENT_QUOTES, 'utf-8') : "";
+    $text = !empty( $_POST['text'] ) ? htmlentities($_POST['text'], ENT_QUOTES, 'utf-8') : "";
+    $category = !empty( $_POST['category'] ) ? $_POST['category'] : 0;
+
+    if(!isset($_POST['date'])) {
+        $date = time();
+    } else {
+        $date = strtotime( $_POST['date'] );
+    } 
         
-    $cfg = array("insert"=>"item (type, title, content, description, keywords, status, category, date)","values"=>"('$posttype','$title', '$text', '$description', '$keywords', 1, $category, '$date')");
+    $cfg = array("insert"=>"item (type, title, content, description, keywords, status, category, date)","values"=>"('$posttype','$title', '$text', '$description', '$keywords', 1, $category, $date)");
     $system->insert($cfg);
     
     $last = $system->last_insert_id();
