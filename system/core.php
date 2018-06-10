@@ -3,13 +3,14 @@
 /**
  * Simplepress Core
  *
- * Datenbankverbindung und grundlegende Aktionen
- *
  * @author Manuel Zarat
  * @version 0.2.0
  * @link https://github.com/zarat/simplepress   
  * @since 06/2018 
  */
+
+$hooks = new hooks();
+global $hooks;
 
 abstract class core {               
  
