@@ -150,8 +150,10 @@ class system extends core {
      * 
      * @return array Das aktuelle Item
      */
-    function get_current_item() {    
-        return $this->current_item;        
+    function get_current_item() { 
+        global $hooks;
+        $item = $hooks->apply_filters( 'get_current_item', $this->current_item );   
+        return $item;        
     }
     
     /**
