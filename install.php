@@ -58,11 +58,15 @@ $configfile_tmp = fopen($configfile, 'w') or die('could not write config file: '
 fwrite($configfile_tmp, $config);
 fclose($configfile_tmp); 
 
-$query = "INSERT INTO user (id,email,password,displayname) VALUES (1, '$adminemail', '$adminpass', '$admindisplayname')";  
-$conn->query($query) or die('Could not create admin user, please reinstall!');
-
+$query = $conn->prepare("INSERT INTO user (email, password, displayname) VALUES (?, ?, ?)");
+$query->bind_param("sss", $adminemail, $adminpass, $admindisplayname);
+if (!$stmt->execute()) {
+    echo 'Could not create admin user, please reinstall!';
+    return false;
+}
+    
 } else {
-
+    //No UserData given exeption
 ?>
 
 <h1>Simplepress Installation</h1>
