@@ -1,12 +1,12 @@
 Simplepress ist ein Content management system in PHP mit Datenbankanbindung zum Erstellen von dynamischen Webanwendungen ohne Programmierkenntnisse um auch ungeübten Personen den Einstieg zu erleichtern.
 
-**WYSIWYG Editor** Zum Bearbeiten von Texten mit einem visuellem Onlineeditor.
+**WYSIWYG**: Mit dem WYSIWYG ("what you see is what you get") Editor können Sie Inhalte ohne Programmierkenntnisse online bearbeiten und trotzdem ein klar strukturiertes und schönes HTML erzeugen.
 
-**Theme support** Zum schnellen wechseln des Designs. Infos folgen.
+**Theme Support**: Themes sind Designvorlagen, die den grundsätzlichen Aufbau der Website abbilden. So kann das Aussehen einfach und effektiv geändert werden, ohne am eigentlichen Code herumwerken zu müssen. Mehr dazu bald.
 
-**Hooks** Um des Verhalten der Website zu individualisieren. Infos folgen.
+**Hooks**: Hooks sind Einsprungmarken im Code die es erlauben, zu bestimmten Zeitpunkten das Verhalten durch "Aktionen" und "Filter" zu beeinflussen. Es ist eine Art Vorläufer eines geplanten Pluginsystems. Auch dazu bald mehr.
 
-**Status**: early alpha
+In der (Onlinedokumentation)[https://dev.simplepress.ml] können Sie sich einen Überblick verschaffen.
 
 **Demo**: https://simplepress.ml - http://x-stream.ml 
 
