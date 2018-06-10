@@ -57,20 +57,17 @@ class simplepress extends theme {
     
 }
 
-/*
- * Beispiel von Hooks
- */
+/** Beispiele
 global $hooks;
-
 function example_action() { 
     echo "example_action"; 
 }
 $hooks->add_action('archive_init','example_action');
-
 function example_filter( $item ) { 
     $item['title'] = "xxx";  
     return $item; 
 }
 $hooks->add_filter( 'get_current_item', 'example_filter' );
+**/
 
 ?>
