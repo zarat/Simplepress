@@ -58,13 +58,14 @@ class simplepress extends theme {
 }
 
 /*
- * Beispiel einer Custom function
+ * Beispiel von Hooks
  */
-function custom_function( $customcontent = false ) {
-    $content = "ordinary content";
-    if( $customcontent ) { $content = $customcontent; }
-    echo $content;    
-}
-//$this->add_action('init', 'custom_function', 'custom content' );
+global $hooks;
+
+function example_action() { }
+$hooks->add_action('archive_init','example_action');
+
+function example_filter( $callback ) { return $callback; }
+$hooks->add_filter( 'get_current_item', 'example_filter' );
 
 ?>
