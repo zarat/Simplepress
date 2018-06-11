@@ -135,7 +135,6 @@ class theme extends system {
                 } else if( is_file( $template ) ) { 
                            
                     $item = $data['content'];
-                    html_entity_decode( $item['content'] );
                     include $template;    
                                 
                 } else {              
