@@ -154,6 +154,6 @@ CREATE TABLE `term_meta` (
 
 CREATE TABLE `term_relation` (
   `object_id` int(10) NOT NULL DEFAULT '0',
-  `term_taxonomy_id` int(10) NOT NULL DEFAULT '0',
+  `term_meta_id` int(10) NOT NULL DEFAULT '0',
   `term_order` int(10) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
