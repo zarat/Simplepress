@@ -8,25 +8,31 @@
  
 class hooks {
 
-    var $filters = array();
-    var $merged_filters = array();
-    var $actions = array();
-    var $current_filter = array();
+var $filters = array();
+var $merged_filters = array();
+var $actions = array();
+var $current_filter = array();
 
     public function __construct($args = null) {
-      $this->filters = array();
-      $this->merged_filters = array();
-      $this->actions = array();
-      $this->current_filter = array();
+        $this->filters = array();
+        $this->merged_filters = array();
+        $this->actions = array();
+        $this->current_filter = array();
     }
 
+    /**
+     * Bindet einen Filter an einen Hook
+     */
     public function add_filter($tag, $function_to_add, $priority = 10, $accepted_args = 1) {
-      $idx =  $this->_filter_build_unique_id($tag, $function_to_add, $priority);
-      $this->filters[$tag][$priority][$idx] = array('function' => $function_to_add, 'accepted_args' => $accepted_args);
-      unset( $this->merged_filters[ $tag ] );
-      return true;
+        $idx =  $this->_filter_build_unique_id($tag, $function_to_add, $priority);
+        $this->filters[$tag][$priority][$idx] = array('function' => $function_to_add, 'accepted_args' => $accepted_args);
+        unset( $this->merged_filters[ $tag ] );
+        return true;
     }
 
+    /**
+     * Entfernt einen Filter von einem Hook
+     */
     public function remove_filter( $tag, $function_to_remove, $priority = 10 ) {
       $function_to_remove = $this->_filter_build_unique_id($tag, $function_to_remove, $priority);
       $r = isset($this->filters[$tag][$priority][$function_to_remove]);
@@ -39,6 +45,9 @@ class hooks {
       return $r;
     }
 
+    /**
+     * Entfernt alle Filter eines Hooks
+     */
     public function remove_all_filters($tag, $priority = false) {
       if( isset($this->filters[$tag]) ) {
         if( false !== $priority && isset($this->filters[$tag][$priority]) )
@@ -51,6 +60,9 @@ class hooks {
       return true;
     }
 
+    /**
+     * Prueft, ob ein Hook Filter registriert hat
+     */
     public function has_filter($tag, $function_to_check = false) {
       $has = !empty($this->filters[$tag]);
       if ( false === $function_to_check || false == $has )
@@ -64,6 +76,9 @@ class hooks {
       return false;
     }
 
+    /**
+     * Wendet einen einzelnen Filter ohne Parameter auf einen Hook an
+     */
     public function apply_filters($tag, $value) {
       $args = array();
       // Do 'all' actions first
@@ -98,6 +113,9 @@ class hooks {
       return $value;
     }
 
+    /**
+     * Wendet einen einzelnen Filter mit Parametern auf einen Hook an
+     */
     public function apply_filters_ref_array($tag, $args) {
       // Do 'all' actions first
       if ( isset($this->filters['all']) ) {
@@ -143,6 +161,9 @@ class hooks {
       return $this->remove_all_filters($tag, $priority);
     }
 
+    /**
+     * Ruft registrierte Actions fuer einen Hook ohne Parameter auf
+     */
     public function do_action($tag, $arg = '') {
       if ( ! isset($this->actions) )
         $this->actions = array();
@@ -184,6 +205,9 @@ class hooks {
       array_pop($this->current_filter);
     }
 
+    /**
+     * Ruft registrierte Actions fuer einen Hook mit Parametern auf
+     */
     public function do_action_ref_array($tag, $args) {
       
       if ( ! isset($this->actions) )
@@ -219,6 +243,9 @@ class hooks {
       array_pop($this->current_filter);
     }
 
+    /**
+     * Prueft, ob ein bestimmter Hook bereits ausgefuehrt wurde
+     */
     public function did_action($tag) {
       if ( ! isset( $this->actions ) || ! isset( $this->actions[$tag] ) )
         return 0;
@@ -228,22 +255,22 @@ class hooks {
     public function current_filter() {
       return end( $this->current_filter );
     }
-
     function current_action() {
       return $this->current_filter();
     }
-
     function doing_filter( $filter = null ) {
       if ( null === $filter ) {
         return ! empty( $this->current_filter );
       } 
       return in_array( $filter, $this->current_filter );
     }
-
     function doing_action( $action = null ) {
       return $this->doing_filter( $action );
     }
 
+    /**
+     * Eindeutige ID fuer einen Filter
+     */
     private function _filter_build_unique_id($tag, $function, $priority) {
         static $filter_id_count = 0;
         if ( is_string($function) )
@@ -255,7 +282,6 @@ class hooks {
             $function = (array) $function;
         }
         if (is_object($function[0]) ) {
-          // Object Class Calling
           if ( function_exists('spl_object_hash') ) {
             return spl_object_hash($function[0]) . $function[1];
           } else {
@@ -272,7 +298,6 @@ class hooks {
             return $obj_idx;
           }
         } else if ( is_string($function[0]) ) {
-          // Static Calling
           return $function[0].$function[1];
         }
     }
