@@ -137,7 +137,7 @@ CREATE TABLE `term` (
 --
 
 CREATE TABLE `term_meta` (
-  `term_taxonomy_id` int(10) NOT NULL AUTO_INCREMENT,
+  `term_meta_id` int(10) NOT NULL AUTO_INCREMENT,
   `term_id` int(10) NOT NULL DEFAULT '0',
   `taxonomy` varchar(30) NOT NULL DEFAULT '',
   `description` longtext NOT NULL,
