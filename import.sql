@@ -143,7 +143,7 @@ CREATE TABLE `term_meta` (
   `description` longtext NOT NULL,
   `parent` int(10) NOT NULL DEFAULT '0',
   `count` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`term_taxonomy_id`)
+  PRIMARY KEY (`term_meta_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
