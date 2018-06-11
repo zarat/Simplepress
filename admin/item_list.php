@@ -21,9 +21,17 @@ echo "<script type=\"text/javascript\">\n
 $(document).ready(function() { $('table#item_list').dataTable( { 'paging':   true, 'ordering': false, 'info': true } ); } );\n
 </script>\n";
 
+/**
+ * SP Content Anfang
+ */
 echo "<div class=\"sp-content\">\n";
 
-echo "<h3><a href=\"./?page=item_add&type=$type\">Neu</a></h3><br>\n";
+/**
+ * Content Item Anfang
+ */
+echo "<div class=\"sp-content-item\">\n";
+
+echo "<div class=\"sp-content-item-head\"><a href=\"./?page=item_add&type=$type\">Neu</a></div>";
 
 echo "<table id=\"item_list\" class=\"display\" cellspacing=\"0\" width=\"100%\">\n
 <thead>\n
@@ -60,6 +68,14 @@ if(false !== $results) {
 
 echo "</tbody>\n</table>";
 
+/**
+ * Content Item Ende
+ */
+echo "</div>";
+
+/**
+ * SP Content Ende
+ */
 echo "</div>";
 
 ?>

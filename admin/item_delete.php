@@ -1,16 +1,24 @@
 <?php
 
 /**
- * 
- * Entfernt ein Item aus der Datenbank.
- * Wird asynchron aufgerufen, deshalb load.php eingebunden.
- * 
+ * @author Manuel Zarat
  */
 
-include "../load.php";
+require "../load.php";
+require_once "auth.php";
 
 $system = new system();
-  
-$system->delete(array("from"=>"item","where"=>"id=$_GET[id]"));
+
+$id = $_GET['id'];
+
+/**
+ * Das Item selbst
+ */
+$system->delete(array("from"=>"item","where"=>"id=$id"));
+
+/**
+ * und die Custom fields dazu entfernen.
+ */
+$system->delete(array("from"=>"item_meta","where"=>"meta_item_id=$id"));
 
 ?>

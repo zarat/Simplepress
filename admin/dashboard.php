@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 
  * Dashboard. 
@@ -16,10 +17,25 @@ echo "<script type='text/javascript'>
     }
 </script>";
 
+/**
+ * SP COntent Start
+ */
 echo "<div class=\"sp-content\">";
 
-echo '<h3>' . $system->_t('welcome_to_dashboard') . '</h3>';
-echo '<p>' . $system->_t('dashboard_description') . '</p>';
+/**
+ * SP COntent Item Start
+ */
+echo "<div class=\"sp-content-item\">";
+
+/**
+ * SP COntent Item Head
+ */
+echo "<div class=\"sp-content-item-head\">" . $system->_t('welcome_to_dashboard') . "</div>";
+
+/**
+ * SP COntent Item BodyStart
+ */
+echo "<div class=\"sp-content-item-body\">";
 
 if (isset($_POST['submit'])) {
 
@@ -78,6 +94,19 @@ if (isset($_POST['submit'])) {
 
 } 
 
+/**
+ * SP Content Item Body Ende
+ */
+echo "</div>";
+
+/**
+ * SP Content Item Ende
+ */
+echo "</div>";
+
+/**
+ * SP Content Ende
+ */
 echo "</div>";
 
 ?>

@@ -1,6 +1,11 @@
 <?php
 
+/**
+ * @author Manuel Zarat
+ */
+
 require_once "../load.php";
+require_once "auth.php";
 
 function get_all_fields( $item_id ) {
     $system = new system();
@@ -8,7 +13,7 @@ function get_all_fields( $item_id ) {
     if($all_fields) {
         foreach( $all_fields as $k => $v) {
             echo "<form>";
-            echo "<p>" . $k . ": " . $v . "</p>";
+            echo "<p>" . $v[0] . ": " . $v[1] . "</p>";
             echo "<a style=\"cursor:pointer;\" onclick=\"deletecustomfield('" . $k . "',$item_id)\">entfernen</a>";
             echo "</form";
         }
@@ -24,9 +29,7 @@ function add_field( $item_id, $field_key, $field_value ) {
 
 function delete_field( $key, $item_id ) {
     $system = new system();
-    $meta_item = $system->select( array( "select" => "*", "from" => "item_meta", "where" => "meta_key='" . $key . "' AND meta_item_id=" . $item_id ) );
-    $meta = $meta_item[0];
-    $system->delete( array( 'from' => 'item_meta', 'where' => 'meta_id=' . $meta['meta_id'] ) );
+    $system->delete( array( 'from' => 'item_meta', 'where' => 'meta_id=' . $key ) );
     echo $item_id;
 } 
     
@@ -42,37 +45,27 @@ if( isset( $_POST['item_id'] ) ) {
 
 } elseif( isset($_GET['action']) ) { 
 
-    $action = $_GET['action'];
-    
-    switch ( $action ) {
-    
+    $action = $_GET['action'];    
+    switch ( $action ) {   
         case "get":
             $item_id = @$_GET['item_id'];
             get_all_fields( $item_id );
-            break;
-            
+            break;            
         case"add":
             $item_id = @$_GET['item_id'];
             $field_key = @$_GET['field_key'];
             $field_value = @$_GET['field_value'];
             add_field( $item_id, $field_key, $field_value );
-            break;
-            
+            break;            
         case "delete":
             $key = @$_GET['key'];
             $item_id = @$_GET['item_id'];
             delete_field( $key, $item_id );
-            break;
-            
+            break;            
         default:
-            break;
-    
+            break;    
     }
 
-} else {
-
-    echo "Error: You havent pushed parameters!";
-
-}
+} 
 
 ?>

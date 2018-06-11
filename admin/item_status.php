@@ -1,31 +1,25 @@
 <?php
 
 /**
- * 
- * Bearbeitet den Status eines Items.
- * Wird asynchron aufgerufen, deshalb load.php einbinden!
- * 
+ * @author Manuel Zarat
  */
 
-if(!isset($_GET['id']) || !isset($_GET['status'])) { die("error: missing parameter 'id' or 'status'"); }
-
-include("../load.php");
+require_once "../load.php";
+require_once "auth.php";
 
 $system = new system();
 
-	  $id = $_GET['id'];
-		$status = $_GET['status'];
+$id = $_GET['id'];
+$status = $_GET['status'];
     
-    $newstatus = ($status==1) ? 0 : 1;
-    $var = ($status==1) ? "deaktivieren" : "aktivieren";
+$newstatus = ($status==1) ? 0 : 1;
+$response = ($status==1) ? "deaktivieren" : "aktivieren";
     
-    $config = array("table"=>"item","set"=>"status=$status WHERE id=$id");
-    $system->update($config);
-    
-    /**
-     * Neuer Link fuer JS Response !
-     * 
-     */
-    echo "<a style='cursor:pointer' onclick=\"update_status('$id','$newstatus')\">$var</a>";		
+$system->update( array( "table"=>"item", "set"=>"status=$status WHERE id=$id" ) );
+
+/**
+ * Weil die Datei asynchron aufgerufen wird, wird hier ein Rueckgabewert ausgegeben.
+ */
+echo "<a style='cursor:pointer' onclick=\"update_status('$id','$newstatus')\">$response</a>";		
 
 ?>

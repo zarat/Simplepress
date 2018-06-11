@@ -1,94 +1,148 @@
 <?php
 
 /**
+ * Simplepress Archiv
+ *
+ * Ein Archiv aller Items bzw. nach etwas gefiltert um es in einem Loop auszugeben.
+ *
  * @author Manuel Zarat
+ * @version 0.2.0
+ * @link https://github.com/zarat/simplepress   
+ * @since 06/2018 
  */
 
 class archive extends system {
 
-private $posts = [];
 private $max_per_page = 10;
 private $displayed_this_page = 0;
 private $last = 0;
-private $post_count = 0;
-
-    function archive_init() {
-        if( !empty( $this->request( 'last' ) ) ) { 
-            $this->last = $this->request( 'last' );
-        }
-        $this->fill_posts(); 
+private $item_count = 0;
+public $items = [];
+    
+    /**
+     * Wird aufgerufen nachdem das Objekt erzeugt wurde. Eventuell den Kontruktor aus Core ueberschreiben?
+     * 
+     * @see core->__construct()
+     * 
+     * @return void
+     */
+    function archive_init( $config = false ) {          
+        if( !empty( $this->request( 'last' ) ) ) {         
+            $this->last = $this->request( 'last' );            
+        }                
+        $this->fill_items( $config );         
     }
     
     /**
      * Fuellt das Array(posts) mit den gefundenen Items
      * 
      * @todo Suche & Blaettern
+     * 
+     * @param $config array optional see $system->select()
+     * 
+     * @return void
      */
-    final function fill_posts() { 
-        if( $this->request( 'type' ) && $this->request( 'type' ) == 'category' ) {
-            if( $this->request( 'last' ) ) {      
-                $this->posts = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                 
-            } else {                   
-                $this->posts = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type='post' AND category='" . $this->request( 'id' ) . "' ORDER BY id ASC") );               
+    final function fill_items( $config = false ) {                               
+        if( false !== $config ) {            
+            $this->items = $this->select( $config );            
+        } else {        
+            $where = "status=1"; 
+            if ( $this->request( 'type' ) == 'category' ) {
+                $where .= " AND type IN ('page','post') AND category=" . $this->request( 'id' );
+            } else if( $this->request( 'type' ) == 'search' ) {
+                $where .= " AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ";
+            } else {
+                $where .= " AND type='post' ";
+            }
+            if ( $this->request( 'last' ) ) {
+                $where .= " AND date < " . $this->request( 'last' );
             } 
-        } elseif( $this->request( 'type' ) && $this->request( 'type' ) == 'search' ) { 
-            if( $this->request( 'last' ) ) {      
-                $this->posts = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                 
-            } else {                   
-                $this->posts = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ORDER BY id ASC") );               
-            }                                
-        } else {   
-            if( $this->request( 'last' ) ) {                     
-                $this->posts = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type='post' AND id < " . $this->request( 'last' ) . " ORDER BY id ASC") );                  
-            } else {                    
-                $this->posts = $this->select( array( "select" => "*", "from" => "item", "where" => "status=1 AND type='post' ORDER BY id ASC") );                
-            }  
-        }  
-        $this->post_count = sizeof( $this->posts );                   
+            $where .= " ORDER BY date ASC";               
+            $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => $where ) );        
+        }        
+        $this->post_count = sizeof( $this->items );           
     }
 
-    function count_posts() {    
-        return ($this->posts);
+    /**
+     * Zaehlt wieviele Items i mErgebnis vorhanden sind.
+     * 
+     * @return int Anzahl an Items
+     */
+    function count_items() { 
+        return ($this->items);        
     }
 
-    function have_posts() {                
-        if( $this->displayed_this_page >= $this->max_per_page )  {        
-            $this->is_page_limit = true;            
-            return false;            
-        }    
-        return ( count($this->posts) > 0) ? true : false;    
+    /**
+     * Prueft, ob noch weitere Items vorhanden sind die AUF DIESER SEITE angezeigt werden!
+     * 
+     * @return bool true|false
+     */
+    function have_items() {                    
+        if( $this->displayed_this_page >= $this->max_per_page ) {                
+            $this->is_page_limit = true;                        
+            return false;                        
+        }            
+        return ( count($this->items) > 0) ? true : false;            
     }
     
-    function more() {
-        return ( count($this->posts) > 0) ? true : false;
+    /**
+     * Prueft, ob noch weitere Items NACH DEN AUF DIESER SEITE AUSZUGEBENDEN vorhanden sind.
+     * Wenn ja wird ein Link zum blaettern angezeigt.
+     * 
+     * @see $this->pagination()
+     * 
+     * @return bool true|false
+     */
+    function more() {    
+        return ( count($this->items) > 0) ? true : false;        
     }
 
-    function the_post( $strip_tags = false, $content_length = false ) {        
-        if( $this->more() ) {
-            $post = array_pop( $this->posts );        
-            $this->last = $post['id'];
-            $this->displayed_this_page++;         
-            if($strip_tags ) { $post['content'] = strip_tags($post['content']); }        
-            if($content_length) {
-                $line=$post['content'];
-                if (preg_match('/^.{1,'.$content_length.'}\b/s', $post['content'], $match)) {
-                    $post['content'] = $match[0];
-                }
-            }                   
-            return $post; 
-        }
-        return false;       
+    /**
+     * Gibt das ktuelle Item im Loop zurueck.
+     * 
+     * @param bool $strip_tags Sollen HTML Tags entfernt werden?
+     * @param int $content_length Auf wie viele Zeichen soll der Inhalt gekuerzt werden.
+     * 
+     * @return array()|bool Das Item als Array oder false
+     */
+    function the_item( $strip_tags = false, $content_length = false ) {            
+        if( $this->more() ) {        
+            $post = array_pop( $this->items );                    
+            $this->last = $post['id']; 
+            $this->last_timestamp = $post['date'];           
+            $this->displayed_this_page++; 
+            
+            $post['content'] = html_entity_decode( $post['content'] );
+            
+            if($strip_tags ) {             
+                $post['content'] = strip_tags( $post['content'] );                 
+            }                    
+            if($content_length) {            
+                $line=$post['content'];                
+                if (preg_match('/^.{1,'.$content_length.'}\b/s', $post['content'], $match)) {                
+                    $post['content'] = $match[0];                   
+                }               
+            }                               
+            return $post;             
+        }        
+        return false;               
     }
 
-    function pagination() {  
-        if( $this->more() ) {               
-            if( $this->request( 'type' ) == 'category' ) {                          
-                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a rel='nofollow' href='../?type=category&id=" . $this->request( 'id' ) . "&last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";                                                    
-            } else {
-                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a rel='nofollow' href='../?last=" . $this->last . "'>&auml;ltere Beitr&auml;ge</a></div></div>";
-            }                      
-        }                         
+    /**
+     * Zeigt Links zu der naechsten Seite eines Archives an.
+     * 
+     * @return html 
+     */
+    function pagination() {      
+        if( $this->more() ) {                       
+            if( $this->request( 'type' ) == 'category' ) {                                      
+                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a rel='nofollow' href='../?type=category&id=" . $this->request( 'id' ) . "&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a></div></div>";                                                                
+            } else {                
+                echo "<div class='sp-content-item'><div class='sp-content-item-head'><a rel='nofollow' href='../?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a></div></div>";           
+            }                              
+        }                            
     }
+
 }
 
 ?>
