@@ -129,7 +129,6 @@ class theme extends system {
                 if( is_file( $custom_template ) ) {
                             
                     $item = $data['content'];
-                    html_entity_decode( $item['content'] );
                     include $custom_template; 
                                    
                 } else if( is_file( $template ) ) { 
