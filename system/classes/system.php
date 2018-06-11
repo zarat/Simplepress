@@ -14,10 +14,9 @@
 class system extends core {
 
     /**
-     * Diese Variablen sind privat, damit nur ueber vorgegebene Methoden darauf zugegriffen werden kann. 
+     * Diese Variable ist privat, damit nur ueber die vorgegebenen Methoden set_current_item() und get_current_item() darauf zugegriffen werden kann. 
      */
     private $current_item = false;        
-    private $hooks = false;
 
     /**
      * Diese Funktion wird als erstes nach dem Start aufgerufen. 
@@ -31,10 +30,7 @@ class system extends core {
      * @return void
      */
     final function init() {     
-        $this->setup_theme();        
-        if($this->has_action(__FUNCTION__)) {         
-            $this->do_action(__FUNCTION__);             
-        }           
+        $this->setup_theme();                
         $this->theme->render();             
     }
     
@@ -54,10 +50,7 @@ class system extends core {
             $this->theme = new $custom_theme;                    
         } else {                  
             $this->theme = new theme();                                 
-        }         
-        if($this->has_action(__FUNCTION__)) {             
-            $this->do_action(__FUNCTION__);                   
-        }                      
+        }                            
     }
     
     /**
@@ -75,59 +68,7 @@ class system extends core {
         }            
         return isset($lang[$str]) ? $lang[$str] : "Fehler: Sprachdatei fehlerhaft, kann '$str' nicht finden.";            
     }
-    
-    /**
-     * Regtistriert eine Custom Funktion, die bei Aufruf eines Hooks getriggert wird.
-     * Wenn keine $action angegeben wird, werden alle Actions auf dem Hook entfernt.
-     * 
-     * @param string $hook Der Hook bei dem die Custom Funktion aufgerufen werden soll
-     * @param string $action Die Custom Funktion, die aufgerufen werden soll
-     * @param string|array params optional Die Parameter, mit der die Custom Funktion aufgerufen werden soll
-     * 
-     * @return bool success|error
-     */
-    public final function add_action( $hook, $action = false, $params = false ) {          
-        if( !$action ) {        
-            $this->hooks[$hook] = array();
-            return false; 
-        }
-        if( $params ) { 
-            $this->hooks[$hook][] = array( $action, $params ); 
-        } else {
-            $this->hooks[$hook][] = $action;
-        } 
-        return true; 
-    }
-    
-    /**
-     * Prueft, ob Cunstom Funktionen zu einem bestimmten Hook registriert wurden. 
-     * 
-     * @param string $hook Der zu pruefende Hook
-     * 
-     * @return bool success|error
-     */
-    final function has_action( $hook ) {    
-        return isset( $this->hooks[$hook] );        
-    }
-    
-    /**
-     * Ruft alle registrierten Custom Funktionen zu einem bestimmten Hooks auf. 
-     * Wurde eine Custom Funktion ohne Parameter registriert, wird ihr eine Referenz auf $this uebergeben. 
-     * 
-     * @param string $hook Der zu pruefende Hook
-     * 
-     * @return void
-     */
-    final function do_action( $hook ) {            
-        if( isset( $this->hooks[$hook] ) ) {                 
-            if( is_array( $this->hooks[$hook][0] ) ) {                         
-                call_user_func_array( $this->hooks[$hook][0][0], array( $this->hooks[$hook][0][1] ) );                                  
-            } else {                         
-                call_user_func( $this->hooks[$hook][0], $this );                                
-            }                                            
-        }                   
-    }   
-    
+ 
     /**
      * Wenn aktuell ein Item oder ein Archiv ausgegeben wird, werden die Informationen im Header gebraucht. 
      * Dazu werden sie vorher hier abgelegt.
