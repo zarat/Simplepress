@@ -147,11 +147,11 @@ class system extends core {
                 $this->set_current_item($item); 
                 
                 /**
-                 * Fucking encoding
-                 * 
-                 * @todo
+                 * Den Inhalt Loop bildem
                  */
-                $item['content'] = html_entity_decode( $item['content'] );
+                $archive = new archive();
+                $archive->archive_init(); 
+                $item = $archive;
                 
                 /**
                  * Ergebnisse fuer theme setzen.
