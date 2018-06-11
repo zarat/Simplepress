@@ -51,6 +51,8 @@ public $items = [];
                 $where .= " AND type IN ('page','post') AND category=" . $this->request( 'id' );
             } else if( $this->request( 'type' ) == 'search' ) {
                 $where .= " AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ";
+            } else if( $this->request( 'type' ) == 'post' || $this->request( 'type' ) == 'page' ) {
+                $where .= " AND id=" . $this->request( 'id' );
             } else {
                 $where .= " AND type='post' ";
             }
