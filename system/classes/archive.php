@@ -26,11 +26,11 @@ public $items = [];
      * 
      * @return void
      */
-    function archive_init() {    
+    function archive_init( $config = false ) {          
         if( !empty( $this->request( 'last' ) ) ) {         
             $this->last = $this->request( 'last' );            
-        }        
-        $this->fill_items();         
+        }                
+        $this->fill_items( $config );         
     }
     
     /**
@@ -38,23 +38,29 @@ public $items = [];
      * 
      * @todo Suche & Blaettern
      * 
+     * @param $config array optional see $system->select()
+     * 
      * @return void
      */
-    final function fill_items() {                       
-        $where = "status=1"; 
-        if ( $this->request( 'type' ) == 'category' ) {
-            $where .= " AND type IN ('page','post') AND category=" . $this->request( 'id' );
-        } else if( $this->request( 'type' ) == 'search' ) {
-            $where .= " AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ";
-        } else {
-            $where .= " AND type='post' ";
-        }
-        if ( $this->request( 'last' ) ) {
-            $where .= " AND date < " . $this->request( 'last' );
-        } 
-        $where .= " ORDER BY date ASC";   
-        $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => $where ) );
-        $this->post_count = sizeof( $this->items );   
+    final function fill_items( $config = false ) {                               
+        if( false !== $config ) {            
+            $this->items = $this->select( $config );            
+        } else {        
+            $where = "status=1"; 
+            if ( $this->request( 'type' ) == 'category' ) {
+                $where .= " AND type IN ('page','post') AND category=" . $this->request( 'id' );
+            } else if( $this->request( 'type' ) == 'search' ) {
+                $where .= " AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ";
+            } else {
+                $where .= " AND type='post' ";
+            }
+            if ( $this->request( 'last' ) ) {
+                $where .= " AND date < " . $this->request( 'last' );
+            } 
+            $where .= " ORDER BY date ASC";               
+            $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => $where ) );        
+        }        
+        $this->post_count = sizeof( $this->items );           
     }
 
     /**
