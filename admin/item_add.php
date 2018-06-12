@@ -19,11 +19,11 @@ if(!empty($_POST['title'])) {
 	/**
 	 * Strip htmlentities between <pre> Tags??
      *
-	function strip_pre_content($matches) {
-		return str_replace($matches[1],htmlentities($matches[1], ENT_QUOTES),$matches[0]);
-	}
-	$text = preg_replace_callback('/<pre>(.*?)<\/pre>/imsu','strip_pre_content', $_POST['text']);
-    */
+	 * function strip_pre_content($matches) {
+	 * return str_replace($matches[1],htmlentities($matches[1], ENT_QUOTES),$matches[0]);
+	 * }
+	 * $text = preg_replace_callback('/<pre>(.*?)<\/pre>/imsu','strip_pre_content', $_POST['text']);
+     */
     
     $text = base64_decode( $_POST['text'] );
         
