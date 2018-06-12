@@ -15,6 +15,11 @@ if(!empty($_POST['title'])) {
     $description = !empty( $_POST['description'] ) ? htmlentities($_POST['description'], ENT_QUOTES, 'utf-8') : "";
     $category = !empty( $_POST['category'] ) ? $_POST['category'] : 0;
     $date = !empty($_POST['date']) ? strtotime( $_POST['date'] ) : time();
+
+    /**
+     * Der Text wird base64 kodiert vom jswriter uebergeben
+     */    
+    $text = base64_decode( $_POST['text'] );
     
 	/**
 	 * Strip htmlentities between <pre> Tags??
@@ -24,11 +29,9 @@ if(!empty($_POST['title'])) {
 	 * }
 	 * $text = preg_replace_callback('/<pre>(.*?)<\/pre>/imsu','strip_pre_content', $_POST['text']);
      */
-    
-    $text = base64_decode( $_POST['text'] );
         
     $cfg = array("insert"=>"item (type, title, content, description, keywords, status, category, date)","values"=>"('$posttype','$title', '$text', '$description', '$keywords', 1, $category, $date)");
-    $system->insert($cfg); 
+    $system->insert($cfg);
 	
 } else {
 
