@@ -28,7 +28,7 @@ if(!empty($_POST['title'])) {
     $text = base64_decode( $_POST['text'] );
         
     $cfg = array("insert"=>"item (type, title, content, description, keywords, status, category, date)","values"=>"('$posttype','$title', '$text', '$description', '$keywords', 1, $category, $date)");
-    $system->insert($cfg);
+    $system->insert($cfg); 
 	
 } else {
 
