@@ -4,9 +4,15 @@
  * @author Manuel Zarat
  */ 
 
-echo "<div class ='sp-content-item'>\n";
-    echo "<div class ='sp-content-item-head'>" . $item['title'] . "</div>\n";
-    echo "<div class ='sp-content-item-body'>" . $item['content'] . "</div>\n";
-echo "</div>\n";
+while( $item->have_items() ) {
+
+    $item1 = $item->the_item( );
+    
+    echo "<div class='sp-content-item'>\n";
+    echo "<div class='sp-content-item-head'>" . $item1['title'] . "</div>\n";
+    echo "<div class='sp-content-item-body'>" . $item1['content'] . "</div>\n";
+    echo "</div>\n";
+    
+}
 
 ?>
