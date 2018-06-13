@@ -1,6 +1,15 @@
 --
 -- Simplepress SQL Import
 --
+-- Beispieljoin Terms
+--
+-- SELECT tm.taxonomy, t.name
+-- FROM term t
+-- INNER JOIN term_meta tm ON t.term_id = tm.term_id
+-- INNER JOIN term_relation tr ON tm.term_id = tr.term_meta_id
+-- INNER JOIN item i ON tr.object_id = i.id
+-- WHERE tr.object_id = 3
+--
 
 SET NAMES utf8;
 SET time_zone = '+02:00';
@@ -58,7 +67,7 @@ CREATE TABLE `item` (
 
 INSERT INTO `item` (`id`, `type`, `title`, `keywords`, `description`, `content`, `date`, `status`, `category`) VALUES
 (1,	'category',	'Allgemein',	'homepage,blog,simplepress', 'Allgemeine Themen', '',	1491560699,	1,	1),
-(2,	'page',	'About',	'homepage,blog,simplepress',	'',	'Seiten wie diese werden nicht automatisch in hierarchischen Archiven angelegt. Du kannst sie im Men&uuml;manager anordnen.',	1515507779,	1,	1),
+(2,	'page',	'About',	'homepage,blog,simplepress',	'',	'Das ist eine Testseite. Auch Seiten kannst du im <a href="../admin">Adminbereich</a> bearbeiten und entfernen.',	1515507779,	1,	1),
 (3,	'post',	'Dein neuer Blog',	'',	'',	'Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im <a href="../admin">Adminbereich</a> bearbeiten oder wieder entfernen kannst. Sieh dich dort am besten gleich mal um und dann auf ans bloggen!',	1515107311,	1,	1);
 
 -- --------------------------------------------------------
@@ -123,37 +132,51 @@ CREATE TABLE `user` (
 --
 
 CREATE TABLE `term` (
-  `term_id` int(10) NOT NULL AUTO_INCREMENT,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
-  `slug` varchar(30) NOT NULL DEFAULT '',
-  `term_group` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`term_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `term`
+--
+
+INSERT INTO `term` (`name`) VALUES ('Allgemeines');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `term_meta`
+-- Tabellenstruktur für Tabelle `term_taxonomy`
 --
 
-CREATE TABLE `term_meta` (
-  `term_meta_id` int(10) NOT NULL AUTO_INCREMENT,
-  `term_id` int(10) NOT NULL DEFAULT '0',
+CREATE TABLE `term_taxonomy` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `taxonomy` varchar(30) NOT NULL DEFAULT '',
-  `description` longtext NOT NULL,
-  `parent` int(10) NOT NULL DEFAULT '0',
-  `count` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`term_meta_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `term_taxonomy`
+--
+
+INSERT INTO `term_taxonomy` (`taxonomy`) VALUES ('category');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `wp_term_relationships`
+-- Tabellenstruktur für Tabelle `term_relation`
 --
 
 CREATE TABLE `term_relation` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `object_id` int(10) NOT NULL DEFAULT '0',
-  `term_meta_id` int(10) NOT NULL DEFAULT '0',
-  `term_order` int(10) NOT NULL DEFAULT '0'
+  `taxonomy_id` int(10) NOT NULL DEFAULT '0',
+  `term_id` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `term_relation`
+--
+
+INSERT INTO `term_relation` (`object_id`, `taxonomy_id`, `term_id`) VALUES (3, 1, 1);

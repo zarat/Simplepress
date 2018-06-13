@@ -78,96 +78,74 @@ class theme extends system {
      * @return html
      */
     function content() {     
-                               
         $data = $this->get_the_content(); 
-         
-        if( !empty( $data['error'] ) ) {   
-                         
-            echo "<div class='sp-content-item'>\n";
-                    echo "<div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div>\n";
-            echo "</div>\n"; 
-                                                          
-        } else {   
-                                                                            
-            if( $data['view'] == "archive" ) { 
-                       
+        /**
+         * Wenn ein Fehler aufgetreten ist..
+         */
+        if( !empty( $data['error'] ) ) { 
+            $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404.php";
+            $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404-" . $this->request('type') . ".php"; 
+            if( is_file( $custom_template ) ) { 
+                include $custom_template;                                    
+            } else if( is_file( $template ) ) {                            
+                include $template;                                    
+            } else {                         
+                echo "<div class='sp-content-item'>\n";
+                        echo "<div class='sp-content-item-head'>" . $this->_t('no_items_to_display') . "</div>\n";
+                echo "</div>\n";
+            }                                                           
+        } else {                                                                               
+            if( $data['view'] == "archive" ) {                        
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive.php";
                 $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $this->request('type') . ".php"; 
-                               
-                if( is_file( $custom_template ) ) { 
-                           
-                    $archive = $data['content'];
+                $archive = $data['content'];
+                if( is_file( $custom_template ) ) {
                     include $custom_template;   
-                                 
                 } else if( is_file( $template ) ) {
-                            
-                    $archive = $data['content'];
                     include $template;   
-                                 
                 } else {       
-                     
                     while( $data['content']->have_items() ) {
-                    
-                        $item = $data['content']->the_item(); 
-                        $item['content'] = strip_tags( preg_replace("/[^ ]*$/", '', substr( $item['content'], 0, 150 ) ) );  
+                        $item = $archive->the_item( array( 
+                            "metadata" => true 
+                        ));   
                         echo "<div class='sp-content-item'>\n";
                             echo "<div class='sp-content-item-head'><a href=\"../?type=$item[type]&id=$item[id]\">$item[title]</a></div>\n";
                             echo "<div class='sp-content-item-body'>$item[content]</div>\n";
                         echo "</div>\n";  
-                                                                      
                     }  
-                                  
                     $data['content']->pagination();   
-                                  
                 }   
-                                                                      
             } else if( $data['view'] == "single" ) { 
-                         
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php";
                 $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";                
-                
+                $archive = $data['content'];
                 if( is_file( $custom_template ) ) {
-                            
-                    $item = $data['content'];
                     include $custom_template; 
-                                   
                 } else if( is_file( $template ) ) { 
-                           
-                    $item = $data['content'];
                     include $template;    
-                                
                 } else {              
-                                                
-                    $item = $data['content'];
-                    $item['content'] = html_entity_decode( $item['content'] );                    
+                    $item = $archive->the_item( array( 
+                            "metadata" => true,
+                        ));                                      
                     echo "<div class='sp-content-item'>\n";
                         echo "<div class='sp-content-item-head'>" . $item['title'] . "</div>\n";
                         echo "<div class='sp-content-item-body'>" . $item['content'] . "</div>\n";
-                    echo "</div>\n"; 
-                                
-                }  
-                                                                                   
-            } else if( $data['view'] == "default" ) {  
-                  
+                    echo "</div>\n";                                 
+                }                                                                                     
+            } else if( $data['view'] == "default" ) {                    
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";
-                                
-                if( is_file( $template ) ) {    
-                        
-                    $latest = $data['content'];
+                $archive = $data['content'];                              
+                if( is_file( $template ) ) {                               
                     include $template;   
-                                 
-                } else {           
-                                                   
-                    while( $data['content']->have_items() ) {
-                    
-                        $post = $data['content']->the_item();
-                        html_entity_decode( $post['content'] );
-                        $post['content'] = strip_tags( preg_replace("/[^ ]*$/", '', substr( $post['content'], 0, 150 ) ) );                    
+                } else {                           
+                    while( $archive->have_items() ) {
+                        $post = $archive->the_item( array( 
+                            "metadata" => true
+                        ));                    
                         echo "<div class='sp-content-item'>\n";
                             echo "<div class='sp-content-item-head'><a href=\"../?type=$post[type]&id=$post[id]\">$post[title]</a></div>\n";
                             echo "<div class='sp-content-item-body'>$post[content]</div>\n";
                         echo "</div>\n"; 
-                        
                     }           
                 }        
             } 
@@ -228,28 +206,6 @@ class theme extends system {
         $this->sidebar();       
         $this->footer();
         $this->html_footer();            
-    }
-    
-    /**
-     * Wenn nichts gefunden wurde muss ein Fehler ausgegeben werden. 
-     * Wird derzeit in system->get_the_content() erledigt.
-     * 
-     * @see system->get_the_content()
-     *
-     * @todo 404 nicht gefunden Fehler
-     */
-    final function error404() {            
-        ob_start();
-        if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404-" . $this->request('type') . ".php") ) {        
-            include $errorfile;            
-        } else if( is_file( $errorfile = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "404.php") ) {        
-            include $errorfile;            
-        } else {
-            echo "<div class='content'><div class='content-item-head'>" . $this->_t('no_items_to_display') . "</div></div>";            
-        } 
-        $result = ob_get_contents();
-        ob_end_clean();
-        return $result;                            
     }
 
 }

@@ -14,6 +14,7 @@ define('ABSPATH', dirname(__file__) . DS);
 spl_autoload_register(function ($class) {
     include 'system' . DS . 'classes' . DS . $class . '.php';
 });
+
 include 'system' . DS . 'core.php';
 
 ?>

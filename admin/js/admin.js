@@ -2,23 +2,20 @@ function delete_item(id) {
 	confirmed = confirm("Diesen Inhalt wirklich entfernen?");
 	if (confirmed) {
 		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("GET","item_delete.php?id="+id,true);
+		xmlhttp.open("GET","../admin/item/delete.php?id="+id,true);
 		xmlhttp.send();
 		document.getElementById(id).style="display:none";
 	}
 }
 function update_status(id,status) {
-	go_on = 1; //confirm("Den Status dieses Beitrages wirklich bearbeiten?");  
-	if (go_on) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange=function() {
        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
           document.getElementById("item_status_link_"+id).innerHTML=xmlhttp.responseText;
         }
     }
-    xmlhttp.open("GET","../admin/item_status.php?id="+id+"&status="+status,true);
+    xmlhttp.open("GET","../admin/item/status.php?id="+id+"&status="+status,true);
     xmlhttp.send();
-	}
 }
 function toggle(id) {
   var e = document.getElementById(id);
@@ -92,21 +89,26 @@ function setCustomfieldStatus(id,status) {
 
 /* CUSTOM FIELDS ENDE */
 
-function ajaxget(url, params) {
+function ajaxget(url, params, callback = false ) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function(){  
         if(xmlhttp.readyState == 4){   
-            // xmlhttp.responseText
+            if( callback ) {
+                callback(xmlhttp.responseText);
+            }
         } 
     }
     xmlhttp.open("GET",url + "?" + params,true);
     xmlhttp.send();
 }
-function ajaxpost(url, params) {
+
+function ajaxpost(url, params, callback = false ) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function(){  
         if(xmlhttp.readyState == 4){   
-            // xmlhttp.responseText
+            if( callback ) {
+                callback(xmlhttp.responseText);
+            }
         } 
     }
     xmlhttp.open("POST", url, true);

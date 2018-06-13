@@ -23,8 +23,6 @@ class system extends core {
      * Sie setzt das Theme auf und triggert den ersten Hook. 
      * Am Ende wird dann das Theme gerendert.
      * 
-     * @todo Theme rendern auslagern
-     * 
      * @param false
      * 
      * @return void
@@ -61,12 +59,23 @@ class system extends core {
      * 
      * @return string uebersetzer_string|fehlerstring
      */
-    final function _t($str) {        
-        include ABSPATH . 'system' . DS . 'lang' . DS . 'lang.php';        
-        if( is_file( $langfile = ABSPATH . 'system' . DS . 'lang' . DS . 'lang-' . $this->settings('site_language') . '.php' ) ) {        
-            include $langfile;                
-        }            
-        return isset($lang[$str]) ? $lang[$str] : "Fehler: Sprachdatei fehlerhaft, kann '$str' nicht finden.";            
+    final function _t($str) { 
+        
+        /**
+         * Erst di Default Sprachdatei, das wir alles haben..
+         *
+         * Danach, falls es eine gibt, diese einbinden und die Default ueberschreiben
+         */
+        include ABSPATH . 'system' . DS . 'lang' . DS . 'lang.php'; 
+               
+        if( is_file( $langfile = ABSPATH . 'system' . DS . 'lang' . DS . 'lang-' . $this->settings('site_language') . '.php' ) ) { 
+               
+            include $langfile; 
+                           
+        }  
+                  
+        return isset($lang[$str]) ? $lang[$str] : "Fehler: Sprachdatei fehlerhaft, kann '$str' nicht finden.";  
+                  
     }
  
     /**
@@ -79,8 +88,10 @@ class system extends core {
      * 
      * @return void
      */
-    function set_current_item( $item ) {    
-        $this->current_item = $item;        
+    function set_current_item( $item ) { 
+       
+        $this->current_item = $item;  
+              
     }
     
     /**
@@ -92,9 +103,11 @@ class system extends core {
      * @return array Das aktuelle Item
      */
     function get_current_item() { 
+    
         global $hooks;
         $item = $hooks->apply_filters( 'get_current_item', $this->current_item );   
-        return $item;        
+        return $item; 
+               
     }
     
     /**
@@ -151,12 +164,11 @@ class system extends core {
                  */
                 $archive = new archive();
                 $archive->archive_init(); 
-                $item = $archive;
                 
                 /**
                  * Ergebnisse fuer theme setzen.
                  */
-                $result['content'] = $item;               
+                $result['content'] = $archive;               
                 $result['view'] = "single";
                 
             break;   
@@ -176,8 +188,6 @@ class system extends core {
                 /**
                  * Archive sind besonders, sie sollen naemlich andere Items nach bestimmten Eigenschaften gruppieren koennen (siehe Taxonomy)
                  * Derzeit nur Kategorien..
-                 * 
-                 * @todo
                  */
                 if( $this->request( 'type' ) == "category" ) {
                                                                 
@@ -230,24 +240,26 @@ class system extends core {
                                                          
             default:
                                                    
-                $latest = new archive();                
-                $latest->archive_init();  
+                $archive = new archive();                
+                $archive->archive_init();  
                                                                                                                                                                            
-                if( !$latest->items ) {  
+                if( !$archive->items ) {  
                     
                     $item = array( "title" => "404", "content" => $this->_t( 'no_items_to_display' ) );
                     $result['content'] = $item;
                     $result['error'] = "error on default";               
                     
                 } else {
-                    $result['content'] = $latest;
+                
+                    $result['content'] = $archive;
+                    
                 } 
                                  
-                $result['view'] = "default"; 
-                //$result['content'] = $latest; 
+                $result['view'] = "default";  
                                 
             break;             
-        }               
+        } 
+                      
         return $result;  
     }
     

@@ -43,8 +43,11 @@ foreach ($lines as $line) {
 echo "<h1>Gratulation</h1><p>SimplePress wurde erfolgreich installiert. Gehe <a href='./login.php'>zum Administrationsbereich</a> oder <a href='./'>deiner Startseite</a></p>";
    
 $configfile = './config.php';
-$config = '
-<?php
+
+/**
+ * Keine Leerzeichen!!!
+ */
+$config = '<?php
 $dbhost = "' . $dbhost . '";
 $dbuser = "' . $dbuser . '";
 $dbpass = "' . $dbpass . '";

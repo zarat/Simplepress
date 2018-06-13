@@ -7,50 +7,51 @@
 /**
  * Dashboard
  */
-$lang['welcome_to_dashboard'] = "Willkommen in deinem Dashboard";
-$lang['dashboard_description'] = "Das ist die Komandozentrale deiner Website.<hr>";
-$lang['change_website_title'] = "Titel deiner Website";
-$lang['change_website_subtitle'] = "Subtitel deiner Website";
-$lang['change_website_theme'] = "Design deiner Website";
-$lang['change_website_keywords'] = "Schlagworte deiner Website";
-$lang['change_website_description'] = "Kurzbeschreibung deiner Website";
+$lang['dashboard'] = "Dashboard";
+$lang['dashboard_description'] = "Base station of your website";
+$lang['change_website_title'] = "Title of your website";
+$lang['change_website_subtitle'] = "Slagline of your website";
+$lang['change_website_theme'] = "Theme of your website";
+$lang['change_website_keywords'] = "Metatags of your website";
+$lang['change_website_description'] = "Metadescription of your website";
 
 /**
  * Theme Editor
  */
-$lang["welcome_to_theme_edit"] = "Willkommen zum Theme Editor";
-$lang["theme_edit_description"] = "Hier kannst du die Dateien deines Themes bearbeiten.<hr>";
+$lang["theme_manager"] = "Theme Manager";
+$lang["theme_manager_description"] = "Edit the files of your theme";
 
 /**
  * Menu Manager
  */
-$lang["welcome_to_menu_edit"] = "Willkommen zum Menumanager";
-$lang["menu_edit_description"] = "Hier kannst du die Hauptnavigation bearbeiten.<hr>";
+$lang["menu_manager"] = "Menu Manager";
+$lang["menu_manager_description"] = "Edit the main navigation";
 
 /**
  * Item Add
  */
-$lang['item_add'] = "Item anlegen";
-$lang['item_add_title'] = "Titel";
-$lang['item_add_category'] = "Kategorie"; 
-$lang['item_add_keywords'] = "Schlagworte";
-$lang['item_add_description'] = "Beschreibung";
-$lang['item_add_content'] = "Inhalt";
+$lang['item_add'] = "Create Item";
+$lang['item_add_title'] = "Title";
+$lang['item_add_date'] = "Date";
+$lang['item_add_category'] = "Category"; 
+$lang['item_add_keywords'] = "Metatags";
+$lang['item_add_description'] = "Metadescription";
+$lang['item_add_content'] = "Content";
 
 /**
  * Item Modify 
  */
-$lang['item_modify'] = "Item bearbeiten";
-$lang['item_modify_title'] = "Titel";
-$lang['item_modify_date'] = "Datum";
-$lang['item_modify_category'] = "Kategorie"; 
-$lang['item_modify_keywords'] = "Schlagworte";
-$lang['item_modify_description'] = "Beschreibung";
-$lang['item_modify_content'] = "Inhalt";
+$lang['item_modify'] = "Edit Item";
+$lang['item_modify_title'] = "Title";
+$lang['item_modify_date'] = "Date";
+$lang['item_modify_category'] = "Category"; 
+$lang['item_modify_keywords'] = "Metatags";
+$lang['item_modify_description'] = "Metadescription";
+$lang['item_modify_content'] = "Content";
 
 /**
  * Additional
  */
-$lang['no_items_to_display'] = "Tut mir leid, dazu konnte ich nichts finden.";
+$lang['no_items_to_display'] = "Sorry, i cant find something matching your criteria";
 
 ?>

@@ -6,7 +6,7 @@
 
 require_once "../load.php";
 require_once "auth.php";
-
+                         
 function get_all_fields( $item_id ) {
     $system = new system();
     $all_fields = $system->single_meta( $item_id, $index = true );
@@ -64,7 +64,7 @@ if( isset( $_POST['item_id'] ) ) {
             break;            
         default:
             break;    
-    }
+    }  
 
 } 
 

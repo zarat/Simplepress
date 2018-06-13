@@ -35,18 +35,10 @@ foreach($rss as $row)    {
     echo "<item>";
     echo "<title>" . html_entity_decode($row['title']) . "</title>";
     echo "<link>" . htmlspecialchars($item_url . "?type=" . $row['type'] . "&id=" . $row['id']) . "</link>";
-    echo "<description>";
-    
-    /**
-     * Sind als htmlentities in db also erst umwandeln um den echten html inhalt zu bekommen
-     */
-    $tmp = html_entity_decode ( $row['content'] );
-    /**
-     * den aber wieder in htmlentities ausgeben :P muss
-     */
-    echo htmlentities( $tmp );
-    
-    echo "</description>";
+    if ( strlen( strip_tags( html_entity_decode( $row['content'] ) ) ) > 240 ) {
+        $row['content'] = preg_replace("/[^ ]*$/", '', substr( html_entity_decode( $row['content'] ), 0, 240) ); 
+    }
+    echo "<description>" . $row['content'] . "</description>";
     echo "<pubDate>" . date('r', $row['date']) . "</pubDate>"; /** moderne RSS Feeds haben RFC822 konformes Datum! */
     echo "</item>";
 

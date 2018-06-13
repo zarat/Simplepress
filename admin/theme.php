@@ -4,7 +4,7 @@
  * @author Manuel Zarat
  */
  
-require_once "../load.php";
+include "header.php";
 
 function getDirContents($dir, &$results = array()) {
     $files = scandir($dir);
@@ -34,7 +34,8 @@ echo "<div class=\"sp-content-item\">";
 /**
  * SP Content Item Head 
  */
-echo "<div class=\"sp-content-item-head\">" . $system->_t('welcome_to_theme_edit') . "</div>"; 
+echo "<div class=\"sp-content-item-head\">" . $system->_t('theme_manager') . "</div>"; 
+echo "<div class=\"sp-content-item-head-secondary\">" . $system->_t('theme_manager_description') . "</div>";
 
 /**
  * SP Content Item Body Start
@@ -120,7 +121,7 @@ $allfilesindir = getDirContents('../content/themes/'. $system->settings('site_th
 
 foreach($allfilesindir as $file) {
 
-    echo "<a href='./?page=edit_file&filename=$file'>" . $file . "</a><hr>";
+    echo "<a href='../admin/theme.php?filename=$file'>" . $file . "</a><hr>";
     
 }
 
@@ -133,5 +134,7 @@ echo "</div>";
  * Sidebar Ende
  */
 echo "</div>";
+
+include "footer.php";
 
 ?>

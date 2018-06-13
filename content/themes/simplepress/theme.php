@@ -57,17 +57,17 @@ class simplepress extends theme {
     
 }
 
-/** Beispiele
+/**
+ * Beispielfilter (zeige nur posts...)
+ */
 global $hooks;
-function example_action() { 
-    echo "example_action"; 
-}
-$hooks->add_action('archive_init','example_action');
-function example_filter( $item ) { 
-    $item['title'] = "xxx";  
+function post_filter( $item ) { 
+    $item = " and type='post'";  
     return $item; 
 }
-$hooks->add_filter( 'get_current_item', 'example_filter' );
-**/
+/**
+ * (...auf der homepage)
+ */
+$hooks->add_filter( 'archive_init_homepage', 'post_filter' );
 
 ?>

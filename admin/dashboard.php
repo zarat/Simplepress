@@ -11,7 +11,7 @@ echo "<script type='text/javascript'>
         go_on = confirm('Diesen Inhalt wirklich entfernen?');
         if (go_on) { 
             var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('GET','../admin/update_settings.php?setting='+k+'&value='+id,true);
+            xmlhttp.open('GET','../admin/settings.php?setting='+k+'&value='+id,true);
             xmlhttp.send();
         }
     }
