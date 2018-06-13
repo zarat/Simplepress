@@ -66,10 +66,9 @@ if (isset($_POST['submit'])) {
         $system->update($cfg);
     }    
     
-    echo "<p>Konfiguration wurde erfolgreich gespeichert. <b>Weiterleitung..</b></p>\n";    
-    echo "<script type=\"text/javascript\">function Redirect() {window.location = './index.php?page=dashboard';}setTimeout('Redirect()', 1000);</script>";
+    echo "<p>Konfiguration wurde erfolgreich gespeichert.</p>\n";
 
-} else {
+} 
 
     echo "<form enctype=\"multipart/form-data\" method=\"post\">";
     echo '<p>' . $system->_t('change_website_title') . '</p>';
@@ -93,7 +92,7 @@ if (isset($_POST['submit'])) {
     echo "<p><input type=\"submit\" value=\"speichern\" name=\"submit\">";
     echo "</form>";
 
-} 
+ 
 
 /**
  * SP Content Item Body Ende

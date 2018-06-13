@@ -5,7 +5,8 @@
  */
 
 define('DS', DIRECTORY_SEPARATOR);
-define('ABSPATH', dirname(__file__) . DS);
+define('ABSPATH', dirname(__file__) . DS);                  
+define('THEME_DIR', ABSPATH . DS . "content" . DS . "themes" . DS);
 
 /**
  * Klassen werden zur Laufzeit eingebunden.

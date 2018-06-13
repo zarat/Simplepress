@@ -3,7 +3,7 @@
 /**
  * Ein Beispieltheme
  *
- * @author Manuel Zarat
+ * @author Manuel Zarat 1
  */
 
 class simplepress extends theme {
