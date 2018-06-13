@@ -83,7 +83,7 @@ abstract class core {
     final function auth() {    
         $token = @$_COOKIE['sp-uid'];        
         $user = $token ? $this->select( array( "select" => "*", "from" => "user", "where" => "token='$token'") ) : false;        
-        return !empty( $user[0]['id'] ) ? $user[0] : false;
+        return !empty( $user[0]['id'] ) ? $user[0] : false;       
     }  
      
     private function sql_escape_string($query) {    
@@ -101,6 +101,20 @@ abstract class core {
     
     final function fetch_assoc($sql) {    
         return $sql->fetch_assoc();       
+    }
+    
+    final function fetch_all($sql) {
+        while( $res = $this->fetch( $sql) ) {
+            $result[] = $res;
+        }
+        return $result ? $result : false;
+    }
+    
+    final function fetch_all_assoc($sql) {
+        while( $res = $this->fetch_assoc( $sql) ) {
+            $result[] = $res;
+        }
+        return $result ? $result : false;
     }
     
     final function last_insert_id() {    
