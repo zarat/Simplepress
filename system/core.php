@@ -90,16 +90,16 @@ abstract class core {
         return mysqli_real_escape_string($this->db, $query);            
     }   
          
-    private function query($query) {     
+    final function query($query) {     
         $this->sql_escape_string($query);        
         return $this->db->query($query);        
     }
     
-    private function fetch($sql) {    
+    final function fetch($sql) {    
         return $sql->fetch_array();        
     }
     
-    private function fetch_assoc($sql) {    
+    final function fetch_assoc($sql) {    
         return $sql->fetch_assoc();       
     }
     
