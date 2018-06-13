@@ -31,6 +31,7 @@ echo "<div class=\"sp-content-item\">";
  * SP COntent Item Head
  */
 echo "<div class=\"sp-content-item-head\">" . $system->_t('welcome_to_dashboard') . "</div>";
+echo "<div class=\"sp-content-item-head-secondary\">" . $system->_t('dashboard_description') . "</div>";
 
 /**
  * SP COntent Item BodyStart
