@@ -91,6 +91,7 @@ input{
                 <ul>
 			        <li><a href="./theme.php">Theme</a></li>
 			        <li><a href="./menu.php">Menu</a></li>
+                    <li><a href="./taxonomy.php">Taxonomy</a></li>
                 </ul>
             </li> 
             <li><a href="#">Inhalte</a>
