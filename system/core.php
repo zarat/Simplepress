@@ -107,14 +107,14 @@ abstract class core {
         while( $res = $this->fetch( $sql) ) {
             $result[] = $res;
         }
-        return $result ? $result : false;
+        return isset($result) ? $result : false;
     }
     
     final function fetch_all_assoc($sql) {
         while( $res = $this->fetch_assoc( $sql) ) {
             $result[] = $res;
         }
-        return $result ? $result : false;
+        return isset($result) ? $result : false;
     }
     
     final function last_insert_id() {    
