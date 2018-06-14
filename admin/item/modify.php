@@ -127,7 +127,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
                     document.getElementById("ret").innerHTML = "";
                     return;
                 }
-                ajaxpost('../admin/taxonomy/taxonomies.php?id='+val, '', show_in_div );
+                ajaxpost('../admin/taxonomy/widget.php?id='+val, '', show_in_div );
             }
             </script>
             
