@@ -33,7 +33,7 @@ $rss = $system->archive($cfg);
 foreach($rss as $row)    {
     
     echo "<item>";
-    echo "<title>" . $row['title'] . "</title>";
+    echo "<title>" . strip_tags( html_entity_decode( $row['title'] ) ) . "</title>";
     
     /**
      * Links muesen kodiert werden um im RSS richtig dargestellt zu werden
@@ -43,10 +43,11 @@ foreach($rss as $row)    {
     /**
      * Inhalt kuerzen, wenn laenger als n Zeichen, Woerter dabei ganz lassen!
      */
-    if ( strlen( strip_tags( html_entity_decode( $row['content'] ) ) ) > 240 ) {
-        $row['content'] = preg_replace("/[^ ]*$/", '', substr( html_entity_decode( $row['content'] ), 0, 240) ); 
+    $content = strip_tags( html_entity_decode( $row['content'] ) );
+    if ( strlen( $content ) > 240 ) {
+        $content = preg_replace("/[^ ]*$/", '', substr( $content, 0, 240) ); 
     } 
-    echo "<description>" . $row['content'] . "</description>";
+    echo "<description>" . $content . "</description>";
     
     /** 
      * moderne RSS Feeds haben RFC822 konformes Datum! 
