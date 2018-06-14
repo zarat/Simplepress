@@ -47,7 +47,7 @@ foreach($rss as $row)    {
     if ( strlen( $content ) > 240 ) {
         $content = preg_replace("/[^ ]*$/", '', substr( $content, 0, 240) ); 
     } 
-    echo "<description>" . htmlspecialchars( $content ) . "</description>";
+    echo "<description>" . htmlspecialchars($content) . "</description>";
     
     /** 
      * moderne RSS Feeds haben RFC822 konformes Datum! 
