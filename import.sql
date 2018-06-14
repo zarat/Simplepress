@@ -141,7 +141,7 @@ CREATE TABLE `term` (
 -- Daten für Tabelle `term`
 --
 
-INSERT INTO `term` (`name`) VALUES ('Allgemeines');
+INSERT INTO `term` (`name`) VALUES ('Allgemeines'), ('Wichtig');
 
 -- --------------------------------------------------------
 
@@ -160,7 +160,7 @@ CREATE TABLE `term_taxonomy` (
 -- Daten für Tabelle `term_taxonomy`
 --
 
-INSERT INTO `term_taxonomy` (`taxonomy`) VALUES ('category');
+INSERT INTO `term_taxonomy` (`taxonomy`) VALUES ('category'), ('tag');
 
 -- --------------------------------------------------------
 
@@ -180,4 +180,4 @@ CREATE TABLE `term_relation` (
 -- Daten für Tabelle `term_relation`
 --
 
-INSERT INTO `term_relation` (`object_id`, `taxonomy_id`, `term_id`) VALUES (3, 1, 1);
+INSERT INTO `term_relation` (`object_id`, `taxonomy_id`, `term_id`) VALUES (3, 1, 1), (3, 2, 2);
