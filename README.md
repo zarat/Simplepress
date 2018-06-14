@@ -8,6 +8,8 @@ Features
 
 **Hooks**: Hooks sind Einsprungmarken im Code die es erlauben, zu bestimmten Zeitpunkten das Verhalten durch "Aktionen" und "Filter" zu beeinflussen. Es ist eine Art Vorläufer eines geplanten Pluginsystems. Auch dazu bald mehr.
 
+**Taxonomies & Terms** In Progress
+
 In der [Onlinedokumentation](https://dev.simplepress.ml) können Sie sich einen Überblick verschaffen.
 
 Installation

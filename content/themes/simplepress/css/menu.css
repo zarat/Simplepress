@@ -19,7 +19,7 @@
      background-color: #005b68;
 }
 /* Reset Links */
- .menu a, .menu a:link, .menu a:visited, .menu a:focus, span {
+ .menu a, .menu a:link, .menu a:visited, .menu a:focus, .menu span {
      color: #fff;
      text-decoration: none;
 }

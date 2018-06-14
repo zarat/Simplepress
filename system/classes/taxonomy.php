@@ -14,17 +14,31 @@
  * @author Manuel Zarat
  */
  
-class taxonomy {
+class taxonomy extends system {
 
     /**
      * Alle Taxonomien die in der Tabelle term_taxonomy existieren
      */
     function get_existing_taxonomies() {
         $query = "
-            select taxonomy 
+            select id, taxonomy 
             from term_taxonomy
-            "; 
-        return $query;    
+            ";
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;    
+    }
+    
+    /**
+     * Alle Taxonomien die in der Tabelle term_taxonomy existieren und kein parent haben
+     */
+    function get_existing_top_taxonomies() {
+        $query = "
+            select id, taxonomy 
+            from term_taxonomy
+            where parent = 0
+            ";
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;    
     }
     
     /**
@@ -45,7 +59,8 @@ class taxonomy {
                 )
             )
             ";
-        return $query;
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;
     }
     
     /**
@@ -64,7 +79,8 @@ class taxonomy {
                 where taxonomy_id = $taxonomy_id
             )
             ";
-        return $query;
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;
     }
 
     /**
@@ -79,7 +95,7 @@ class taxonomy {
      */
     function get_taxonomies_from_term_name( $term_name ) {    
         $query = "
-            select taxonomy 
+            select id, taxonomy 
             from term_taxonomy
             where id in(
                 select taxonomy_id from term_relation where term_id IN (
@@ -87,7 +103,8 @@ class taxonomy {
                 )
             )
             ";
-        return $query;            
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;            
     }
     
     /**
@@ -102,13 +119,31 @@ class taxonomy {
      */
     function get_taxonomies_from_term_id( $term_id ) {     
         $query = "
-            select taxonomy 
+            select id, taxonomy 
             from term_taxonomy
             where id in(
                 select taxonomy_id from term_relation where term_id = $term_id
             )
             ";
-        return $query;
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;
+    }
+    
+    /**
+     * Alle untergeordneten Taxonomien einer Taxonomie->Id
+     * 
+     * Frage: Was ist alles eine Art von "category"?
+     * 
+     * Antwort: 
+     */
+    function get_all_child_taxonomies_of_taxonomy_id( $taxonomy_id ) {
+        $query = "
+            select * 
+            from term_taxonomy
+            where parent = $taxonomy_id
+            ";
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;    
     }
     
 }

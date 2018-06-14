@@ -161,11 +161,11 @@ public $items = [];
      */
     function the_item( $config = false ) {
         /**
-         * Default Config definieren..
-         */
-        $html = true; 
+         * Default Config
+         */ 
         $metadata = true;
         $content_length = false;
+        $html = true;
         $strip_tags = false;
         /**
          * und wenn Parameter uebergeben, dann ueberschreiben.
@@ -212,16 +212,20 @@ public $items = [];
                 /**
                  * Woerter und HTML Tags dabei ganz lassen
                  */
-                if ( strlen( strip_tags( html_entity_decode( $item['content'] ) ) ) > $content_length ) {
-                    $item['content'] = preg_replace("/[^ ]*$/", '', substr( html_entity_decode( $item['content'] ), 0, $content_length) ); 
+                $tmp = strip_tags( html_entity_decode( $item['content'] ) );
+                if ( strlen( $tmp ) > $content_length ) {
+                    $item['content'] = preg_replace("/[^ ]*$/", '', substr( $tmp , 0, $content_length) ) . " ..."; 
                 }                                                                                                 
-            }
+            }            
             /**
-             * Wenn gestrippt wurde, sind sowieso keine HTML Tags mehr drin..
+             * HTML is default auf true, also staerker als plain!
              */
-            if( $html ) {
-                $item['content'] = html_entity_decode( $item['content'] );        
-            }
+            if( $html ) { 
+                $item['content'] = html_entity_decode( $item['content'] );
+            } 
+            if( $strip_tags ) {
+                $item['content'] = strip_tags( $item['content'] );
+            }                      
             return $item;  
         }  
         return false; 
