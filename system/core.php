@@ -203,10 +203,24 @@ abstract class core {
      * 
      * @return array()|bool item|(success|error)
      */
-    final function single( $config ) { 
-        extract($config);
-        $item = $this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$config[id]" ) ); 
-        if( !$item["id"] ) { return false; };
+    final function single( $config ) {    
+        extract($config);        
+        $item = $this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$config[id]" ) );                
+        if( !$item["id"] ) { return false; };        
+        /**
+         * get all taxonomies of this item
+         */
+        $tax = new taxonomy();
+        $taxonomies = $tax->get_all_taxonomies_an_item_belongs_to( $item['id'] ); 
+        if($taxonomies) {        
+            foreach( $taxonomies as $taxonomy ) {            
+                $item[ $taxonomy['taxonomy'] ] = array();                
+                $all_terms = $tax->get_all_terms_of_taxonomy_id( $taxonomy['id']);                
+                foreach( $all_terms as $term ) {                
+                    $item[ $taxonomy['taxonomy'] ] [$term['id']] = $term['name'];                    
+                }                
+            }           
+        }        
         if( @$metadata && $metas = $this->single_meta($item['id'])) {
             foreach( $metas as $k => $v ) {
                 $item[$k] = $v;
