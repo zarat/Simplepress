@@ -89,9 +89,10 @@ input{
         <ul class="menu">    
             <li><a href="./">Dashboard</a>
                 <ul>
-			        <li><a href="./theme.php">Theme</a></li>
+			     <li><a href="./theme.php">Theme</a></li>
 			        <li><a href="./menu.php">Menu</a></li>
                     <li><a href="./taxonomy.php">Taxonomy</a></li>
+                    <li><a href="./term.php">Term</a></li>
                 </ul>
             </li> 
             <li><a href="#">Inhalte</a>
