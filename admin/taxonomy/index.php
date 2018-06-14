@@ -28,10 +28,13 @@ $(document).ready(function() {
     <tbody>
     <?php
     $taxonomy = new taxonomy();
-    foreach( $taxonomy->get_existing_top_taxonomies() as $taxonomy){      
-        echo "\n<tr>";      
-        echo "<td><a href='../admin/taxonomy.php?action=list&id=$taxonomy[id]'>$taxonomy[taxonomy]</a></td>";      
-        echo "\n</tr>\n";    
+    $existing_top_taxonomies = $taxonomy->get_existing_top_taxonomies();
+    if( $existing_top_taxonomies ) {
+        foreach( $taxonomy->get_existing_top_taxonomies() as $taxonomy){      
+            echo "\n<tr>";      
+            echo "<td><a href='../admin/taxonomy.php?action=list&id=$taxonomy[id]'>$taxonomy[taxonomy]</a></td>";      
+            echo "\n</tr>\n";    
+        }
     }
     ?>
 </tbody>
