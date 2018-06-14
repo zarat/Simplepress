@@ -145,6 +145,22 @@ class taxonomy extends system {
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;    
     }
+ 
+    /**
+     * Alle Taxonomien, denen ein DB Item angehoert.
+     */
+    function get_all_taxonomies_an_item_belongs_to( $item_id ) {
+        $query = "
+            select id,taxonomy 
+            from term_taxonomy
+            where id IN (
+                select taxonomy_id from term_relation where object_id=$item_id
+            )
+            group by taxonomy
+            ";
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;    
+    }
     
 }
 
