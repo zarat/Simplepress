@@ -14,11 +14,8 @@ $(document).ready(function() {
 </script>
 
 <div class="sp-content">
-
 <div class="sp-content-item">
-
 <div class="sp-content-item-head"><a href="../admin/taxonomy.php?action=add">Neu</a></div>
-
 <div class="sp-content-item-body">
 
 <table id="item_list" class="display" cellspacing="0" width="100%">
@@ -29,27 +26,19 @@ $(document).ready(function() {
     </thead>
     <tfoot></tfoot>
     <tbody>
-
-<?php
-
-$taxonomy = new taxonomy();
-$taxonomies = $taxonomy->get_existing_top_taxonomies();
-
-foreach($taxonomies as $taxonomy){      
-    echo "\n<tr>";      
-    echo "<td><a href='../admin/taxonomy.php?action=list_children&id=$taxonomy[id]'>$taxonomy[taxonomy]</a></td>";      
-    echo "\n</tr>\n";    
-}
-
-?>
-
+    <?php
+    $taxonomy = new taxonomy();
+    foreach( $taxonomy->get_existing_top_taxonomies() as $taxonomy){      
+        echo "\n<tr>";      
+        echo "<td><a href='../admin/taxonomy.php?action=list&id=$taxonomy[id]'>$taxonomy[taxonomy]</a></td>";      
+        echo "\n</tr>\n";    
+    }
+    ?>
 </tbody>
 </table>        
         
+</div>        
 </div>
-        
-</div>
-
 </div>
 
 <?php include "footer.php"; ?>
