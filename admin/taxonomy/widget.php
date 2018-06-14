@@ -7,18 +7,18 @@
 require_once "../../load.php";
 
 $system = new system();
-$tax = new taxonomy();
+$term = new term();
 
 /**
- * Zeige ale Terms zu einer Taxonomy
- */
-$taxonomy_id = $_GET['id']; 
-
-echo "<p>choose one</p>";
+ * Zeige ale Terms
+ */ 
+echo "<p>choose a term to associate with</p>";
 echo "<select name=''>";
-foreach( $tax->get_all_terms_of_taxonomy_id( $taxonomy_id ) as $term ) {
+foreach( $term->get_existing_terms() as $term ) {
     echo "<option name='' value='" . $term['id'] . "'>" . $term['name'] . "</option>";
 }  
 echo "</select>";
-echo "<p>create one</p>";
+
+echo "<p>save the relation!</p>";
+
 ?>
