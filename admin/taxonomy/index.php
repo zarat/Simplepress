@@ -28,11 +28,15 @@ $(document).ready(function() {
     <tbody>
     <?php
     $taxonomy = new taxonomy();
-    $existing_top_taxonomies = $taxonomy->get_existing_top_taxonomies();
-    if( $existing_top_taxonomies ) {
-        foreach( $taxonomy->get_existing_top_taxonomies() as $taxonomy){      
+    if( isset( $_GET['id'] ) ) {
+        $taxonomies = $taxonomy->get_all_child_taxonomies_of_taxonomy_id( $_GET['id'] );
+    } else {
+        $taxonomies = $taxonomy->get_existing_top_taxonomies();
+    }
+    if( $taxonomies ) {
+        foreach( $taxonomies as $taxonomy){      
             echo "\n<tr>";      
-            echo "<td><a href='../admin/taxonomy.php?action=list&id=$taxonomy[id]'>$taxonomy[taxonomy]</a></td>";      
+            echo "<td>$taxonomy[taxonomy] <a href='../admin/taxonomy.php?id=$taxonomy[id]'>Sub taxonomies</a></td>";      
             echo "\n</tr>\n";    
         }
     }
@@ -43,5 +47,3 @@ $(document).ready(function() {
 </div>        
 </div>
 </div>
-
-<?php include "footer.php"; ?>
