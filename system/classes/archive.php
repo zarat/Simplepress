@@ -166,6 +166,7 @@ public $items = [];
         $metadata = true;
         $content_length = false;
         $html = true;
+        $strip_tags = false;
         /**
          * und wenn Parameter uebergeben, dann ueberschreiben.
          */
@@ -221,7 +222,10 @@ public $items = [];
              */
             if( $html ) { 
                 $item['content'] = html_entity_decode( $item['content'] );
-            }                       
+            } 
+            if( $strip_tags ) {
+                $item['content'] = strip_tags( $item['content'] );
+            }                      
             return $item;  
         }  
         return false; 
