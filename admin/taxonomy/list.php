@@ -30,28 +30,23 @@ $(document).ready(function() {
     <tfoot></tfoot>
     <tbody>
 
-<?php
-
-$taxonomy = new taxonomy();
-$taxonomies = $taxonomy->get_all_child_taxonomies_of_taxonomy_id( $_GET['id'] );
-
-if( $taxonomies ) {
-foreach($taxonomies as $taxonomy){      
-    echo "\n<tr>";      
-    echo "<td><a href='../admin/taxonomy.php?action=list_children&id=$taxonomy[id]'>$taxonomy[taxonomy]</a></td>";      
-    echo "\n</tr>\n";    
-}
-}
-
-?>
+    <?php
+    $taxonomy = new taxonomy();
+    $taxonomies = $taxonomy->get_all_child_taxonomies_of_taxonomy_id( $_GET['id'] );
+    if( $taxonomies ) {
+        foreach($taxonomies as $taxonomy){      
+            echo "\n<tr>";      
+            echo "<td><a href='../admin/taxonomy.php?action=list&id=$taxonomy[id]'>$taxonomy[taxonomy]</a></td>";      
+            echo "\n</tr>\n";    
+        }
+    }
+    ?>
 
 </tbody>
 </table>        
         
 </div>
-        
 </div>
-
 </div>
 
 <?php include "footer.php"; ?>
