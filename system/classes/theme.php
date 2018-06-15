@@ -33,8 +33,8 @@ class theme extends system {
                 echo "<meta name='generator' content='SimplePress - https://github.com/zarat/simplepress' />\n";
                 echo "<meta name='keywords' content='$keywords'>\n";
                 echo "<meta name='description' content='$description'>\n";        
-                echo "<link rel='stylesheet' href='../content/themes/" . $this->settings( 'site_theme' ) . "/css/style.css'>\n";
-                echo "<link rel='stylesheet' href='../content/themes/" . $this->settings( 'site_theme' ) . "/css/menu.css'>\n";              
+                echo "<link rel='stylesheet' href='/content/themes/" . $this->settings( 'site_theme' ) . "/css/style.css'>\n";
+                echo "<link rel='stylesheet' href='/content/themes/" . $this->settings( 'site_theme' ) . "/css/menu.css'>\n";              
             echo "</head>\n";
         echo "<body>\n";        
     }
