@@ -24,7 +24,7 @@ echo "</pre>";
 <fieldset>
   <legend>Choose Terms</legend>
 
-<?php foreach( $term->get_existing_terms() as $term ) { ?>
+<?php foreach( $term->terms() as $term ) { ?>
 
   <div>
     
