@@ -19,7 +19,7 @@ class taxonomy extends system {
     /**
      * Alle Taxonomien die in der Tabelle term_taxonomy existieren
      */
-    function get_existing_taxonomies() {
+    function taxonomies() {
         $query = "
             select id, taxonomy 
             from term_taxonomy
@@ -31,11 +31,28 @@ class taxonomy extends system {
     /**
      * Alle Taxonomien die in der Tabelle term_taxonomy existieren und kein parent haben
      */
-    function get_existing_top_taxonomies() {
+    function top_taxonomies() {
         $query = "
             select id, taxonomy 
             from term_taxonomy
             where parent = 0
+            ";
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;    
+    }
+    
+    /**
+     * Alle untergeordneten Taxonomien einer Taxonomie->Id
+     * 
+     * Frage: Was ist alles eine Art von "category"?
+     * 
+     * Antwort: 
+     */
+    function child_taxonomies( $taxonomy_id ) {
+        $query = "
+            select * 
+            from term_taxonomy
+            where parent = $taxonomy_id
             ";
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;    
@@ -48,7 +65,7 @@ class taxonomy extends system {
      * Antwort: "Spezielles" ist der taxonomy(category) zugewiesen
      * Antwort: "Spezielles" ist der taxonomy(post_tag) zugewiesen
      */
-    function get_all_terms_of_taxonomy_name( $taxonomy_name) {
+    function terms_by_taxonomy_name( $taxonomy_name) {
         $query = "
             select id, name
             from term
@@ -70,7 +87,7 @@ class taxonomy extends system {
      * Antwort: "Spezielles" ist der taxonomy(1) zugewiesen
      * Antwort: "Spezielles" ist der taxonomy(2) zugewiesen
      */
-    function get_all_terms_of_taxonomy_id( $taxonomy_id) {
+    function terms_by_taxonomy_id( $taxonomy_id) {
         $query = "
             select id, name
             from term
@@ -93,7 +110,7 @@ class taxonomy extends system {
      * Antwort: "Spezielles" ist der taxonomy(2) zugewiesen
      * 
      */
-    function get_taxonomies_from_term_name( $term_name ) {    
+    function taxonomies_by_term_name( $term_name ) {    
         $query = "
             select id, taxonomy 
             from term_taxonomy
@@ -117,7 +134,7 @@ class taxonomy extends system {
      * Antwort: Dem Term 2 ("Spezielles") ist der taxonomy(post_tag) zugewiesen
      * 
      */
-    function get_taxonomies_from_term_id( $term_id ) {     
+    function taxonomies_by_term_id( $term_id ) {     
         $query = "
             select id, taxonomy 
             from term_taxonomy
@@ -128,28 +145,11 @@ class taxonomy extends system {
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;
     }
-    
-    /**
-     * Alle untergeordneten Taxonomien einer Taxonomie->Id
-     * 
-     * Frage: Was ist alles eine Art von "category"?
-     * 
-     * Antwort: 
-     */
-    function get_all_child_taxonomies_of_taxonomy_id( $taxonomy_id ) {
-        $query = "
-            select * 
-            from term_taxonomy
-            where parent = $taxonomy_id
-            ";
-        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
-        return $result;    
-    }
  
     /**
      * Alle Taxonomien, denen ein DB Item angehoert.
      */
-    function get_all_taxonomies_an_item_belongs_to( $item_id ) {
+    function taxonomies_by_item_id( $item_id ) {
         $query = "
             select id,taxonomy 
             from term_taxonomy
@@ -165,7 +165,7 @@ class taxonomy extends system {
     /**
      * um die bereits verlinkten taxonomy->term relations anzuzeigen!
      */
-    function get_taxonomy_terms_an_item_belongs_to( $item_id, $taxonomy_id ) {
+    function terms_by_item_id( $item_id, $taxonomy_id ) {
         $query = "
             select tt.taxonomy, t.id, t.name 
             from term t
