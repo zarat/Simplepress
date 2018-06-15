@@ -1,16 +1,19 @@
 <?php
 
 /**
+ * Speichert eine leere neue Taxonomie in der DB -> term_taxonomy
+ * wird asynchron ueber widget.php aufgerufen.
+ * 
  * @author Manuel Zarat
  */
 
 if(!empty($_POST['name'])) { 
 
-    $name = $_POST['name'];
-    $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;
     /**
-     * Neue Taxonomie speichern
+     * speichern
      */
+    $name = $_POST['name'];
+    $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;    
     $id = $system->query( "insert into term_taxonomy (taxonomy, parent) values ('$name', $parent)" );
 	
 }
