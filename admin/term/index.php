@@ -28,7 +28,7 @@ $(document).ready(function() {
     <tbody>
     <?php
     $term = new term();
-    $terms = $term->get_existing_terms();    
+    $terms = $term->terms();    
     if( $terms ) {
         foreach( $terms as $term){      
             echo "\n<tr>";      
