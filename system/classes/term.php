@@ -14,7 +14,7 @@ class term extends system {
     /**
      * Alle Terms die in der Tabelle term existieren
      */
-    function get_existing_terms() {
+    function terms() {
         $query = "
             select id, name 
             from term
@@ -29,7 +29,7 @@ class term extends system {
      * Antwort: "Allgemeines" ist der taxonomy(category) zugewiesen
      * Antwort: "Allgemeines" ist der taxonomy(post_tag) zugewiesen
      */
-    function get_all_taxonomies_of_term_name( $term_name) {
+    function taxonomies_by_term_name( $term_name) {
         $query = "
             select term_taxonomy.id, term_taxonomy.taxonomy
             from term_taxonomy
@@ -48,7 +48,7 @@ class term extends system {
      * Antwort: Term 1 ist der taxonomy(category) zugewiesen
      * Antwort: Term 1 ist der taxonomy(post_tag) zugewiesen
      */
-    function get_all_taxonomies_of_term_id( $term_id) {
+    function taxonomies_by_term_id( $term_id) {
         $query = "
             select id, name
             from term
