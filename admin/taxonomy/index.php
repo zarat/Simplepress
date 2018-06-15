@@ -29,9 +29,9 @@ $(document).ready(function() {
     <?php
     $taxonomy = new taxonomy();
     if( isset( $_GET['id'] ) ) {
-        $taxonomies = $taxonomy->get_all_child_taxonomies_of_taxonomy_id( $_GET['id'] );
+        $taxonomies = $taxonomy->child_taxonomies( $_GET['id'] );
     } else {
-        $taxonomies = $taxonomy->get_existing_top_taxonomies();
+        $taxonomies = $taxonomy->top_taxonomies();
     }
     if( $taxonomies ) {
         foreach( $taxonomies as $taxonomy){      
