@@ -136,7 +136,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
             <option value="0" selected="selected">Waehle</option>       
             <?php
             $taxonomy = new taxonomy();
-            $taxonomies = $taxonomy->get_existing_taxonomies();
+            $taxonomies = $taxonomy->taxonomies();
             foreach( $taxonomies as $taxonomy) {
             echo "<option value='" . $taxonomy['id'] . "'>" . $taxonomy['taxonomy'] . "</option>";
             }
