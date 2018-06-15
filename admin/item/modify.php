@@ -113,7 +113,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
     <div class="sp-sidebar-item">
     
-        <div class="sp-sidebar-item-head">Terms</div>
+        <div class="sp-sidebar-item-head">Relations</div>
         
         <div class="sp-sidebar-item-body">
 
@@ -127,7 +127,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
                     document.getElementById("ret").innerHTML = "";
                     return;
                 }
-                ajaxpost('../admin/taxonomy/widget.php?id='+val, '', show_in_div );
+                ajaxpost('../admin/taxonomy/widget.php?id='+val, 'item_id=<?php echo $id;?>', show_in_div );
             }
             </script>
             
