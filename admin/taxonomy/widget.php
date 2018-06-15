@@ -13,7 +13,7 @@ $parent_taxonomy = $_GET['id'];
 $item_id = $_POST['item_id'];
 
 $tax = new taxonomy();
-$get_taxonomy_terms_an_item_belongs_to = $tax->get_taxonomy_terms_an_item_belongs_to( $item_id, $parent_taxonomy );
+$get_taxonomy_terms_an_item_belongs_to = $tax->terms_by_item_id( $item_id, $parent_taxonomy );
 
 echo "<pre>";
 //print_r($get_taxonomy_terms_an_item_belongs_to);
