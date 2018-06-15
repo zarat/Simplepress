@@ -211,13 +211,15 @@ abstract class core {
          * get all taxonomies of this item
          */
         $tax = new taxonomy();
-        $taxonomies = $tax->get_all_taxonomies_an_item_belongs_to( $item['id'] ); 
+        $taxonomies = $tax->taxonomies_by_item_id( $item['id'] ); 
         if($taxonomies) {        
             foreach( $taxonomies as $taxonomy ) {            
                 $item[ $taxonomy['taxonomy'] ] = array();                
-                $all_terms = $tax->get_all_terms_of_taxonomy_id( $taxonomy['id']);                
-                foreach( $all_terms as $term ) {                
-                    $item[ $taxonomy['taxonomy'] ] [$term['id']] = $term['name'];                    
+                $all_terms = $tax->terms_by_taxonomy_id( $taxonomy['id']);                
+                if( $all_terms ) {
+                    foreach( $all_terms as $term ) {                
+                        $item[ $taxonomy['taxonomy'] ] [$term['id']] = $term['name'];                    
+                    }
                 }                
             }           
         }        
