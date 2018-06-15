@@ -161,6 +161,22 @@ class taxonomy extends system {
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;    
     }
+ 
+    /**
+     * um die bereits verlinkten taxonomy->term relations anzuzeigen!
+     */
+    function get_taxonomy_terms_an_item_belongs_to( $item_id, $taxonomy_id ) {
+        $query = "
+            select tt.taxonomy, t.id, t.name 
+            from term t
+            inner join term_relation tr on t.id=tr.term_id
+            inner join term_taxonomy tt on tt.id=tr.taxonomy_id
+            where tr.object_id=$item_id and tr.taxonomy_id=$taxonomy_id
+            group by name
+            ";
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;
+    }
     
 }
 
