@@ -109,46 +109,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
 </div>
 
-<div class="sp-sidebar">
-
-    <div class="sp-sidebar-item">
-    
-        <div class="sp-sidebar-item-head">Terms</div>
-        
-        <div class="sp-sidebar-item-body">
-
-            <script>
-            function show_in_div(data) {
-                document.getElementById("ret").innerHTML = data;
-            }
-            function select_taxonomy(val) {
-                console.log(val);
-                if( val == 0 ) {
-                    document.getElementById("ret").innerHTML = "";
-                    return;
-                }
-                ajaxpost('../admin/taxonomy/widget.php?id='+val, '', show_in_div );
-            }
-            </script>
-            
-            <p>Taxonomy</p>
-            <p><select onchange="select_taxonomy(this.value);"> 
-            <option value="0" selected="selected">Waehle</option>       
-            <?php
-            $taxonomy = new taxonomy();
-            $taxonomies = $taxonomy->get_existing_taxonomies();
-            foreach( $taxonomies as $taxonomy) {
-            echo "<option value='" . $taxonomy['id'] . "'>" . $taxonomy['taxonomy'] . "</option>";
-            }
-            ?>       
-            </select></p>
-                        
-            
-            <div id="ret"></div>
-
-        </div>
-    
-    </div> 
+<div class="sp-sidebar"> 
 
     <div class="sp-sidebar-item">
     
