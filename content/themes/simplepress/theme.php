@@ -74,7 +74,8 @@ function post_filter( $item ) {
 }
 /**
  * und ersetze den Inhalt auf der Homepage damit.
+ *
+ * $hooks->add_filter( 'archive_init_homepage', 'post_filter' );
  */
-$hooks->add_filter( 'archive_init_homepage', 'post_filter' );
 
 ?>
