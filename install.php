@@ -39,8 +39,6 @@ foreach ($lines as $line) {
         $op_data = '';
     }
 }
-
-echo "<h1>Gratulation</h1><p>SimplePress wurde erfolgreich installiert. Gehe <a href='./login.php'>zum Administrationsbereich</a> oder <a href='./'>deiner Startseite</a></p>";
    
 $configfile = './config.php';
 
@@ -71,7 +69,7 @@ if (!$query->execute()) {
     echo 'Could not create admin user, please reinstall!';
     return false;    
 }else {
-    echo "<h1>Gratulation</h1><p>SimplePress wurde erfolgreich installiert. Gehe <a href='./login.php'>zum Administrationsbereich</a> oder <a href='./'>deiner Startseite</a></p>"; 
+    echo "<p>Gratulation $admindisplayname, SimplePress wurde erfolgreich installiert. Gehe <a href='./login.php'>zum Administrationsbereich</a> oder <a href='./'>deiner Startseite</a></p>"; 
 }
 
 } else {
