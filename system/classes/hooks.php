@@ -1,24 +1,18 @@
 <?php
 
 /**
- * Simplepress Hooks
- *
- * WP Hooks in eine einzelne Klasse portiert.
+ * Simplepress Hooks Klasse
  */
  
 class hooks {
 
+/**
+ * Public!
+ */
 var $filters = array();
 var $merged_filters = array();
 var $actions = array();
 var $current_filter = array();
-
-    public function __construct($args = null) {
-        $this->filters = array();
-        $this->merged_filters = array();
-        $this->actions = array();
-        $this->current_filter = array();
-    }
 
     /**
      * Bindet einen Filter an einen Hook
