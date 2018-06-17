@@ -61,8 +61,18 @@ $configfile_tmp = fopen($configfile, 'w') or die('could not write config file: '
 fwrite($configfile_tmp, $config);
 fclose($configfile_tmp); 
 
-$query = "INSERT INTO user (id,email,password,displayname) VALUES (1, '$adminemail', '$adminpass', '$admindisplayname')";  
-$conn->query($query) or die('Could not create admin user, please reinstall!');
+/**
+ * Prepared statement as mentioned by
+ * https://github.com/Assimilationstheorie
+ */
+$query = $conn->prepare("INSERT INTO user (email, password, displayname) VALUES (?, ?, ?)");
+$query->bind_param("sss", $adminemail, $adminpass, $admindisplayname);
+if (!$query->execute()) {
+    echo 'Could not create admin user, please reinstall!';
+    return false;    
+}else {
+    echo "<h1>Gratulation</h1><p>SimplePress wurde erfolgreich installiert. Gehe <a href='./login.php'>zum Administrationsbereich</a> oder <a href='./'>deiner Startseite</a></p>"; 
+}
 
 } else {
 
