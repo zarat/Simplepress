@@ -9,6 +9,6 @@
     /**
      * Neue Taxonomie speichern
      */
-    $id = $system->query( "insert into term_relation (object_id,taxonomy_id, term_id) values ($itemid, $tax, $term)" );
+    $id = $system->query( "insert into term_relation (object_id,taxonomy_id,term_id) values ($itemid, $tax, $term)" );
 
 ?>

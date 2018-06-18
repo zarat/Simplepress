@@ -10,21 +10,32 @@ require_once "../../load.php";
 $term = new term();
 
 $parent_taxonomy = $_GET['id'];
+
 $item_id = $_POST['item_id'];
 
 $tax = new taxonomy();
-$get_taxonomy_terms_an_item_belongs_to = $tax->terms_by_item_id( $item_id, $parent_taxonomy );
+$term = new term();
+
+$taxonomy_terms = $term->terms_by_taxonomy_id( $parent_taxonomy );
+$item_terms = $term->terms_by_item_id($item_id, $parent_taxonomy);
 
 echo "<pre>";
-//print_r($get_taxonomy_terms_an_item_belongs_to);
+//print_r($taxonomy_terms);
 echo "</pre>";
+
+//echo "<hr>";
+
+echo "<pre>";
+//print_r($item_terms);
+echo "</pre>";
+
 ?>
 
 
 <fieldset>
   <legend>Choose Terms</legend>
 
-<?php foreach( $term->terms() as $term ) { ?>
+<?php foreach( $taxonomy_terms as $i => $term ) { ?>
 
   <div>
     
@@ -32,8 +43,15 @@ echo "</pre>";
     type="checkbox" 
     id="<?php echo "$term[id]"; ?>" 
     value="<?php echo "$term[id]"; ?>"
-    <?php /** markiere die checkbox als aktiv, wenn der term bereits verlinkt ist */ 
-    if($get_taxonomy_terms_an_item_belongs_to) { foreach($get_taxonomy_terms_an_item_belongs_to as $a) { if($a['name'] == $term['name']) { echo " checked=\"checked\" "; }; } } ?>       
+    <?php 
+    if($item_terms) {
+        foreach( $item_terms as $i => $existing_term ) { 
+            if($existing_term['term_id'] == $term['id'] ) { 
+            echo "checked='checked'";
+            }
+        }
+    } 
+    ?>      
     onclick="javascript:if(this.checked) { ajaxget('../admin/taxonomy.php','action=add_relation&item_id=<?php echo $item_id; ?>&taxonomy=<?php echo $parent_taxonomy; ?>&term=<?php echo $term['id']; ?>') } else { ajaxget('../admin/taxonomy.php','action=remove_relation&item_id=<?php echo $item_id; ?>&taxonomy=<?php echo $parent_taxonomy; ?>&term=<?php echo $term['id']; ?>') };">    
     <label for="<?php echo "$term[id]"; ?>"><?php echo "$term[name]"; ?></label>
     
