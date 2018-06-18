@@ -7,11 +7,11 @@
 if(!empty($_POST['name'])) { 
 
     $name = $_POST['name'];
-    
+    $taxonomy = $_POST['taxonomy'];
     /**
      * Neuen Term speichern
      */
-    $id = $system->insert( array( "insert" =>"term (name)", "values" => "('$name')" ) );
+    $id = $system->insert( array( "insert" =>"term (name, taxonomy_id)", "values" => "('$name', $taxonomy)" ) );
 	
 }
 
@@ -30,6 +30,18 @@ if(!empty($_POST['name'])) {
     <div class="sp-content-item-body">
     
         <form id="frm" method="post">
+        
+            <p>Parent Taxonomy?</p>
+            <select name="taxonomy">
+            <option value="0" selected="selected">Waehle</option>
+            <?php            
+            $taxonomy = new taxonomy();
+            foreach( $taxonomy->taxonomies() as $taxonomy ) {
+                echo "<option value='" . $taxonomy['id'] . "'>" . $taxonomy['taxonomy'] . "</option>";
+            }  
+            
+            ?>   
+            </select></p>
 
             <p>Term</p>
             <p><input type="text" name="name"></p>            

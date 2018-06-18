@@ -32,7 +32,7 @@ $(document).ready(function() {
     if( $terms ) {
         foreach( $terms as $term){      
             echo "\n<tr>";      
-            echo "<td>$term[name]</td>";      
+            echo "<td>$term[name] <a href='../admin/term.php?action=edit&id=$term[id]'>edit</a></td>";      
             echo "\n</tr>\n";    
         }
     }
