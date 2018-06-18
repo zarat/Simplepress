@@ -187,7 +187,6 @@ class system extends core {
                 
                 /**
                  * Archive sind besonders, sie sollen naemlich andere Items nach bestimmten Eigenschaften gruppieren koennen (siehe Taxonomy)
-                 * Derzeit nur Kategorien..
                  */
                 if( $this->request( 'type' ) == "category" ) {
                                                                 
