@@ -128,24 +128,6 @@ CREATE TABLE `user` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `term`
---
-
-CREATE TABLE `term` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Daten für Tabelle `term`
---
-
-INSERT INTO `term` (`name`) VALUES ('Allgemeines'), ('Wichtig');
-
--- --------------------------------------------------------
-
---
 -- Tabellenstruktur für Tabelle `term_taxonomy`
 --
 
@@ -160,7 +142,26 @@ CREATE TABLE `term_taxonomy` (
 -- Daten für Tabelle `term_taxonomy`
 --
 
-INSERT INTO `term_taxonomy` (`taxonomy`) VALUES ('category'), ('tag');
+INSERT INTO `term_taxonomy` (`taxonomy`) VALUES ('type'), ('tag');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `term`
+--
+
+CREATE TABLE `term` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `taxonomy_id` int(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `term`
+--
+
+INSERT INTO `term` (`name`,`taxonomy_id`) VALUES ('page', 1), ('post', 1), ('wichtig', 2), ('unwichtig', 2);
 
 -- --------------------------------------------------------
 
@@ -178,6 +179,7 @@ CREATE TABLE `term_relation` (
 
 --
 -- Daten für Tabelle `term_relation`
+-- post, page
 --
 
-INSERT INTO `term_relation` (`object_id`, `taxonomy_id`, `term_id`) VALUES (3, 1, 1), (3, 2, 2);
+INSERT INTO `term_relation` (`object_id`, `taxonomy_id`, `term_id`) VALUES (3, 1, 2), (2, 1, 1);
