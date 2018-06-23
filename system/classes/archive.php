@@ -46,9 +46,6 @@ public $is_search = false;
         if( false !== $config ) {            
             $this->items = $this->select( $config );            
         } else {                    
-            /**
-             * Nur aktive  Items!!
-             */
             $query = "";             
             /**
              * Wenn eine Kategorie abgerufen wird..
@@ -136,7 +133,11 @@ public $is_search = false;
                 $last = " AND item.date < " . $this->request( 'last' );
                 $last = $hooks->apply_filters('archive_init_last', $last);
                 $query .= $last;
-            }                         
+            } 
+            /**
+             * Nur aktive Items
+             */
+            $query .= " AND item.status=1 ";
             /**
              * Sortieren nach..
              * String kann mit einem Hook gefiltert werden
