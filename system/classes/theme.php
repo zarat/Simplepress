@@ -95,7 +95,7 @@ class theme extends system {
                 echo "</div>\n";
             }                                                           
         } else {                                                                               
-            if( $data['view'] == "archive" ) {                        
+            if( $data['content']->is_archive ) {                        
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive.php";
                 $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $this->request('type') . ".php"; 
                 $archive = $data['content'];
@@ -115,7 +115,7 @@ class theme extends system {
                     }  
                     $data['content']->pagination();   
                 }   
-            } else if( $data['view'] == "single" ) { 
+            } else if( $data['content']->is_single ) { 
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php";
                 $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";                
                 $archive = $data['content'];
@@ -132,7 +132,7 @@ class theme extends system {
                         echo "<div class='sp-content-item-body'>" . $item['content'] . "</div>\n";
                     echo "</div>\n";                                 
                 }                                                                                     
-            } else if( $data['view'] == "default" ) {                    
+            } else if( $data['content']->is_default ) {                    
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";
                 $archive = $data['content'];                              
                 if( is_file( $template ) ) {                               
