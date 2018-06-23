@@ -21,7 +21,7 @@ if(!empty($_POST['title'])) {
     echo "<div class=\"sp-content-item\">\n";
     echo "<div class=\"sp-content-item-head\">" . $system->_t('item_modify') . "</div>\n";
     echo "<div class=\"sp-content-item-body\">\n";   
-    echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?id=$last'>hier ansehen</a>, <a href='../admin/item.php?action=modify&id=$last'>weiter bearbeiten</a> oder <a href=\"../admin/item.php?action=add\">neu anlegen</a>.";
+    echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?id=$last'>hier ansehen</a>, <a href='../admin/item.php?action=edit&id=$last'>weiter bearbeiten</a> oder <a href=\"../admin/item.php?action=add\">neu anlegen</a>.";
     echo "</div>\n";
     echo "</div>\n";
     echo "</div>\n";       
