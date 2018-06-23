@@ -16,7 +16,7 @@ class archive extends system {
 private $max_per_page = 10;
 private $displayed_this_page = 0;
 private $last = 0;
-private $item_count = 0;
+private $item_count = -1;
 public $items = array();
 
 public $is_single = false;
@@ -49,35 +49,48 @@ public $is_search = false;
             /**
              * Nur aktive  Items!!
              */
-            $where = "";             
+            $query = "";             
             /**
              * Wenn eine Kategorie abgerufen wird..
              * Aufteilen auf Array um dynamischer filtern zu koennen
              */
-            if ( $this->request( 'type' ) == 'category' ) {
+            if ( $this->request( 'category' ) ) {
+
+                $cat_query = "                    
+                        select item.* from item 
+                        inner join term_relation tr on tr.object_id=item.id
+                        inner join term_taxonomy tt on tt.id=tr.taxonomy_id
+                        inner join term t on t.id=tr.term_id
+                        where tr.taxonomy_id=(
+                        	select id from term_taxonomy where taxonomy='category'
+                        )
+                        AND t.id='" . $this->request( 'category' ) . "'
+                        GROUP BY item.id
+                        ";
+                $query = $cat_query;                
+                $this->is_archive = true;
+                /*
                 $where_category = "select * from item WHERE type IN ('page','post') ";
                 $where_category = $hooks->apply_filters('archive_init_category', $where_category);
-                $where_category .= " AND category=" . $this->request( 'id' );
+                $where_category .= " AND category=" . $this->request( 'id' );                
                 $where .= $where_category; 
-                $this->is_archive = true;           
+                */           
             /**
              * Wenn gesucht wird..
              * Aufteilen auf ein Array um dynamischer filtern zu koennen??
              */
             } else if( $this->request( 'type' ) == 'search' ) {
-                $where_search = "select * from item WHERE type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ";
+                $where_search = "select * from item WHERE ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ";
                 $where_search = $hooks->apply_filters('archive_init_search', $where_search);
-                $where .= $where_search;  
+                $query = $where_search;  
                 $this->is_archive = true; 
                 $this->is_search = true;          
             /**
              * Wenn ein bestimmter Type, aber NICHT CATEGORY ODER SEARCH abgerufen wird..
              * aufteilen auf ein array?? Derzeit noch unnoetig
              */
-            } else {
-            
-                if( $this->request( 'type' ) ) {
-                
+            } else {            
+                if( $this->request( 'type' ) ) {                
                     $custom_query= "                    
                             select item.* from item 
                             inner join term_relation tr on tr.object_id=item.id
@@ -88,29 +101,32 @@ public $is_search = false;
                             )
                             AND t.name='" . $this->request( 'type' ) . "'
                             ";
-                    $where .= $custom_query;
-                    $this->is_archive = true;
-                
-                } else { 
-                
+                    $query = $custom_query;
+                    $this->is_archive = true;                
+                } else {                
                     if( $this->request( 'id' ) ) {
                         $where_id = "select * from item WHERE id=" . $this->request( 'id' );
                         $where_id = $hooks->apply_filters('archive_init_where_id', $where_id);
-                        $where .= $where_id;
+                        $query = $where_id;
                         $this->is_archive = false;
-                        $this->is_single = true;
-                        
+                        $this->is_single = true;                        
                     } else {                          
-                        $homepage = "select * from item WHERE type IN ('page','post')";
+                        $homepage = "                    
+                            select item.* from item 
+                            inner join term_relation tr on tr.object_id=item.id
+                            inner join term_taxonomy tt on tt.id=tr.taxonomy_id
+                            inner join term t on t.id=tr.term_id
+                            where tr.taxonomy_id=(
+                            	select id from term_taxonomy where taxonomy='type'
+                            )
+                            AND t.name IN ('post')
+                        ";
                         //$homepage = $hooks->apply_filters('archive_init_homepage', $homepage);
-                        $where .= $homepage; 
+                        $query = $homepage; 
                         $this->is_default = true;             
-                    }
-                    
-                }  
-            
+                    }                    
+                }              
             }          
-
             /**
              * Wenn geblaettert wird..
              * String kann mit Hook gefiltert werden
@@ -119,35 +135,22 @@ public $is_search = false;
             if ( $this->request( 'last' ) ) {
                 $last = " AND item.date < " . $this->request( 'last' );
                 $last = $hooks->apply_filters('archive_init_last', $last);
-                $where .= $last;
-            } 
-                        
+                $query .= $last;
+            }                         
             /**
              * Sortieren nach..
              * String kann mit einem Hook gefiltert werden
              * DATE und SORT_ORDER in array??
              */
-            if( !$this->is_single ) {
-                $order = " ORDER BY item.date ASC"; 
-                $order = $hooks->apply_filters('archive_init_order_by', $order);
-                $where .= $order;  
-            }
-                                                                                       
-            $this->items = $this->fetch_all_assoc( $this->query( $where ) ); 
-        
+            $order = " ORDER BY item.date ASC"; 
+            $order = $hooks->apply_filters('archive_init_order_by', $order);
+            $query .= $order;                     
+            //echo $query;                                                                                       
+            $this->items = $this->fetch_all_assoc( $this->query( $query ) );         
         } 
-      
-        $this->item_count = $this->count_items(); 
-                                                            
-    }
-
-    /**
-     * Zaehlt wieviele Items i mErgebnis vorhanden sind.
-     * 
-     * @return int Anzahl an Items
-     */
-    function count_items() { 
-        return count($this->items);        
+        if( $this->items ) {
+            $this->item_count = count($this->items);
+        }                                                            
     }
 
     /**
@@ -172,7 +175,7 @@ public $is_search = false;
      * @return bool true|false
      */
     function more() {    
-        return $this->count_items() > 0 ? true : false;        
+        return $this->item_count < 1 ? false : true;        
     }
 
     /**
@@ -215,7 +218,8 @@ public $is_search = false;
             /**
              * Zuletzt angezeigter Timestamp
              */
-            $this->last_timestamp = $item['date'];           
+            $this->last_timestamp = $item['date']; 
+            $item['link'] = "../".$this->request('type')."/".$item['id'];          
             /**
              * Wieviele Items auf dieser Seite schon angezeigt wurden
              */
