@@ -25,9 +25,7 @@ public $is_default = false;
 public $is_search = false;
 
     /**
-     * Wird aufgerufen nachdem das Objekt erzeugt wurde. Eventuell den Kontruktor aus Core ueberschreiben?
-     * 
-     * @see core->__construct()
+     * Wird aufgerufen nachdem das Objekt erzeugt wurde. 
      * 
      * @return void
      */
@@ -40,10 +38,6 @@ public $is_search = false;
     
     /**
      * Fuellt das Array(items) mit den gefundenen Items
-     * 
-     * Kann mit Hooks gefiltert werden ALPHA!!!!!!!!!!!!!!! wegen Pagination
-     * 
-     * @param $config array optional see $system->select()
      * 
      * @return void
      */
@@ -197,17 +191,16 @@ public $is_search = false;
         $content_length = false;
         $html = true;
         $strip_tags = false;
-        /**
-         * und wenn Parameter uebergeben, dann ueberschreiben.
-         */
+        
+        if( $config ) {
+            extract( $config );
+        }
 
         /**
          * Nur weitermachen wenn noch Items vorhanden sind
          */
         if( $this->more() ) {
-        
-        $this->item_count--; 
-                                   
+            $this->item_count--;                                    
             /**
              * Erstes vom Stack poppen..
              */
@@ -223,11 +216,9 @@ public $is_search = false;
             /**
              * Wieviele Items auf dieser Seite schon angezeigt wurden
              */
-            $this->displayed_this_page++; 
-                      
+            $this->displayed_this_page++;                       
             return $item;  
-        }
-        echo "yolo2";  
+        } 
         return false; 
     }
 
