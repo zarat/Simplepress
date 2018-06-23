@@ -17,8 +17,13 @@ private $max_per_page = 10;
 private $displayed_this_page = 0;
 private $last = 0;
 private $item_count = 0;
-public $items = [];
-    
+public $items = array();
+
+public $is_single = false;
+public $is_archive = false;    
+public $is_default = false;
+public $is_search = false;
+
     /**
      * Wird aufgerufen nachdem das Objekt erzeugt wurde. Eventuell den Kontruktor aus Core ueberschreiben?
      * 
@@ -50,72 +55,96 @@ public $items = [];
             /**
              * Nur aktive  Items!!
              */
-            $where = "status=1";             
+            $where = "";             
             /**
              * Wenn eine Kategorie abgerufen wird..
              * Aufteilen auf Array um dynamischer filtern zu koennen
              */
             if ( $this->request( 'type' ) == 'category' ) {
-                $where_category = " AND type IN ('page','post') AND category=" . $this->request( 'id' );
+                $where_category = "select * from item WHERE type IN ('page','post') ";
                 $where_category = $hooks->apply_filters('archive_init_category', $where_category);
-                $where .= $where_category;            
+                $where_category .= " AND category=" . $this->request( 'id' );
+                $where .= $where_category; 
+                $this->is_archive = true;           
             /**
              * Wenn gesucht wird..
              * Aufteilen auf ein Array um dynamischer filtern zu koennen??
              */
             } else if( $this->request( 'type' ) == 'search' ) {
-                $where_search = " AND type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ";
+                $where_search = "select * from item WHERE type IN ('page','post') AND ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ";
                 $where_search = $hooks->apply_filters('archive_init_search', $where_search);
-                $where .= $where_search;            
+                $where .= $where_search;  
+                $this->is_archive = true; 
+                $this->is_search = true;          
             /**
              * Wenn ein bestimmter Type, aber NICHT CATEGORY ODER SEARCH abgerufen wird..
              * aufteilen auf ein array?? Derzeit noch unnoetig
              */
-            } else if( $this->request( 'type' ) && ( $this->request( 'type' ) != 'category' && $this->request( 'type' ) != 'search' ) ) { 
-                $custom_type = " AND type='" . $this->request( 'type' ) . "'";
-                $custom_type = $hooks->apply_filters('archive_init_custom_type', $custom_type);
-                $where .= $custom_type;            
-            /**
-             * Wenn nichts bestimmtes aufgerufen wird, also die Homepage sozusagen
-             * String kann mit einem Hook gefiltert werden
-             * Aufteilen auf ein array??
-             */
-            } else {              
-                $homepage = " AND type IN ('page','post')";
-                $homepage = $hooks->apply_filters('archive_init_homepage', $homepage);
-                $where .= $homepage;
-            }            
-            /**
-             * Wenn eine ID gesetzt ist..
-             * Kann mit Hooks gefiltert werden
-             * auf ein array aufteilen??
-             */
-            if( $this->request( 'id' ) && $this->request( 'type' ) != "category" ) {
-                $where_id = " AND id=" . $this->request( 'id' );
-                $where_id = $hooks->apply_filters('archive_init_where_id', $where_id);
-                $where .= $where_id;
-            }            
+            } else {
+            
+                if( $this->request( 'type' ) ) {
+                
+                    $custom_query= "                    
+                            select item.* from item 
+                            inner join term_relation tr on tr.object_id=item.id
+                            inner join term_taxonomy tt on tt.id=tr.taxonomy_id
+                            inner join term t on t.id=tr.term_id
+                            where tr.taxonomy_id=(
+                            	select id from term_taxonomy where taxonomy='type'
+                            )
+                            AND t.name='" . $this->request( 'type' ) . "'
+                            ";
+                    $where .= $custom_query;
+                    $this->is_archive = true;
+                
+                } else { 
+                
+                    if( $this->request( 'id' ) ) {
+                        $where_id = "select * from item WHERE id=" . $this->request( 'id' );
+                        $where_id = $hooks->apply_filters('archive_init_where_id', $where_id);
+                        $where .= $where_id;
+                        $this->is_archive = false;
+                        $this->is_single = true;
+                        
+                    } else {                          
+                        $homepage = "select * from item WHERE type IN ('page','post')";
+                        //$homepage = $hooks->apply_filters('archive_init_homepage', $homepage);
+                        $where .= $homepage; 
+                        $this->is_default = true;             
+                    }
+                    
+                }  
+            
+            }          
+
             /**
              * Wenn geblaettert wird..
              * String kann mit Hook gefiltert werden
              * DATE und PARAM(last) aufteilen auf ein Array um beides separat zu filtern??
              */
             if ( $this->request( 'last' ) ) {
-                $last = " AND date < " . $this->request( 'last' );
+                $last = " AND item.date < " . $this->request( 'last' );
                 $last = $hooks->apply_filters('archive_init_last', $last);
                 $where .= $last;
-            }             
+            } 
+                        
             /**
              * Sortieren nach..
              * String kann mit einem Hook gefiltert werden
              * DATE und SORT_ORDER in array??
              */
-            $order = " ORDER BY date ASC"; 
-            $order = $hooks->apply_filters('archive_init_order_by', $order);
-            $where .= $order;                          
-            $this->items = $this->select( array( "select" => "*", "from" => "item", "where" => $where ) );        
-        }        
-        $this->post_count = sizeof( $this->items );           
+            if( !$this->is_single ) {
+                $order = " ORDER BY item.date ASC"; 
+                $order = $hooks->apply_filters('archive_init_order_by', $order);
+                $where .= $order;  
+            }
+                                                                                       
+            $this->items = $this->fetch_all_assoc( $this->query( $where ) ); 
+        
+        } 
+      
+        $this->item_count = $this->count_items(); 
+                                                            
     }
 
     /**
@@ -124,7 +153,7 @@ public $items = [];
      * @return int Anzahl an Items
      */
     function count_items() { 
-        return ($this->items);        
+        return count($this->items);        
     }
 
     /**
@@ -137,7 +166,7 @@ public $items = [];
             $this->is_page_limit = true;                        
             return false;                        
         }            
-        return ( count($this->items) > 0) ? true : false;            
+        return $this->more();           
     }
     
     /**
@@ -149,7 +178,7 @@ public $items = [];
      * @return bool true|false
      */
     function more() {    
-        return ( count($this->items) > 0) ? true : false;        
+        return $this->count_items() > 0 ? true : false;        
     }
 
     /**
@@ -160,6 +189,7 @@ public $items = [];
      * @return array()|bool Das Item als Array oder false
      */
     function the_item( $config = false ) {
+        
         /**
          * Default Config
          */ 
@@ -170,13 +200,14 @@ public $items = [];
         /**
          * und wenn Parameter uebergeben, dann ueberschreiben.
          */
-        if( is_array( $config ) ) {
-            extract( $config );
-        }
+
         /**
          * Nur weitermachen wenn noch Items vorhanden sind
          */
-        if( $this->more() ) {                
+        if( $this->more() ) {
+        
+        $this->item_count--; 
+                                   
             /**
              * Erstes vom Stack poppen..
              */
@@ -193,41 +224,10 @@ public $items = [];
              * Wieviele Items auf dieser Seite schon angezeigt wurden
              */
             $this->displayed_this_page++; 
-            /**
-             * Sollen Metadaten mit ausgegeben werden, dann einfach an das array anhaengen
-             * Zur Sicherheit $post statt $content
-             */
-            if( $metadata ) {
-                $tmp_data = $this->single_meta( $item['id'] );
-                if( $tmp_data ) {
-                    foreach( $tmp_data as $k => $v ) {
-                        $item[$k] = $v;
-                    }
-                }
-            }
-            /**
-             * Inhalt kuerzen
-             */
-            if( $content_length ) {                        
-                /**
-                 * Woerter und HTML Tags dabei ganz lassen
-                 */
-                $tmp = strip_tags( html_entity_decode( $item['content'] ) );
-                if ( strlen( $tmp ) > $content_length ) {
-                    $item['content'] = preg_replace("/[^ ]*$/", '', substr( $tmp , 0, $content_length) ) . " ..."; 
-                }                                                                                                 
-            }            
-            /**
-             * HTML is default auf true, also staerker als plain!
-             */
-            if( $html ) { 
-                $item['content'] = html_entity_decode( $item['content'] );
-            } 
-            if( $strip_tags ) {
-                $item['content'] = strip_tags( $item['content'] );
-            }                      
+                      
             return $item;  
-        }  
+        }
+        echo "yolo2";  
         return false; 
     }
 
@@ -238,25 +238,25 @@ public $items = [];
      * 
      * @return html 
      */
-    function pagination() {          
-        if( $this->more() ) {              
-            /**
-             * Wenn in einer Kategorie geblaettert wird..
-             */
-            if( $this->request( 'type' ) == 'category' ) { 
-                echo "<!-- BeginNoIndex -->\n<div class='sp-content-item'>\n<div class='sp-content-item-head'><a rel='nofollow' href='../?type=category&id=" . $this->request( 'id' ) . "&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a></div>\n</div>\n<!-- EndNoIndex -->\n";            
-            /**
-             * Wenn gesucht wird
-             */
-            } else if( $this->request( 'type' ) == 'search' ) {
-                echo "<!-- BeginNoIndex --><div class='sp-content-item'>\n<div class='sp-content-item-head'><a rel='nofollow' href='../?type=search&term=" . $this->request( 'term' ) . "&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a></div>\n</div>\n<!-- EndNoIndex -->\n";            
-            /**
-             * Default 
-             */
-            } else {                            
-                echo "<!-- BeginNoIndex --><div class='sp-content-item'>\n<div class='sp-content-item-head'><a rel='nofollow' href='../?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a></div>\n</div>\n<!-- EndNoIndex -->\n";                       
-            }                                          
-        }                                    
+    function pagination() {
+        
+        /**
+         * Nur anzeigen wenn es noch Items gibt.
+         */
+        if( $this->more() ) {                          
+            echo "<!-- BeginNoIndex --><div class='sp-content-item'>\n<div class='sp-content-item-head'>";            
+            if( $this->is_archive ) {
+                if( $this->is_search ) {
+                    echo "<a rel='nofollow' href='?type=".$this->request('type')."&term=".$this->request('term')."&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
+                } else {
+                    echo "<a rel='nofollow' href='?type=".$this->request('type')."&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";    
+                }
+            } else {
+                echo "<a rel='nofollow' href='?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
+            }
+            echo "</div>\n</div>\n<!-- EndNoIndex -->\n";                                                               
+        } 
+                                           
     }
 
 }
