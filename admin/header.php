@@ -91,15 +91,13 @@ input{
                 <ul>
 			     <li><a href="./theme.php">Theme</a></li>
 			        <li><a href="./menu.php">Menu</a></li>
-                    <li><a href="./taxonomy.php">Taxonomy</a></li>
-                    <li><a href="./term.php">Term</a></li>
                 </ul>
             </li> 
             <li><a href="#">Inhalte</a>
                 <ul>
-                    <li><a href="./item.php?action=list&type=page">Seiten</a></li>
-                    <li><a href="./item.php?action=list&type=post">Artikel</a></li>
-                    <li><a href="./item.php?action=list&type=category">Kategorien</a></li>
+                    <li><a href="./taxonomy.php">Taxonomien</a></li>
+                    <li><a href="./term.php">Terms</a></li>
+                    <li><a href="./item.php">Items</a></li>
                 
                 </ul>
             </li>
