@@ -19,8 +19,8 @@ echo "<channel>";
 echo "<title>" . $system->settings('site_title') . " > Updates</title>";
 echo "<link>" . $channel_url . "</link>";
 echo "<description>" . html_entity_decode($system->settings('site_description')) . "</description>";
-$cfg = array("select"=>"*","from"=>"item","where"=>"status=1 ORDER BY date DESC");
-$rss = $system->archive($cfg);
+$query = "select * from item where status=1 ORDER BY date DESC";
+$rss = $system->fetch_all_assoc( $system->query( $query ) );
     
 foreach($rss as $row)    {
     
