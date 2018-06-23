@@ -191,16 +191,19 @@ public $is_search = false;
         $content_length = false;
         $html = true;
         $strip_tags = false;
-        
+        /**
+         * und wenn Parameter uebergeben, dann ueberschreiben.
+         */
         if( $config ) {
             extract( $config );
         }
-
         /**
          * Nur weitermachen wenn noch Items vorhanden sind
          */
         if( $this->more() ) {
-            $this->item_count--;                                    
+        
+        $this->item_count--; 
+                                   
             /**
              * Erstes vom Stack poppen..
              */
@@ -216,9 +219,32 @@ public $is_search = false;
             /**
              * Wieviele Items auf dieser Seite schon angezeigt wurden
              */
-            $this->displayed_this_page++;                       
+            $this->displayed_this_page++;            
+            if( $metadata ) {
+                $tmp_data = $this->single_meta( $item['id'] );
+                if( $tmp_data ) {
+                    foreach( $tmp_data as $k => $v ) {
+                        $item[$k] = $v;
+                    }
+                }
+            }
+            if( $content_length ) {                        
+                /**
+                 * Woerter und HTML Tags ganz lassen
+                 */
+                $tmp = strip_tags( html_entity_decode( $item['content'] ) );
+                if ( strlen( $tmp ) > $content_length ) {
+                    $item['content'] = preg_replace("/[^ ]*$/", '', substr( $tmp , 0, $content_length) ) . " ..."; 
+                }                                                                                                 
+            }            
+            if( $html ) { 
+                $item['content'] = html_entity_decode( $item['content'] );
+            } 
+            if( $strip_tags ) {
+                $item['content'] = strip_tags( $item['content'] );
+            }           
             return $item;  
-        } 
+        }  
         return false; 
     }
 
