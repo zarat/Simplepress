@@ -30,7 +30,7 @@ foreach($rss as $row)    {
     /**
      * Links muesen kodiert werden um im RSS richtig dargestellt zu werden
      */
-    echo "<link>" . htmlspecialchars($item_url . "?type=" . $row['type'] . "&id=" . $row['id']) . "</link>";
+    echo "<link>" . htmlspecialchars($item_url . "?id=" . $row['id']) . "</link>";
     
     /**
      * Inhalt kuerzen, wenn laenger als n Zeichen, Woerter dabei ganz lassen!
