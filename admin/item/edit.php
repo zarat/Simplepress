@@ -3,9 +3,6 @@
 /**
  * Wenn $_GET && $_POST uebergeben wurden, wird es gespeichert und dann angezeigt, sonst nur angezeigt.
  */
- 
-if( !@$_GET['id'] && !@$_POST['title'] ) { die("sorry, wrong query."); }
-
 
 if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
