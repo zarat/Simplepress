@@ -1,15 +1,6 @@
 --
 -- Simplepress SQL Import
 --
--- Beispieljoin Terms
---
--- SELECT tm.taxonomy, t.name
--- FROM term t
--- INNER JOIN term_meta tm ON t.term_id = tm.term_id
--- INNER JOIN term_relation tr ON tm.term_id = tr.term_meta_id
--- INNER JOIN item i ON tr.object_id = i.id
--- WHERE tr.object_id = 3
---
 
 SET NAMES utf8;
 SET time_zone = '+02:00';
@@ -39,7 +30,7 @@ CREATE TABLE `menu` (
 
 INSERT INTO `menu` (`id`, `menu_id`, `label`, `link`, `parent`, `sort`) VALUES
 (NULL,	1,	'Home',	'../',	0,	1),
-(NULL,	1,	'About',	'../?type=page&id=2',	0,	2);
+(NULL,	1,	'About', '../?type=page&id=2', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -67,7 +58,7 @@ CREATE TABLE `item` (
 
 INSERT INTO `item` (`id`, `type`, `title`, `keywords`, `description`, `content`, `date`, `status`, `category`) VALUES
 (1,	'page',	'About',	'homepage,blog,simplepress',	'',	'Das ist eine Testseite. Auch Seiten kannst du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten und entfernen.',	1515507779,	1,	1),
-(2,	'post',	'Dein neuer Blog',	'',	'',	'Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten oder wieder entfernen kannst. Sieh dich dort am besten gleich mal um und dann auf ans bloggen!',	1515107311,	1,	1);
+(2,	'post',	'Dein neuer Blog', '',	'',	'Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten oder wieder entfernen kannst. Sieh dich dort am besten gleich mal um und dann auf ans bloggen!',	1515107311,	1,	1);
 
 -- --------------------------------------------------------
 
@@ -101,11 +92,11 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`key`, `value`) VALUES
-('site_title',	'SimplePress'),
+('site_title', 'SimplePress'),
 ('site_subtitle',	'Just another simplepress blog'),
 ('site_keywords',	'CMS, Homepage, Website'),
-('site_description',	'Simplepress ist ein objektorientiertes CMS in PHP und SQL'),
-('site_theme',	'simplepress'),
+('site_description', 'Simplepress ist ein objektorientiertes CMS in PHP und SQL'),
+('site_theme', 'simplepress'),
 ('site_language',	'de');
 
 -- --------------------------------------------------------
@@ -178,7 +169,6 @@ CREATE TABLE `term_relation` (
 
 --
 -- Daten für Tabelle `term_relation`
--- post, page
 --
 
 INSERT INTO `term_relation` (`object_id`, `taxonomy_id`, `term_id`) VALUES (1,1,1), (2,1,2), (2,2,3);
