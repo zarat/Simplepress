@@ -66,9 +66,8 @@ CREATE TABLE `item` (
 --
 
 INSERT INTO `item` (`id`, `type`, `title`, `keywords`, `description`, `content`, `date`, `status`, `category`) VALUES
-(1,	'category',	'Allgemein',	'homepage,blog,simplepress', 'Allgemeine Themen', '',	1491560699,	1,	1),
-(2,	'page',	'About',	'homepage,blog,simplepress',	'',	'Das ist eine Testseite. Auch Seiten kannst du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten und entfernen.',	1515507779,	1,	1),
-(3,	'post',	'Dein neuer Blog',	'',	'',	'Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten oder wieder entfernen kannst. Sieh dich dort am besten gleich mal um und dann auf ans bloggen!',	1515107311,	1,	1);
+(1,	'page',	'About',	'homepage,blog,simplepress',	'',	'Das ist eine Testseite. Auch Seiten kannst du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten und entfernen.',	1515507779,	1,	1),
+(2,	'post',	'Dein neuer Blog',	'',	'',	'Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten oder wieder entfernen kannst. Sieh dich dort am besten gleich mal um und dann auf ans bloggen!',	1515107311,	1,	1);
 
 -- --------------------------------------------------------
 
@@ -142,7 +141,7 @@ CREATE TABLE `term_taxonomy` (
 -- Daten für Tabelle `term_taxonomy`
 --
 
-INSERT INTO `term_taxonomy` (`taxonomy`) VALUES ('type'), ('tag');
+INSERT INTO `term_taxonomy` (`taxonomy`) VALUES ('type'), ('category');
 
 -- --------------------------------------------------------
 
@@ -161,7 +160,7 @@ CREATE TABLE `term` (
 -- Daten für Tabelle `term`
 --
 
-INSERT INTO `term` (`name`,`taxonomy_id`) VALUES ('page', 1), ('post', 1), ('wichtig', 2), ('unwichtig', 2);
+INSERT INTO `term` (`name`,`taxonomy_id`) VALUES ('page', 1), ('post', 1), ('Allgemein', 2);
 
 -- --------------------------------------------------------
 
@@ -182,4 +181,4 @@ CREATE TABLE `term_relation` (
 -- post, page
 --
 
-INSERT INTO `term_relation` (`object_id`, `taxonomy_id`, `term_id`) VALUES (3, 1, 2), (2, 1, 1);
+INSERT INTO `term_relation` (`object_id`, `taxonomy_id`, `term_id`) VALUES (1,1,1), (2,1,2), (2,2,3);
