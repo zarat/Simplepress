@@ -62,7 +62,6 @@ public $is_search = false;
                         	select id from term_taxonomy where taxonomy='category'
                         )
                         AND t.id='" . $this->request( 'category' ) . "'
-                        GROUP BY item.id
                         ";
                 $query = $cat_query;                
                 $this->is_archive = true;
