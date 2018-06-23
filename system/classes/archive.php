@@ -75,8 +75,8 @@ public $is_search = false;
              * Wenn gesucht wird..
              * Aufteilen auf ein Array um dynamischer filtern zu koennen??
              */
-            } else if( $this->request( 'type' ) == 'search' ) {
-                $where_search = "select * from item WHERE ( title LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'term' ) ) . "%' ) ";
+            } else if( $this->request( 'search' ) ) {
+                $where_search = "select * from item WHERE ( title LIKE '%" . htmlentities( $this->request( 'search' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'search' ) ) . "%' ) ";
                 $where_search = $hooks->apply_filters('archive_init_search', $where_search);
                 $query = $where_search;  
                 $this->is_archive = true; 
