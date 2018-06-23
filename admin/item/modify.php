@@ -13,11 +13,10 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     $title = !empty( $_POST['title'] ) ? htmlentities($_POST['title'], ENT_QUOTES, 'utf-8') : "";
     $keywords = !empty( $_POST['keywords'] ) ? htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8') : "";  
     $description = !empty( $_POST['description'] ) ? htmlentities($_POST['description'], ENT_QUOTES, 'utf-8') : "";
-    $category = !empty( $_POST['category'] ) ? $_POST['category'] : 0;
     $date = !empty($_POST['date']) ? strtotime( $_POST['date'] ) : time();    
     $content = !empty( $_POST['content'] ) ? htmlentities($_POST['content'], ENT_QUOTES, 'utf-8') : "";
     
-    $cfg = array("table" => "item","set" => "title='$title',keywords='$keywords', description='$description', content='$content', category=$category, date=$date WHERE id=$id");
+    $cfg = array("table" => "item","set" => "title='$title',keywords='$keywords', description='$description', content='$content', date=$date WHERE id=$id");
     $system->update($cfg);
     
     $item = $system->single( array( "id" => $id ) );
@@ -26,7 +25,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     echo "<div class=\"sp-content-item\">\n";
     echo "<div class=\"sp-content-item-head\">" . $system->_t('item_modify') . "</div>\n";
     echo "<div class=\"sp-content-item-body\">\n";   
-    echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?type=" . $item['type']. "&id=$id'>hier ansehen</a>, <a href='../admin/item.php?action=modify&id=$id'>weiter bearbeiten</a> oder <a href=\"../admin/item.php?action=add&type=$item[type]\">neu anlegen</a>.";
+    echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?id=$id'>hier ansehen</a>, <a href='../admin/item.php?action=modify&id=$id'>weiter bearbeiten</a> oder <a href=\"../admin/item.php?action=add\">neu anlegen</a>.";
     echo "</div>\n";
     echo "</div>\n";
     echo "</div>\n";     	
@@ -42,7 +41,6 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     $title = $item['title'];
     $keywords = $item['keywords'];
     $description = $item['description'];
-    $category = $item['category'];
     $date = date("d.m.Y", $item['date']);
     $content = $item['content'];
     
@@ -72,21 +70,6 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
                     
                     <p><?php echo $system->_t('item_modify_date'); ?></p>
                     <p><input type="text" name="date" class="datepicker" value="<?php echo $date; ?>" id="date"></p> 
-                           
-                    <p><?php echo $system->_t('item_modify_category'); ?></p>
-                    <p><select name="category">
-                        <?php
-                        $cfg = array('select'=>'*','from'=>'item','where'=>'type="category"');
-                        $a = $system->archive($cfg);
-                        for($i=0;$i<count($a);$i++) {                
-                            if($category == $a[$i]['id']) {
-                                echo "<option value='" . $a[$i]['id'] . "' selected='selected'>" . $a[$i]['title'] . "</option>";
-                            } else {
-                                echo "<option value='" . $a[$i]['id'] . "'>" . $a[$i]['title'] . "</option>";
-                            }            
-                        }
-                        ?>
-                    </select></p> 
                            
                     <p><?php echo $system->_t('item_modify_keywords'); ?></p>
                     <p><input name="keywords" type="text" value="<?php echo $keywords; ?>" id="keywords"></p> 
