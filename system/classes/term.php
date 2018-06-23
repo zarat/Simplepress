@@ -3,8 +3,7 @@
 /**
  * Simplepress Term Klasse Beta
  * 
- * Ein Term kann mehreren Taxonomien zugewiesen werden.
- * Er kann also die Taxonomie "category" oder "post_tag" oder etwas anderes sein.
+ * Ein Term wird einer Taxonomie zugewiesen.
  * 
  * @author Manuel Zarat
  */
@@ -21,44 +20,6 @@ class term extends system {
             ";
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;    
-    }
-    
-    /**
-     * Alle Taxonomien, die einem Term->Name zugewiesen wind
-     * 
-     * Antwort: "Allgemeines" ist der taxonomy(category) zugewiesen
-     * Antwort: "Allgemeines" ist der taxonomy(post_tag) zugewiesen
-     */
-    function taxonomies_by_term_name( $term_name) {
-        $query = "
-            select term_taxonomy.id, term_taxonomy.taxonomy
-            from term_taxonomy
-            inner join term_relation tr on tr.taxonomy_id = term_taxonomy.id 
-            where tr.term_id = ( 
-                select id from term where name = 'Allgemeines'
-            )
-            ";
-        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
-        return $result;
-    }
-
-    /**
-     * Alle Taxonomien, die einer Term->Id zugewiesen wind
-     * 
-     * Antwort: Term 1 ist der taxonomy(category) zugewiesen
-     * Antwort: Term 1 ist der taxonomy(post_tag) zugewiesen
-     */
-    function taxonomies_by_term_id( $term_id) {
-        $query = "
-            select id, name
-            from term
-            where id in (
-            	select term_id from term_relation
-                where taxonomy_id = $taxonomy_id
-            )
-            ";
-        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
-        return $result;
     }
     
     function terms_by_taxonomy_id( $taxonomy_id ) {
