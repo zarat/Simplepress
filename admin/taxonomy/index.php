@@ -28,11 +28,7 @@ $(document).ready(function() {
     <tbody>
     <?php
     $taxonomy = new taxonomy();
-    if( isset( $_GET['id'] ) ) {
-        $taxonomies = $taxonomy->child_taxonomies( $_GET['id'] );
-    } else {
-        $taxonomies = $taxonomy->top_taxonomies();
-    }
+    $taxonomies = $taxonomy->taxonomies();
     if( $taxonomies ) {
         foreach( $taxonomies as $taxonomy){      
             echo "\n<tr>";      
