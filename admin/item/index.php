@@ -6,8 +6,6 @@
  * 
  */
 
-if(isset($_GET['type'])) {  $type = $_GET['type']; } else { die("Error: var 'type' is not set!"); }
-
 echo "<script src=\"./js/admin.js\"></script>";
 echo "<script type=\"text/javascript\" src=\"./js/jquery.js\"></script>\n";
 echo "<script type=\"text/javascript\" src=\"./js/jquery.dataTables.js\"></script>\n";
@@ -31,7 +29,7 @@ echo "<div class=\"sp-content\">\n";
  */
 echo "<div class=\"sp-content-item\">\n";
 
-echo "<div class=\"sp-content-item-head\"><a href=\"./item.php?action=add&type=$type\">Neu</a></div>";
+echo "<div class=\"sp-content-item-head\"><a href=\"./item.php?action=add\">Neu</a></div>";
 
 /**
  * Content Item Body Anfang
@@ -47,7 +45,7 @@ echo "<table id=\"item_list\" class=\"display\" cellspacing=\"0\" width=\"100%\"
 <tfoot></tfoot>\n    
 <tbody>\n";
 
-$cfg = array("select"=>"*","from"=>"item","where"=>"type='$type' ORDER BY id DESC");
+$cfg = array("select"=>"*","from"=>"item","where"=>"1=1 ORDER BY id DESC");
 $results = $system->archive($cfg);
 
 if(false !== $results) {
