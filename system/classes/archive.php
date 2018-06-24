@@ -267,16 +267,16 @@ public $is_search = false;
         if( $this->more() ) {                          
             echo "<!-- BeginNoIndex --><div class='sp-content-item'>\n<div class='sp-content-item-head'>";            
             if( $this->is_archive ) {
-                if( $this->is_search ) {
-                    echo "<a rel='nofollow' href='?type=".$this->request('type')."&term=".$this->request('term')."&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
-                } else {
-                    echo "<a rel='nofollow' href='?type=".$this->request('type')."&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";    
+                if( $this->request('search') ) {
+                    echo "<a rel='nofollow' href='?search=".$this->request('search')."&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
+                } else if( $this->request('category') ) {
+                    echo "<a rel='nofollow' href='?category=" . $this->request('category') . "&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";    
                 }
             } else {
                 echo "<a rel='nofollow' href='?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
             }
             echo "</div>\n</div>\n<!-- EndNoIndex -->\n";                                                               
-        } 
+        }
                                            
     }
 
