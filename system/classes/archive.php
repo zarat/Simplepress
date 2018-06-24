@@ -13,7 +13,7 @@
 
 class archive extends system {
 
-private $max_per_page = 3;
+private $max_per_page = 10;
 private $displayed_this_page = 0;
 private $last = 0;
 private $item_count = -1;
