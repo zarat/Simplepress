@@ -10,7 +10,7 @@ require_once "../../load.php";
 
 $system = new system();
 
-if( !$system->auth() ) { header("Location: ../login.php"); }
+if( !$system->auth() ) header("Location: ../login.php");
 
 $id = $_GET['id'];
 $status = $_GET['status'];   
