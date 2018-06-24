@@ -1,12 +1,10 @@
 <?php
 
 /**
- * @author Manuel Zarat
- */
-
-/**
  * Die Datei wird ueber index.php eingebunden deshalb ist $system schon definiert.
  * Asynchron eingebundene Dateien muessen load.php einbinden und auch $system deklarieren!
+ *
+ * @author Manuel Zarat
  */
 if( !$system->auth() ) die();
 
