@@ -3,6 +3,7 @@
 /**
  * @author Manuel Zarat
  */
+if( !$system->auth() ) header("Location: ../login.php");
 
 if(!empty($_POST['name'])) { 
 
