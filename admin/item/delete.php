@@ -1,9 +1,11 @@
 <?php
 
 /**
+ * Die Datei wird asynchron aufgerufen deshalb ist $system noch nicht definiert!
+ * Asynchron eingebundene Dateien muessen load.php einbinden und auch $system deklarieren!
+ * 
  * @author Manuel Zarat
  */
-
 require "../../load.php";
 
 $system = new system();
