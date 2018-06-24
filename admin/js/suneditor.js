@@ -1989,7 +1989,7 @@ SUNEDITOR.defaultLang = {
     };
 
     /**
-     * â†“â†“â†“â†“â†“â†“ Create Suneditor â†“â†“â†“â†“â†“â†“
+     * Ã¢â€ â€œÃ¢â€ â€œÃ¢â€ â€œÃ¢â€ â€œÃ¢â€ â€œÃ¢â€ â€œ Create Suneditor Ã¢â€ â€œÃ¢â€ â€œÃ¢â€ â€œÃ¢â€ â€œÃ¢â€ â€œÃ¢â€ â€œ
      */
     SUNEDITOR.lang = SUNEDITOR.lang || SUNEDITOR.defaultLang;
 
@@ -2251,25 +2251,11 @@ SUNEDITOR.defaultLang = {
             this.contentWindow.document.body.setAttribute("contenteditable", true);
 
             if (element.value.length > 0) {
-
-            var tag, innerHTML = "";
-            var baseHTML = element.value.split("\n");
-
-            for (var i = 0, len = baseHTML.length; i < len; i++) {
-                tag = document.createRange().createContextualFragment(baseHTML[i]);
-                tag = (tag.children && tag.children.length > 0) ? tag.children : tag.childNodes;
-
-                if (!/^P$/i.test(tag[0].tagName) && baseHTML[i].trim().length > 0) {
-                    baseHTML[i] = "<P>" + baseHTML[i].trim() + "</p>";
-                }
-
-                innerHTML += baseHTML[i];
-            }
-
-            this.contentWindow.document.body.innerHTML = innerHTML;
-          } else {
-              this.contentWindow.document.body.innerHTML = "<p>&#65279</p>";
-          }           
+                this.contentWindow.document.body.innerHTML = element.value;
+            } else {
+                this.contentWindow.document.body.innerHTML = '';
+            } 
+                     
         });
 
         /** resize bar */
