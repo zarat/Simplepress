@@ -5,7 +5,7 @@
  * 
  * @author Manuel Zarat
  */
-if( !$system->auth() ) die();
+if( !$system->auth() ) header("Location: ../login.php");
 
 if( !empty( $_POST['name'] ) ) { 
 
@@ -19,7 +19,7 @@ if( !empty( $_POST['name'] ) ) {
 }
 
 /**
- * Anzeigen
+ * und Anzeigen
  */
 
 ?>
