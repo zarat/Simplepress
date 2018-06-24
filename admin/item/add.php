@@ -4,6 +4,12 @@
  * @author Manuel Zarat
  */
 
+/**
+ * Die Datei wird ueber index.php eingebunden deshalb ist $system schon definiert.
+ * Asynchron eingebundene Dateien muessen load.php einbinden und auch $system deklarieren!
+ */
+if( !$system->auth() ) die();
+
 if(!empty($_POST['title'])) { 
 
     $title = !empty( $_POST['title'] ) ? htmlentities($_POST['title'], ENT_QUOTES, 'utf-8') : "";
