@@ -6,7 +6,7 @@
  *
  * @author Manuel Zarat
  */
-if( !$system->auth() ) die();
+if( !$system->auth() ) header("Location: ../login.php"); 
 
 if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
