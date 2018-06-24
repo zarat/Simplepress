@@ -2251,10 +2251,25 @@ SUNEDITOR.defaultLang = {
             this.contentWindow.document.body.setAttribute("contenteditable", true);
 
             if (element.value.length > 0) {
-                this.contentWindow.document.body.innerHTML = '' + element.value + '';
-            } else {
-                //this.contentWindow.document.body.innerHTML = '<p>&#65279</p>';
+
+            var tag, innerHTML = "";
+            var baseHTML = element.value.split("\n");
+
+            for (var i = 0, len = baseHTML.length; i < len; i++) {
+                tag = document.createRange().createContextualFragment(baseHTML[i]);
+                tag = (tag.children && tag.children.length > 0) ? tag.children : tag.childNodes;
+
+                if (!/^P$/i.test(tag[0].tagName) && baseHTML[i].trim().length > 0) {
+                    baseHTML[i] = "<P>" + baseHTML[i].trim() + "</p>";
+                }
+
+                innerHTML += baseHTML[i];
             }
+
+            this.contentWindow.document.body.innerHTML = innerHTML;
+          } else {
+              this.contentWindow.document.body.innerHTML = "<p>&#65279</p>";
+          }           
         });
 
         /** resize bar */
