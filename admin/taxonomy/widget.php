@@ -6,7 +6,8 @@
 
 require_once "../../load.php";
 
-//$system = new system();
+if( !$system->auth() ) header("Location: ../login.php");
+
 $term = new term();
 
 $parent_taxonomy = $_GET['id'];
@@ -18,16 +19,6 @@ $term = new term();
 
 $taxonomy_terms = $term->terms_by_taxonomy_id( $parent_taxonomy );
 $item_terms = $term->terms_by_item_id($item_id, $parent_taxonomy);
-
-echo "<pre>";
-//print_r($taxonomy_terms);
-echo "</pre>";
-
-//echo "<hr>";
-
-echo "<pre>";
-//print_r($item_terms);
-echo "</pre>";
 
 ?>
 
