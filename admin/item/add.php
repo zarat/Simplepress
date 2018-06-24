@@ -39,6 +39,8 @@ echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
 
 ?>
 
+<script src="../admin/js/tinymce.min.js"></script>
+
 <div class="sp-content">
 
     <div class="sp-content-item">
@@ -66,9 +68,9 @@ echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
             </div>
                
             <p><?php echo $system->_t('item_add_content'); ?></p>
-            <p><textarea id="editor" name="content" style="width:100% !important;" rows="20"></textarea></p>
+            <p><textarea name="content" style="width:100% !important;" rows="20"></textarea></p>
             
-            <p><a style="cursor:pointer;" onclick="sun_save();">speichern</a></p> 
+            <p><input type="submit" value="speichern"></p> 
                
         </form>
     
@@ -81,12 +83,18 @@ echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
 <div style="clear:both;"></div>
  
 <script>
-var suneditor = SUNEDITOR.create('editor', {});
-document.getElementById("datepicker").datepicker();
-function sun_save() {
-    suneditor.save();
-    document.getElementById('frm').submit();
-};   
+document.getElementById("datepicker").datepicker();  
+</script>
+
+<script>
+tinymce.init({
+  selector: 'textarea',
+  //plugins: 'print preview fullpage powerpaste searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount tinymcespellchecker a11ychecker imagetools mediaembed  linkchecker contextmenu colorpicker textpattern help',
+  plugins: 'image link media lists textcolor imagetools code',  
+  toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | image link media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent  | removeformat | code',
+  image_advtab: true,
+  mobile: { theme: 'mobile' }
+ });
 </script>
 
 <?php } ?>
