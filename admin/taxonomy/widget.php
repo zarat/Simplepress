@@ -28,7 +28,7 @@ $item_terms = $term->terms_by_item_id($item_id, $parent_taxonomy);
 <fieldset>
   <legend>Choose Terms</legend>
 
-<?php foreach( $taxonomy_terms as $i => $term ) { ?>
+<?php if( $taxonomy_terms ) { foreach( $taxonomy_terms as $i => $term ) { ?>
 
   <div>
     
@@ -50,6 +50,6 @@ $item_terms = $term->terms_by_item_id($item_id, $parent_taxonomy);
     
   </div>
 
-<?php } ?>
+<?php } } ?>
 
 </fieldset>
