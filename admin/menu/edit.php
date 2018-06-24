@@ -1,3 +1,7 @@
+<?php 
+$system = new system();
+if( !$system->auth() ) header("Location: ../login.php");
+?>
 <link rel="stylesheet" type="text/css" href="../admin/menu/style.css">
 
 <div class ="sp-content">
@@ -21,9 +25,7 @@
                 <div class="dd" id="nestable">
         
                     <?php
-                    
-                    $system = new system();
-                    
+
                     $menu = $system->archive( array( "select" => "*", "from" => 'menu', "where" => "menu_id=$_GET[menu_id] order by sort") );
                      
                     $ref = [];
