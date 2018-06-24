@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Speichert eine leere neue Taxonomie in der DB -> term_taxonomy
- * wird asynchron ueber widget.php aufgerufen.
+ * Speichert eine Taxonomie in der DB -> term_taxonomy
  * 
  * @author Manuel Zarat
  */
+if( !$system->auth() ) die();
 
-if(!empty($_POST['name'])) { 
+if( !empty( $_POST['name'] ) ) { 
 
     /**
      * speichern
