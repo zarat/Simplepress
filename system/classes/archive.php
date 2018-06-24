@@ -138,8 +138,7 @@ public $is_search = false;
             $query .= " GROUP BY item.id "; 
             $order = " ORDER BY item.date ASC"; 
             $order = $hooks->apply_filters('archive_init_order_by', $order);
-            $query .= $order; 
-            echo $query;                                                                                                           
+            $query .= $order;                                                                                                           
             $this->items = $this->fetch_all_assoc( $this->query( $query ) );         
         } 
         if( $this->items ) {
