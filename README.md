@@ -2,7 +2,7 @@ Branch 0.4 - [Simplepress](https://simplepress.ml) ist ein Content management sy
 
 Features
 --------
-**WYSIWYG** (SunEditor): Mit dem WYSIWYG ("what you see is what you get") Editor können Sie Inhalte ohne Programmierkenntnisse online bearbeiten und trotzdem ein klar strukturiertes und schönes HTML erzeugen.
+**WYSIWYG** (TinyMCE): Mit dem WYSIWYG ("what you see is what you get") Editor können Sie Inhalte ohne Programmierkenntnisse online bearbeiten und trotzdem ein klar strukturiertes und schönes HTML erzeugen.
 
 **Theme Support**: Themes sind Designvorlagen, die den grundsätzlichen Aufbau der Website abbilden. So kann das Aussehen einfach und effektiv geändert werden, ohne am eigentlichen Code herumwerken zu müssen. Mehr dazu bald.
 
