@@ -8,6 +8,8 @@ require_once '../../load.php';
 
 $system = new system();
 
+if( !$system->auth() ) header("Location: ../login.php");
+
 if( !empty( $_POST['id'] ) ) {
 
     $arr['type']  = 'edit';
