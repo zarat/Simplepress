@@ -686,12 +686,11 @@ SUNEDITOR.defaultLang = {
             },
 
             /**
-             * @description Get line node of the paramater node value (P,Table, H1, H2, H3, H4, H5, H6)
-             * @param {element|null} element - Reference element if null or no value, it is relative to the current focus node.
+             * @description Get node of current line (P,Table..)
+             * @param {element} element - Reference element
              * @returns {Element}
              */
             getLineElement: function (element) {
-                element = element || this._variable.selectionNode;
                 while (!/^BODY$/i.test(element.parentNode.tagName)) {
                     element = element.parentNode;
                 }
@@ -702,15 +701,12 @@ SUNEDITOR.defaultLang = {
             /**
              * @description Append P tag to current line next
              * @param {element} element - Insert as siblings of that element
-             * @returns {element}
              */
             appendP: function (element) {
                 element = this.getLineElement(element);
                 var oP = document.createElement("P");
                 oP.innerHTML = '&#65279';
                 element.parentNode.insertBefore(oP, element.nextElementSibling);
-
-                return oP;
             },
 
             /**
@@ -1444,6 +1440,7 @@ SUNEDITOR.defaultLang = {
              */
             toggleFrame: function () {
                 if (!this._variable.wysiwygActive) {
+                
                     var ec = {"&amp;": "&", "&nbsp;": "\u00A0", /*"&quot;": "\"", */"&lt;": "<", "&gt;": ">"};
                     var code_html = context.element.code.value.replace(/&[a-z]+;/g, function (m) {
                         return (typeof ec[m] === "string") ? ec[m] : m;
@@ -1453,6 +1450,7 @@ SUNEDITOR.defaultLang = {
                     context.element.code.style.display = "none";
                     context.element.wysiwygElement.style.display = "block";
                     this._variable.wysiwygActive = true;
+                    
                 }
                 else {
                     context.element.code.value = context.element.wysiwygWindow.document.body.innerHTML.trim().replace(/<\/p>(?=[^\n])/gi, "<\/p>\n");
@@ -1814,21 +1812,6 @@ SUNEDITOR.defaultLang = {
             },
 
             onKeyUp_wysiwyg: function (e) {
-                /** enter */
-                if (/^13$/.test(e.keyCode)) {
-                    e.preventDefault();
-
-                    var line = editor.getLineElement().nextSibling;
-                    if (line && !/^P$/i.test(line.tagName)) {
-                        var oP = document.createElement("P");
-                        oP.innerHTML = '&#65279';
-
-                        line.parentNode.replaceChild(oP, line);
-                    }
-
-                    return;
-                }
-
                 editor._setSelectionNode();
                 if (event._directionKeyKeyCode.test(e.keyCode)) {
                     event._findButtonEffectTag();
@@ -2268,21 +2251,9 @@ SUNEDITOR.defaultLang = {
             this.contentWindow.document.body.setAttribute("contenteditable", true);
 
             if (element.value.length > 0) {
-                var tag, baseHtml, innerHTML = "";
-                tag = document.createRange().createContextualFragment(element.value).childNodes;
-
-                for (var i = 0, len = tag.length; i < len; i++) {
-                    baseHtml = tag[i].outerHTML || tag[i].textContent;
-                    if (!/^(?:P|TABLE|H[1-6]|DIV)$/i.test(tag[i].tagName)) {
-                        innerHTML += "<P>" + baseHtml + "</p>";
-                    } else {
-                        innerHTML += baseHtml;
-                    }
-                }
-
-                this.contentWindow.document.body.innerHTML = innerHTML;
+                this.contentWindow.document.body.innerHTML = '' + element.value + '';
             } else {
-                this.contentWindow.document.body.innerHTML = "<p>&#65279</p>";
+                //this.contentWindow.document.body.innerHTML = '<p>&#65279</p>';
             }
         });
 
@@ -2387,14 +2358,14 @@ SUNEDITOR.defaultLang = {
             throw Error('[SUNEDITOR.create.fail] The ID of the suneditor you are trying to create already exists (ID:"' + cons.constructed._top.id + '")');
         }
 
-        element.style.display = "none";
-
         /** Create to sibling node */
         if (typeof element.nextElementSibling === 'object') {
             element.parentNode.insertBefore(cons.constructed._top, element.nextElementSibling);
         } else {
             element.parentNode.appendChild(cons.constructed._top);
         }
+
+        element.style.display = "none";
 
         return core(_Context(element, cons.constructed, cons.options), SUNEDITOR.dom, SUNEDITOR.func);
     };
