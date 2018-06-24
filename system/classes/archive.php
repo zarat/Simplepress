@@ -13,7 +13,7 @@
 
 class archive extends system {
 
-private $max_per_page = 10;
+private $max_per_page = 3;
 private $displayed_this_page = 0;
 private $last = 0;
 private $item_count = -1;
@@ -85,7 +85,7 @@ public $is_search = false;
                     $query = $where_id;
                     $this->is_archive = false;
                     $this->is_single = true;                        
-                } else if( $this->request() ) {
+                } else if( $this->request() && 'last' != key( $this->request() ) ) {
                     $key = key( $this->request() );
                     $val = $this->request($key);
                     $custom_query= "                    
@@ -123,21 +123,23 @@ public $is_search = false;
              */
             if ( $this->request( 'last' ) ) {
                 $last = " AND item.date < " . $this->request( 'last' );
-                $last = $hooks->apply_filters('archive_init_last', $last);
+                //$last = $hooks->apply_filters('archive_init_last', $last);
                 $query .= $last;
             } 
             /**
              * Nur aktive Items
              */
-            $query .= " AND item.status=1 ";
+            $query .= " AND item.status=1 ";                       
             /**
              * Sortieren nach..
              * String kann mit einem Hook gefiltert werden
              * DATE und SORT_ORDER in array??
              */
+            $query .= " GROUP BY item.id "; 
             $order = " ORDER BY item.date ASC"; 
             $order = $hooks->apply_filters('archive_init_order_by', $order);
-            $query .= $order;                                                                                                           
+            $query .= $order; 
+            echo $query;                                                                                                           
             $this->items = $this->fetch_all_assoc( $this->query( $query ) );         
         } 
         if( $this->items ) {
@@ -256,7 +258,7 @@ public $is_search = false;
          * Nur anzeigen wenn es noch Items gibt.
          */
         if( $this->more() ) {                                                  
-            if( $this->is_archive ) { 
+            if( !$this->is_single ) { 
                 echo "<!-- BeginNoIndex --><div class='sp-content-item'>\n<div class='sp-content-item-head'>";             
                 if( $this->request('search') ) {
                     echo "<a rel='nofollow' href='?search=".$this->request('search')."&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
@@ -268,7 +270,7 @@ public $is_search = false;
                     $key = @key( $this->request() );
                     if( $key == 'last' ) {
                         echo "<a rel='nofollow' href='?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";        
-                    } else if( ! empty( $key ) ) {
+                    } else {
                         $val = $this->request( $key );
                         echo "<a rel='nofollow' href='?$key=$val&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
                     }                    
@@ -278,7 +280,7 @@ public $is_search = false;
                 echo "</div>\n</div>\n<!-- EndNoIndex -->\n";
             }                                           
         }                                                                       
-    } 
+    }                                         
 
 }
 
