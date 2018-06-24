@@ -8,7 +8,7 @@
  *
  * @author Manuel Zarat
  */
-if( !$system->auth() ) { die(); }
+if( !$system->auth() ) header("Location: ../login.php");
 
 echo "<script src=\"./js/admin.js\"></script>";
 echo "<script type=\"text/javascript\" src=\"./js/jquery.js\"></script>\n";
