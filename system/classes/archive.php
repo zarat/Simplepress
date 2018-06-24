@@ -252,30 +252,34 @@ public $is_search = false;
      * 
      * @return html 
      */
-    function pagination() {
-        
+    function pagination() {        
         /**
          * Nur anzeigen wenn es noch Items gibt.
          */
-        if( $this->more() ) {                          
-            echo "<!-- BeginNoIndex --><div class='sp-content-item'>\n<div class='sp-content-item-head'>";            
-            if( $this->is_archive ) {
+        if( $this->more() ) {                                                  
+            if( $this->is_archive ) { 
+                echo "<!-- BeginNoIndex --><div class='sp-content-item'>\n<div class='sp-content-item-head'>";             
                 if( $this->request('search') ) {
                     echo "<a rel='nofollow' href='?search=".$this->request('search')."&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
                 } else if( $this->request('category') ) {
                     echo "<a rel='nofollow' href='?category=" . $this->request('category') . "&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";    
+                } else if( $this->request('tag') ) {                               
+                    echo "<a rel='nofollow' href='?tag=" . $this->request('tag') . "&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";                
+                } else if( $this->request() ) {
+                    $key = @key( $this->request() );
+                    if( $key == 'last' ) {
+                        echo "<a rel='nofollow' href='?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";        
+                    } else if( ! empty( $key ) ) {
+                        $val = $this->request( $key );
+                        echo "<a rel='nofollow' href='?$key=$val&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
+                    }                    
                 } else {
-                    $key = key( $this->request() );
-                    $val = $this->request( $key );
-                    echo "<a rel='nofollow' href='?$key=$val&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
+                    echo "<a rel='nofollow' href='?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
                 }
-            } else {
-                echo "<a rel='nofollow' href='?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
-            }
-            echo "</div>\n</div>\n<!-- EndNoIndex -->\n";                                                               
-        }
-                                           
-    }
+                echo "</div>\n</div>\n<!-- EndNoIndex -->\n";
+            }                                           
+        }                                                                       
+    } 
 
 }
 
