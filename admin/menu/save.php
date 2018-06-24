@@ -6,6 +6,8 @@ $data = json_decode($_POST['data']);
 
 $system = new system();
 
+if( !$system->auth() ) header("Location: ../login.php");
+
 function parseJsonArray($jsonArray, $parentID = 0) {
 
   $return = array();
