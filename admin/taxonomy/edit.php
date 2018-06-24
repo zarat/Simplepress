@@ -5,6 +5,7 @@
  * 
  * @author Manuel Zarat
  */
+if( !$system->auth() ) header("Location: ../login.php");
 
 if( isset($_GET['id']) ) { 
 
