@@ -1,8 +1,12 @@
 <?php
 
 /**
- * Wenn $_GET && $_POST uebergeben wurden, wird es gespeichert und dann angezeigt, sonst nur angezeigt.
+ * Die Datei wird ueber index.php eingebunden deshalb ist $system schon definiert.
+ * Asynchron eingebundene Dateien muessen load.php einbinden und auch $system deklarieren!
+ *
+ * @author Manuel Zarat
  */
+if( !$system->auth() ) die();
 
 if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
