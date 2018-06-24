@@ -1,10 +1,14 @@
 <?php
 
 /**
- * 
- * Zeigt alle Items aus der Datenbank.
- * 
+ * Zeigt alle Items an
+ *
+ * Die Datei wird ueber index.php eingebunden deshalb ist $system schon definiert.
+ * Asynchron eingebundene Dateien muessen load.php einbinden und auch $system deklarieren!
+ *
+ * @author Manuel Zarat
  */
+if( !$system->auth() ) { die(); }
 
 echo "<script src=\"./js/admin.js\"></script>";
 echo "<script type=\"text/javascript\" src=\"./js/jquery.js\"></script>\n";
@@ -19,21 +23,9 @@ echo "<script type=\"text/javascript\">\n
 $(document).ready(function() { $('table#item_list').dataTable( { 'paging':   true, 'ordering': false, 'info': true } ); } );\n
 </script>\n";
 
-/**
- * SP Content Anfang
- */
 echo "<div class=\"sp-content\">\n";
-
-/**
- * Content Item Anfang
- */
 echo "<div class=\"sp-content-item\">\n";
-
 echo "<div class=\"sp-content-item-head\"><a href=\"./item.php?action=add\">Neu</a></div>";
-
-/**
- * Content Item Body Anfang
- */
 echo "<div class=\"sp-content-item-body\">";
 
 echo "<table id=\"item_list\" class=\"display\" cellspacing=\"0\" width=\"100%\">\n
@@ -70,20 +62,8 @@ if(false !== $results) {
 }
 
 echo "</tbody>\n</table>";
-
-/**
- * Content Item Body Ende
- */
 echo "</div>";
-
-/**
- * Content Item Ende
- */
 echo "</div>";
-
-/**
- * SP Content Ende
- */
 echo "</div>";
 
 ?>
