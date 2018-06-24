@@ -54,6 +54,8 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     
 ?>
 
+<script src="../admin/js/tinymce.min.js"></script>
+
 <div class="sp-content">
 
     <div class="sp-content-item">
@@ -81,9 +83,9 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
                 </div> 
                   
                 <p><?php echo $system->_t('item_modify_content'); ?></p>
-                <p><textarea id="editor" name="content" style="width:100% !important;" rows="20"><?php echo $content; ?></textarea></p>
+                <p><textarea name="content" style="width:100% !important;" rows="20"><?php echo $content; ?></textarea></p>
                 
-                <p><a style="cursor:pointer;" onclick="sun_save();">speichern</a></p> 
+                <p><input type="submit" value="speichern"></p> 
                    
             </form>
         
@@ -168,12 +170,18 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 <div style="clear:both;"></div>
 
 <script>
-    var suneditor = SUNEDITOR.create('editor', {});
     document.getElementById("datepicker").datepicker();
-    function sun_save() {
-        suneditor.save();
-        document.getElementById('frm').submit();
-    };
+</script>
+
+<script>
+tinymce.init({
+  selector: 'textarea',
+  //plugins: 'print preview fullpage powerpaste searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount tinymcespellchecker a11ychecker imagetools mediaembed  linkchecker contextmenu colorpicker textpattern help',
+  plugins: 'image link media lists textcolor imagetools code',  
+  toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | image link media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent  | removeformat | code',
+  image_advtab: true,
+  mobile: { theme: 'mobile' }
+ });
 </script>
 
 <?php } ?>
