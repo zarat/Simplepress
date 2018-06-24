@@ -10,7 +10,7 @@ require "../../load.php";
 
 $system = new system();
 
-if( !$system->auth() ) die();
+if( !$system->auth() ) header("Location: ../login.php");
 
 $id = $_GET['id'];
 
