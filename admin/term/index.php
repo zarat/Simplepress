@@ -1,3 +1,4 @@
+<?php if( !$system->auth() ) header("Location: ../login.php"); ?>
 <script src="./js/admin.js"></script>
 <script type="text/javascript" src="./js/jquery.js"></script>
 <script type="text/javascript" src="./js/jquery.dataTables.js"></script>
