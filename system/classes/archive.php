@@ -52,7 +52,6 @@ public $is_search = false;
              * Aufteilen auf Array um dynamischer filtern zu koennen
              */
             if ( $this->request( 'category' ) ) {
-
                 $cat_query = "                    
                         select item.* from item 
                         inner join term_relation tr on tr.object_id=item.id
@@ -64,13 +63,7 @@ public $is_search = false;
                         AND t.id='" . $this->request( 'category' ) . "'
                         ";
                 $query = $cat_query;                
-                $this->is_archive = true;
-                /*
-                $where_category = "select * from item WHERE type IN ('page','post') ";
-                $where_category = $hooks->apply_filters('archive_init_category', $where_category);
-                $where_category .= " AND category=" . $this->request( 'id' );                
-                $where .= $where_category; 
-                */           
+                $this->is_archive = true;         
             /**
              * Wenn gesucht wird..
              * Aufteilen auf ein Array um dynamischer filtern zu koennen??
@@ -85,43 +78,43 @@ public $is_search = false;
              * Wenn ein bestimmter Type, aber NICHT CATEGORY ODER SEARCH abgerufen wird..
              * aufteilen auf ein array?? Derzeit noch unnoetig
              */
-            } else {            
-                if( $this->request( 'type' ) ) {                
+            } else {                           
+                if( $this->request( 'id' ) ) {
+                    $where_id = "select * from item WHERE id=" . $this->request( 'id' );
+                    $where_id = $hooks->apply_filters('archive_init_where_id', $where_id);
+                    $query = $where_id;
+                    $this->is_archive = false;
+                    $this->is_single = true;                        
+                } else if( $this->request() ) {
+                    $key = key( $this->request() );
+                    $val = $this->request($key);
                     $custom_query= "                    
                             select item.* from item 
                             inner join term_relation tr on tr.object_id=item.id
                             inner join term_taxonomy tt on tt.id=tr.taxonomy_id
                             inner join term t on t.id=tr.term_id
                             where tr.taxonomy_id=(
-                            	select id from term_taxonomy where taxonomy='type'
+                            	select id from term_taxonomy where taxonomy='$key'
                             )
-                            AND t.name='" . $this->request( 'type' ) . "'
+                            AND t.name='$val'
                             ";
                     $query = $custom_query;
-                    $this->is_archive = true;                
-                } else {                
-                    if( $this->request( 'id' ) ) {
-                        $where_id = "select * from item WHERE id=" . $this->request( 'id' );
-                        $where_id = $hooks->apply_filters('archive_init_where_id', $where_id);
-                        $query = $where_id;
-                        $this->is_archive = false;
-                        $this->is_single = true;                        
-                    } else {                          
-                        $homepage = "                    
-                            select item.* from item 
-                            inner join term_relation tr on tr.object_id=item.id
-                            inner join term_taxonomy tt on tt.id=tr.taxonomy_id
-                            inner join term t on t.id=tr.term_id
-                            where tr.taxonomy_id=(
-                            	select id from term_taxonomy where taxonomy='type'
-                            )
-                            AND t.name IN ('post')
-                        ";
-                        //$homepage = $hooks->apply_filters('archive_init_homepage', $homepage);
-                        $query = $homepage; 
-                        $this->is_default = true;             
-                    }                    
-                }              
+                    $this->is_archive = true;
+                } else {                          
+                    $homepage = "                    
+                        select item.* from item 
+                        inner join term_relation tr on tr.object_id=item.id
+                        inner join term_taxonomy tt on tt.id=tr.taxonomy_id
+                        inner join term t on t.id=tr.term_id
+                        where tr.taxonomy_id=(
+                        	select id from term_taxonomy where taxonomy='type'
+                        )
+                        AND t.name IN ('post')
+                    ";
+                    //$homepage = $hooks->apply_filters('archive_init_homepage', $homepage);
+                    $query = $homepage; 
+                    $this->is_default = true;             
+                }                                                  
             }          
             /**
              * Wenn geblaettert wird..
@@ -276,7 +269,7 @@ public $is_search = false;
                 echo "<a rel='nofollow' href='?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
             }
             echo "</div>\n</div>\n<!-- EndNoIndex -->\n";                                                               
-        }
+        } 
                                            
     }
 
