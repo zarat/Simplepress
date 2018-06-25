@@ -143,7 +143,6 @@ INSERT INTO `term_taxonomy` (`taxonomy`) VALUES ('type'), ('category');
 CREATE TABLE `term` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
-  `taxonomy_id` int(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -151,7 +150,7 @@ CREATE TABLE `term` (
 -- Daten für Tabelle `term`
 --
 
-INSERT INTO `term` (`name`,`taxonomy_id`) VALUES ('page', 1), ('post', 1), ('Allgemein', 2);
+INSERT INTO `term` (`name`) VALUES ('page'), ('post'), ('Allgemein');
 
 -- --------------------------------------------------------
 
