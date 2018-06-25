@@ -175,13 +175,36 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
 <script>
 tinymce.init({
-  selector: 'textarea',
-  //plugins: 'print preview fullpage powerpaste searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount tinymcespellchecker a11ychecker imagetools mediaembed  linkchecker contextmenu colorpicker textpattern help',
-  plugins: 'image link media lists textcolor imagetools code',  
-  toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | image link media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent  | removeformat | code',
-  image_advtab: true,
-  mobile: { theme: 'mobile' }
- });
+    selector: 'textarea',
+    plugins: 'image link media lists textcolor imagetools code',  
+    toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | image link media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent  | removeformat | code',
+    image_advtab: true,
+    mobile: { theme: 'mobile' },    
+    relative_urls : false,
+    images_upload_handler: function (blobInfo, success, failure) {
+        var xhr, formData;
+        xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
+        xhr.open('POST', '../admin/upload.php');
+        xhr.onload = function() {
+            var json;
+            if (xhr.status != 200) {
+                failure('HTTP Error: ' + xhr.status);
+                return;
+            }
+            json = JSON.parse(xhr.responseText);
+            if (!json || typeof json.location != 'string') {
+                failure('Invalid JSON: ' + xhr.responseText);
+                return;
+            }
+            success(json.location);
+        };
+        formData = new FormData();
+        formData.append('file', blobInfo.blob(), blobInfo.filename());
+        xhr.send(formData);
+    },   
+    image_list: "../admin/uploads.php"       
+});
 </script>
 
 <?php } ?>
