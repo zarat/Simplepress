@@ -89,8 +89,8 @@ document.getElementById("datepicker").datepicker();
 <script>
 tinymce.init({
     selector: 'textarea',
-    plugins: 'image link media lists textcolor imagetools code fullscreen',  
-    toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | image link media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent  | removeformat | code fullscreen',
+    plugins: 'image link media lists textcolor imagetools code',  
+    toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | image link media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent  | removeformat | code',
     image_advtab: true,
     mobile: { theme: 'mobile' },    
     relative_urls : false,
