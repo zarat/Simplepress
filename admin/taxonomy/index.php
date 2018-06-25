@@ -33,7 +33,7 @@ $(document).ready(function() {
     if( $taxonomies ) {
         foreach( $taxonomies as $taxonomy){      
             echo "\n<tr>";      
-            echo "<td><a href='../admin/taxonomy.php?id=$taxonomy[id]'>$taxonomy[taxonomy]</a> - <a href='../admin/taxonomy.php?action=edit&id=$taxonomy[id]'>edit</a></td>";      
+            echo "<td>$taxonomy[taxonomy] - <a href='../admin/taxonomy.php?action=edit&id=$taxonomy[id]'>edit</a></td>";      
             echo "\n</tr>\n";    
         }
     }
