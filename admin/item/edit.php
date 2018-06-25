@@ -176,8 +176,8 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 <script>
 tinymce.init({
     selector: 'textarea',
-    plugins: 'image link media lists textcolor imagetools code',  
-    toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | image link media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent  | removeformat | code',
+    plugins: 'image link media lists textcolor imagetools code fullscreen',  
+    toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | image link media | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent  | removeformat | code fullscreen',
     image_advtab: true,
     mobile: { theme: 'mobile' },    
     relative_urls : false,
