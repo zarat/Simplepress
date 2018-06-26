@@ -46,24 +46,11 @@ public $is_search = false;
         if( false !== $config ) {            
             $this->items = $this->select( $config );            
         } else {                    
-            $query = ""; 
-            if ( $this->request( 'category' ) ) {
-                $cat_query = "                    
-                        select item.* from item 
-                        inner join term_relation tr on tr.object_id=item.id
-                        inner join term_taxonomy tt on tt.id=tr.taxonomy_id
-                        inner join term t on t.id=tr.term_id
-                        where tr.taxonomy_id=(
-                        	select id from term_taxonomy where taxonomy='category'
-                        )
-                        AND t.id='" . $this->request( 'category' ) . "'
-                        ";
-                $query = $cat_query;                
-                $this->is_archive = true;         
+            $query = "";         
             /**
              * Suche ist eine hierarchische Taxonomie.. Mehr dazu kommt noch 
              */
-            } else if( $this->request( 'search' ) ) {
+            if( $this->request( 'search' ) ) {
                 $where_search = "select * from item WHERE ( title LIKE '%" . htmlentities( $this->request( 'search' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'search' ) ) . "%' ) ";
                 $where_search = $hooks->apply_filters('archive_init_search', $where_search);
                 $query = $where_search;  
