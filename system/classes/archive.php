@@ -70,14 +70,16 @@ public $is_search = false;
                     $key = key( $this->request() );
                     $val = $this->request( $key );
                     $custom_query= "                    
-                            select item.* from item 
-                            inner join term_relation tr on tr.object_id=item.id
-                            inner join term_taxonomy tt on tt.id=tr.taxonomy_id
-                            inner join term t on t.id=tr.term_id
-                            where tr.taxonomy_id=(
-                            	select id from term_taxonomy where taxonomy='$key'
-                            )
-                            AND t.id='$val'
+                        SELECT item.*, 
+                        GROUP_CONCAT( 
+                            ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), 
+                            '_', 
+                            ( tr.term_id ) 
+                        ) AS type
+                        FROM item
+                        JOIN term_relation tr ON tr.object_id=item.id
+                        GROUP BY item.id
+                        HAVING type LIKE ('%$key"."_"."$val%')
                             ";
                     $query = $custom_query;
                     $this->is_archive = true;
