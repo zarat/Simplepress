@@ -48,35 +48,16 @@ public $is_search = false;
         } else {                    
             $query = "";             
             /**
-             * Wenn eine Kategorie abgerufen wird..
-             * Aufteilen auf Array um dynamischer filtern zu koennen
+             * Suche ist eine hierarchische Taxonomie.. Mehr dazu kommt noch 
              */
-            if ( $this->request( 'category' ) ) {
-                $cat_query = "                    
-                        select item.* from item 
-                        inner join term_relation tr on tr.object_id=item.id
-                        inner join term_taxonomy tt on tt.id=tr.taxonomy_id
-                        inner join term t on t.id=tr.term_id
-                        where tr.taxonomy_id=(
-                        	select id from term_taxonomy where taxonomy='category'
-                        )
-                        AND t.id='" . $this->request( 'category' ) . "'
-                        ";
-                $query = $cat_query;                
-                $this->is_archive = true;         
-            /**
-             * Wenn gesucht wird..
-             * Aufteilen auf ein Array um dynamischer filtern zu koennen??
-             */
-            } else if( $this->request( 'search' ) ) {
+            if( $this->request( 'search' ) ) {
                 $where_search = "select * from item WHERE ( title LIKE '%" . htmlentities( $this->request( 'search' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'search' ) ) . "%' ) ";
                 $where_search = $hooks->apply_filters('archive_init_search', $where_search);
                 $query = $where_search;  
                 $this->is_archive = true; 
                 $this->is_search = true;          
             /**
-             * Wenn ein bestimmter Type, aber NICHT CATEGORY ODER SEARCH abgerufen wird..
-             * aufteilen auf ein array?? Derzeit noch unnoetig
+             * Alles andere
              */
             } else {                           
                 if( $this->request( 'id' ) ) {
@@ -87,7 +68,7 @@ public $is_search = false;
                     $this->is_single = true;                        
                 } else if( $this->request() && 'last' != key( $this->request() ) ) {
                     $key = key( $this->request() );
-                    $val = $this->request($key);
+                    $val = $this->request( $key );
                     $custom_query= "                    
                             select item.* from item 
                             inner join term_relation tr on tr.object_id=item.id
@@ -96,7 +77,7 @@ public $is_search = false;
                             where tr.taxonomy_id=(
                             	select id from term_taxonomy where taxonomy='$key'
                             )
-                            AND t.name='$val'
+                            AND t.id='$val'
                             ";
                     $query = $custom_query;
                     $this->is_archive = true;
@@ -118,8 +99,6 @@ public $is_search = false;
             }          
             /**
              * Wenn geblaettert wird..
-             * String kann mit Hook gefiltert werden
-             * DATE und PARAM(last) aufteilen auf ein Array um beides separat zu filtern??
              */
             if ( $this->request( 'last' ) ) {
                 $last = " AND item.date < " . $this->request( 'last' );
@@ -131,19 +110,20 @@ public $is_search = false;
              */
             $query .= " AND item.status=1 ";                       
             /**
-             * Sortieren nach..
-             * String kann mit einem Hook gefiltert werden
-             * DATE und SORT_ORDER in array??
+             * Gruppieren
              */
             $query .= " GROUP BY item.id "; 
+            /**
+             * Sortieren
+             */
             $order = " ORDER BY item.date ASC"; 
             $order = $hooks->apply_filters('archive_init_order_by', $order);
-            $query .= $order;                                                                                                           
-            $this->items = $this->fetch_all_assoc( $this->query( $query ) );         
-        } 
-        if( $this->items ) {
+            $query .= $order;     
+            $this->items = $this->fetch_all_assoc( $this->query( $query ) );             
+        }         
+        if( $this->items ) {        
             $this->item_count = count($this->items);
-        }                                                            
+        }          
     }
 
     /**
