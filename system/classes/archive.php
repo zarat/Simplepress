@@ -114,7 +114,7 @@ public $is_search = false;
             /**
              * Gruppieren
              */
-            $query .= " GROUP BY item.id "; 
+            //$query .= " GROUP BY item.id "; 
             /**
              * Sortieren
              */
