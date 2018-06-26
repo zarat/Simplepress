@@ -96,7 +96,7 @@ input{
             <li><a href="#">Inhalte</a>
                 <ul>
                     <li><a href="./taxonomy.php">Taxonomien</a></li>
-                    <li><a href="./term.php">Terms</a></li>
+                    <li><a href="./term.php">Terme</a></li>
                     <li><a href="./item.php">Items</a></li>
                 
                 </ul>
