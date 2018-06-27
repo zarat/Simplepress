@@ -33,7 +33,7 @@ $(document).ready(function() {
     if( $terms ) {
         foreach( $terms as $term){      
             echo "\n<tr>";      
-            echo "<td id=\"$term[id]\">$term[name] <a href=\"../admin/term.php?action=edit&id=$term[id]\">edit</a> <a href=\"#\" onclick=\"javascript:ajaxget('../admin/term/delete.php', 'term_id=$term[id]', delete_row ) \">delete</a></td>";      
+            echo "<td id=\"$term[id]\">$term[name] <a href=\"../admin/term.php?action=edit&id=$term[id]\">edit</a> <a href=\"#\" onclick=\"javascript:delete_term($term[id])\">delete</a></td>";      
             echo "\n</tr>\n";    
         }
     }
@@ -45,8 +45,12 @@ $(document).ready(function() {
 /**
  * Zeile ausblenden nachdem der Term entfernt wurde
  */
-function delete_row( id ) {
-    document.getElementById( id ).style.display = "none";    
+function delete_term( id ) {
+    confirmed = confirm("Diesen Term wirklich entfernen?");
+	if (confirmed) {
+        ajaxget( '../admin/term/delete.php', 'term_id='+id);
+        document.getElementById( id ).style.display = "none";
+    }    
 }
 </script>       
         
