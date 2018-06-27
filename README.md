@@ -1,4 +1,4 @@
-Branch 0.4 - [Simplepress](https://zarat.ml) ist ein Content management system in PHP mit Datenbankanbindung zum Erstellen von dynamischen Webanwendungen ohne Programmierkenntnisse um auch ungeübten Personen den Einstieg zu erleichtern.
+Branch 0.4 - [Simplepress](https://simplepress.ml) ist ein Content management system in PHP mit Datenbankanbindung zum Erstellen von dynamischen Webanwendungen ohne Programmierkenntnisse um auch ungeübten Personen den Einstieg zu erleichtern.
 
 Features
 --------
