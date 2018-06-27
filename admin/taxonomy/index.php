@@ -33,13 +33,22 @@ $(document).ready(function() {
     if( $taxonomies ) {
         foreach( $taxonomies as $taxonomy){      
             echo "\n<tr>";      
-            echo "<td>$taxonomy[taxonomy] - <a href='../admin/taxonomy.php?action=edit&id=$taxonomy[id]'>edit</a></td>";      
+            echo "<td id=\"$taxonomy[id]\">$taxonomy[taxonomy] - <a href=\"../admin/taxonomy.php?action=edit&id=$taxonomy[id]\">edit</a> <a href=\"#\" onclick=\"javascript:ajaxget('../admin/taxonomy/delete.php', 'taxonomy_id=$taxonomy[id]', delete_row ) \">delete</a></td>";      
             echo "\n</tr>\n";    
         }
     }
     ?>
 </tbody>
-</table>        
+</table> 
+
+<script>
+/**
+ * Zeile ausblenden nachdem die Taxonomie entfernt wurde
+ */
+function delete_row( id ) {
+    document.getElementById( id ).style.display = "none";    
+}
+</script>       
         
 </div>        
 </div>
