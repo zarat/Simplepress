@@ -33,7 +33,7 @@ $(document).ready(function() {
     if( $taxonomies ) {
         foreach( $taxonomies as $taxonomy){      
             echo "\n<tr>";      
-            echo "<td id=\"$taxonomy[id]\">$taxonomy[taxonomy] - <a href=\"../admin/taxonomy.php?action=edit&id=$taxonomy[id]\">edit</a> <a href=\"#\" onclick=\"javascript:ajaxget('../admin/taxonomy/delete.php', 'taxonomy_id=$taxonomy[id]', delete_row ) \">delete</a></td>";      
+            echo "<td id=\"$taxonomy[id]\">$taxonomy[taxonomy] - <a href=\"../admin/taxonomy.php?action=edit&id=$taxonomy[id]\">edit</a> <a href=\"#\" onclick=\"javascript:delete_taxonomy($taxonomy[id])\">delete</a></td>";      
             echo "\n</tr>\n";    
         }
     }
@@ -45,8 +45,12 @@ $(document).ready(function() {
 /**
  * Zeile ausblenden nachdem die Taxonomie entfernt wurde
  */
-function delete_row( id ) {
-    document.getElementById( id ).style.display = "none";    
+function delete_taxonomy( id ) {
+    confirmed = confirm("Diese Taxonomie wirklich entfernen?");
+	if (confirmed) {
+        ajaxget( '../admin/taxonomy/delete.php', 'taxonomy_id='+id);
+        document.getElementById( id ).style.display = "none";
+    }    
 }
 </script>       
         
