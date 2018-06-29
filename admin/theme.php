@@ -39,7 +39,7 @@ $filename = @$_GET['filename'];
  * Wenn kein Dateiname dann theme.php anzeigen
  */
 if( !$filename ) {
-    $filename = realpath(THEME_DIR . $system->settings('site_theme') . DS . "theme.php");
+    $filename = realpath(ABSPATH . 'content' . DS . 'themes' . DS . $system->settings('site_theme') . DS . "theme.php");
 }
  
 $filecontent = file_get_contents($filename);
