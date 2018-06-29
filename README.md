@@ -6,9 +6,9 @@ Features
 
 **Theme Support**: Themes sind Designvorlagen, die den grundsätzlichen Aufbau der Website abbilden. So kann das Aussehen einfach und effektiv geändert werden, ohne am eigentlichen Code herumwerken zu müssen. Mehr dazu bald.
 
-**Hooks**: Hooks sind Einsprungmarken im Code die es erlauben, zu bestimmten Zeitpunkten das Verhalten durch "Aktionen" und "Filter" zu beeinflussen. Es ist eine Art Vorläufer eines geplanten Pluginsystems. Auch dazu bald mehr.
+**Hooks**: Hooks sind Einsprungmarken im Code die es erlauben, zu bestimmten Zeitpunkten das Verhalten durch "Aktionen" und "Filter" zu beeinflussen. 
 
-**Taxonomies & Terms** In Progress
+**Taxonomies & Terms** Taxonomien kategorisieren Inhalte. Sie setzen Items in Relation mit Termen.
 
 In der [Onlinedokumentation](https://dev.simplepress.ml) können Sie sich einen Überblick verschaffen.
 
