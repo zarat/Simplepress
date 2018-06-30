@@ -43,13 +43,9 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     $description = $item['description'];
     $date = date("d.m.Y", $item['date']);
     $content = $item['content'];
-    
-    /** $link = "../?type=$result[type]&id=$id"; */
-    
-    echo "<script type=\"text/javascript\" src=\"../admin/js/suneditor.js\"></script>\n";
+
     echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
-    echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
-    echo "<link rel=\"stylesheet\" href=\"../admin/css/suneditor.css\">\n";                                    
+    echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";                                
     
 ?>
 
