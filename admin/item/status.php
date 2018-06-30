@@ -17,7 +17,9 @@ $status = $_GET['status'];
 $newstatus = ($status==1) ? 0 : 1;
 $response = ($status==1) ? "deaktivieren" : "aktivieren";
     
-$system->query( "update item set status=$status WHERE id=$id" );
+$stmt = $system->db->prepare( "update item set status=? WHERE id=?" );
+$stmt->bind_param( "ii" , $newstatus, $id );
+$stmt->execute();
 
 /**
  * Weil die Datei asynchron aufgerufen wird, wird hier ein Rueckgabewert ausgegeben.
