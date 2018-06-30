@@ -32,9 +32,7 @@ if(!empty($_POST['title'])) {
 	
 } else {
 
-echo "<script type=\"text/javascript\" src=\"../admin/js/suneditor.js\"></script>\n";
 echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
-echo "<link rel=\"stylesheet\" href=\"../admin/css/suneditor.css\">\n";
 echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
 
 ?>
