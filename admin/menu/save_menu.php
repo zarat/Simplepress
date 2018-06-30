@@ -12,12 +12,13 @@ if( !$system->auth() ) header("Location: ../login.php");
 
 if( !empty( $_POST['id'] ) ) {
 
-    $label = $_POST['label'];
-    $link  = $_POST['link'];
-    $id    = $_POST['id'];
+    $arr['type'] = "edit";
+    $arr['label'] = $_POST['label'];
+    $arr['link'] = $_POST['link'];
+    $arr['id'] = $_POST['id'];
     
     $stmt = $system->db->prepare( "update menu set label=?, link=? where id=?" );    
-    $stmt->bind_param( "ssi" , $label, $link, $id );
+    $stmt->bind_param( "ssi" , $arr['label'], $arr['link'], $arr['id'] );
     $stmt->execute();   
 
 } else {
