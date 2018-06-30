@@ -74,7 +74,9 @@ abstract class core {
      */
     final function logout() {    
         $token = $_COOKIE['sp-uid'];        
-        $this->query( "update user set token='' where token='$token'" );        
+        $stmt = $this->db->prepare( "update user set token='' where token=?" );           
+        $stmt->bind_param( "s" , $token );
+        $stmt->execute();          
     }
     
     /**
