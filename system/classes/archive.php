@@ -51,44 +51,58 @@ public $is_search = false;
              * Suche ist eine hierarchische Taxonomie.. Mehr dazu kommt noch 
              */
             if( $this->request( 'search' ) ) {
-                $where_search = "select * from item WHERE ( title LIKE '%" . htmlentities( $this->request( 'search' ) ) . "%' OR content LIKE '%" . htmlentities( $this->request( 'search' ) ) . "%' ) ";
-                $where_search = $hooks->apply_filters('archive_init_search', $where_search);
-                $query = $where_search;  
+
+                $stmt = $this->db->prepare( "select * from item WHERE title LIKE (?) OR content LIKE (?)" );    
+                $s = "%" . htmlentities( $this->request( 'search' ) ) . "%";
+                $stmt->bind_param( "ss", $s, $s ); 
                 $this->is_archive = true; 
-                $this->is_search = true;          
+                $this->is_search = true;
+                         
             /**
              * Alles andere
              */
             } else {                           
                 if( $this->request( 'id' ) ) {
-                    $where_id = "select * from item WHERE id=" . $this->request( 'id' );
-                    $where_id = $hooks->apply_filters('archive_init_where_id', $where_id);
-                    $query = $where_id;
+ 
+                    $stmt = $this->db->prepare( "select * from item WHERE id=?" );    
+                    $s = $this->request( 'id' );
+                    $stmt->bind_param( "i", $s );                    
                     $this->is_archive = false;
-                    $this->is_single = true; 
+                    $this->is_single = true;
+                     
                 } else if( $this->request() && 'last' != key( $this->request() ) ) {
+                
                     $key = key( $this->request() );
                     $val = $this->request( $key );
+                    $numparam = is_numeric( $val );
+                    $param_ = "%" . $key . "_" . $val . "%";                                        
                     $custom_query= "                    
                         SELECT item.*, 
                         GROUP_CONCAT( 
                             ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), 
                             '_',";                     
-                    if( is_numeric( $val ) ) { 
+                    if( $numparam ) { 
                         $custom_query .= "( t.id )"; 
                     } else { 
                         $custom_query .= "( t.name )"; 
-                    }                    
+                    }                                       
                     $custom_query .= ") AS type
                         FROM item
                         JOIN term_relation tr ON tr.object_id=item.id
                         join term t on t.id=tr.term_id
-                        GROUP BY item.id
-                        HAVING type LIKE ('%$key"."_"."$val%')
-                            ";
-                    $query = $custom_query;
+                        GROUP BY item.id";                        
+                    $custom_query .= " HAVING type LIKE (?)";
+
+                    if ( $this->request( 'last' ) ) {
+                        $custom_query .= " AND item.date < " . $this->request( 'last' );
+                    }                    
+                    $custom_query .= " AND item.status=1 ORDER BY item.date ASC";
+                    $stmt = $this->db->prepare( $custom_query );
+                    $stmt->bind_param( "s", $param_ );                    
                     $this->is_archive = true;
-                } else {                          
+                    
+                } else {
+                                          
                     $homepage = "                    
                         select item.* from item 
                         inner join term_relation tr on tr.object_id=item.id
@@ -99,34 +113,28 @@ public $is_search = false;
                         )
                         AND t.name IN ('post')
                     ";
-                    //$homepage = $hooks->apply_filters('archive_init_homepage', $homepage);
-                    $query = $homepage; 
-                    $this->is_default = true;             
-                }                                                  
+                    if ( $this->request( 'last' ) ) {
+                        $homepage .= " AND item.date < " . $this->request( 'last' );
+                    }
+                    $homepage .= " AND item.status=1 ORDER BY item.date ASC";
+                    $stmt = $this->db->prepare( $homepage );     
+                    $this->is_default = true; 
+                                
+                } 
+                                                                 
             }          
-            /**
-             * Wenn geblaettert wird..
-             */
-            if ( $this->request( 'last' ) ) {
-                $last = " AND item.date < " . $this->request( 'last' );
-                //$last = $hooks->apply_filters('archive_init_last', $last);
-                $query .= $last;
-            } 
-            /**
-             * Nur aktive Items
-             */
-            $query .= " AND item.status=1 ";                       
-            /**
-             * Gruppieren
-             */
-            //$query .= " GROUP BY item.id "; 
-            /**
-             * Sortieren
-             */
-            $order = " ORDER BY item.date ASC"; 
-            $order = $hooks->apply_filters('archive_init_order_by', $order);
-            $query .= $order;     
-            $this->items = $this->fetch_all_assoc( $this->query( $query ) );             
+            
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $rows = array(); //echo "<pre>";
+            while ( $row = $result->fetch_assoc() ) {
+
+                $rows[] = $row;
+              
+            }
+
+            $this->items = $rows;              
+                      
         }         
         if( $this->items ) {        
             $this->item_count = count($this->items);
