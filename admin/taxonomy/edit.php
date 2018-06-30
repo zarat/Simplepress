@@ -11,11 +11,10 @@ if( isset($_GET['id']) ) {
 
     $id = $_GET['id'];
     
-    if( isset( $_POST['parent'] ) && isset( $_POST['name'] ) ) {
+    if( isset( $_POST['name'] ) ) {
     
         $name = $_POST['name'];
-        $parent = $_POST['parent'];
-        $system->query( "update term_taxonomy set parent=$parent, taxonomy='$name' where id=$id" );    
+        $system->query( "update term_taxonomy set taxonomy='$name' where id=$id" );    
     
     }
     
