@@ -15,16 +15,17 @@ if(!empty($_POST['title'])) {
     $keywords = !empty( $_POST['keywords'] ) ? htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8') : "";  
     $description = !empty( $_POST['description'] ) ? htmlentities($_POST['description'], ENT_QUOTES, 'utf-8') : "";    
     $content = !empty( $_POST['content'] ) ? htmlentities($_POST['content'], ENT_QUOTES, 'utf-8') : "";
-        
-    $system->query( "insert into item (title, date, keywords, description, content, status) values ('$title', $date, '$keywords', '$description', '$content', 1)" );
+    $status = 0;
     
-    $last = $system->last_insert_id();
+    $stmt = $system->db->prepare( "insert into item (title, date, keywords, description, content, status) values (?,?,?,?,?,?)" );    
+    $stmt->bind_param( "sisssi" , $title, $date, $keywords, $description, $content, $status );
+    $stmt->execute();
 
     echo "<div class=\"sp-content\">\n";
     echo "<div class=\"sp-content-item\">\n";
     echo "<div class=\"sp-content-item-head\">" . $system->_t('item_modify') . "</div>\n";
     echo "<div class=\"sp-content-item-body\">\n";   
-    echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?id=$last'>hier ansehen</a>, <a href='../admin/item.php?action=edit&id=$last'>weiter bearbeiten</a> oder <a href=\"../admin/item.php?action=add\">neu anlegen</a>.";
+    echo "Inhalt wurde gespeichert.";
     echo "</div>\n";
     echo "</div>\n";
     echo "</div>\n";       
