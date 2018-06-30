@@ -30,9 +30,7 @@ foreach($readbleArray as $row){
 
   $i++;
   
-	//$db->query("update menu set parent = '".$row['parentID']."', sort = '".$i."' where id = '".$row['id']."' ");
-  $system->update(array("table" => "menu", "set" => "parent=".$row['parentID'].", sort=".$i." where id=".$row['id']));
+  $system->query ( "update menu set parent=".$row['parentID'].", sort=".$i." where id=".$row['id'] );
 }
-
 
 ?>
