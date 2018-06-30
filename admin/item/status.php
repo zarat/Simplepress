@@ -18,7 +18,7 @@ $newstatus = ($status==1) ? 0 : 1;
 $response = ($status==1) ? "deaktivieren" : "aktivieren";
     
 $stmt = $system->db->prepare( "update item set status=? WHERE id=?" );
-$stmt->bind_param( "ii" , $newstatus, $id );
+$stmt->bind_param( "ii" , $status, $id );
 $stmt->execute();
 
 /**
