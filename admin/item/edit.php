@@ -17,7 +17,9 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     $date = !empty($_POST['date']) ? strtotime( $_POST['date'] ) : time();    
     $content = !empty( $_POST['content'] ) ? htmlentities($_POST['content'], ENT_QUOTES, 'utf-8') : "";
     
-    $system->query( "update item set title='$title', keywords='$keywords', description='$description', content='$content', date=$date WHERE id=$id" );
+    $stmt = $system->db->prepare( "update item set title=?, date=?, keywords=?, description=?, content=? WHERE id=?" );    
+    $stmt->bind_param( "sisssi" , $title, $date, $keywords, $description, $content, $id );
+    $stmt->execute();
 
     echo "<div class=\"sp-content\">\n";
     echo "<div class=\"sp-content-item\">\n";
