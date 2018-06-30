@@ -17,16 +17,22 @@ $id = $_GET['id'];
 /**
  * Das Item
  */
-$system->query( "delete from item where id=$id" );
-
+$delete_item = $system->db->prepare( "delete from item where id=?" );    
+$delete_item->bind_param( "i" , $id );
+$delete_item->execute();
+    
 /**
  * Die Custom fields
  */
-$system->query( "delete from item_meta where meta_item_id=$id" );
+$delete_custom_fields = $system->db->prepare( "delete from item_meta where meta_item_id=?" );    
+$delete_custom_fields->bind_param( "i" , $id );
+$delete_custom_fields->execute();
 
 /**
  * Die Relationen
  */
-$system->query( "delete from term_relation where object_id=$id" );
+$delete_relations = $system->db->prepare( "delete from term_relation where object_id=?" );    
+$delete_relations->bind_param( "i" , $id );
+$delete_relations->execute();
 
 ?>
