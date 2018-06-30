@@ -73,9 +73,13 @@ public $is_search = false;
                         SELECT item.*, 
                         GROUP_CONCAT( 
                             ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), 
-                            '_', 
-                            ( t.id ) -- by name | by id bei taxonomien unterschiedlich 
-                        ) AS type
+                            '_',";                     
+                    if( is_numeric( $val ) ) { 
+                        $custom_query .= "( t.id )"; 
+                    } else { 
+                        $custom_query .= "( t.name )"; 
+                    }                    
+                    $custom_query .= ") AS type
                         FROM item
                         JOIN term_relation tr ON tr.object_id=item.id
                         join term t on t.id=tr.term_id
