@@ -20,12 +20,12 @@ if(!empty($_POST['title'])) {
     $stmt = $system->db->prepare( "insert into item (title, date, keywords, description, content, status) values (?,?,?,?,?,?)" );    
     $stmt->bind_param( "sisssi" , $title, $date, $keywords, $description, $content, $status );
     $stmt->execute();
-
+    $last = $stmt->insert_id;
     echo "<div class=\"sp-content\">\n";
     echo "<div class=\"sp-content-item\">\n";
     echo "<div class=\"sp-content-item-head\">" . $system->_t('item_modify') . "</div>\n";
     echo "<div class=\"sp-content-item-body\">\n";   
-    echo "Inhalt wurde gespeichert.";
+    echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?id=$last'>hier ansehen</a>, <a href='../admin/item.php?action=edit&id=$last'>weiter bearbeiten</a> oder <a href=\"../admin/item.php?action=add\">neu anlegen</a>.";
     echo "</div>\n";
     echo "</div>\n";
     echo "</div>\n";       
