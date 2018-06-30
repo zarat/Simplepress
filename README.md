@@ -1,6 +1,6 @@
 Branch 0.4 - [Simplepress](https://simplepress.ml) ist ein Content management system in PHP mit Datenbankanbindung zum Erstellen von dynamischen Webanwendungen ohne Programmierkenntnisse um auch ungeübten Personen den Einstieg zu erleichtern.
 
-**Aktuell bin ich dabei, alle Datenbankabfragen auf Prepared Statements umzuschreiben, was ich viel zu lange vor mir hergeschoben habe.**
+**Aktuell bin ich dabei, alle Datenbankabfragen auf Prepared Statements umzuschreiben, was ich aus Bequemlichkeit viel zu lange vor mir hergeschoben habe.**
 
 Features
 --------
