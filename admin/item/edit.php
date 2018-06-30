@@ -17,10 +17,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     $date = !empty($_POST['date']) ? strtotime( $_POST['date'] ) : time();    
     $content = !empty( $_POST['content'] ) ? htmlentities($_POST['content'], ENT_QUOTES, 'utf-8') : "";
     
-    $cfg = array("table" => "item","set" => "title='$title',keywords='$keywords', description='$description', content='$content', date=$date WHERE id=$id");
-    $system->update($cfg);
-    
-    $item = $system->single( array( "id" => $id ) );
+    $system->query( "update item set title='$title', keywords='$keywords', description='$description', content='$content', date=$date WHERE id=$id" );
 
     echo "<div class=\"sp-content\">\n";
     echo "<div class=\"sp-content-item\">\n";
