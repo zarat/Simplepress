@@ -56,9 +56,13 @@ abstract class core {
      * 
      * @return int|bool userID|(sucess|error)
      */
-    final function login($uid, $pass) {    
-        $user = $this->fetch_assoc( $this->query( "select * from user where email='$uid' AND password='$pass'" ) );        
-        return !empty( $user['id'] ) ? $user['id'] : false;        
+    final function login($uid, $pass) {         
+        $stmt = $this->db->prepare( "select id,email,password from user where email=? AND password=?" );           
+        $stmt->bind_param( "ss" , $uid, $pass );
+        $stmt->bind_result( $id, $email, $password);
+        $stmt->execute();    
+        $stmt->fetch();        
+        return !empty( $id ) ? $id : false;        
     }
     
     /**
@@ -81,9 +85,13 @@ abstract class core {
      * @return integer|bool UserID|(success|error)
      */
     final function auth() {    
-        $token = @$_COOKIE['sp-uid'];        
-        $user = $token ? $this->fetch_assoc( $this->query( "select * from user where token='$token'" ) ) : false;        
-        return !empty( $user['id'] ) ? $user['id'] : false;       
+        $token = @$_COOKIE['sp-uid'];
+        $stmt = $this->db->prepare( "select id,email,password from user where token=?" );           
+        $stmt->bind_param( "s" , $token );
+        $stmt->bind_result( $id, $email, $password);
+        $stmt->execute();    
+        $stmt->fetch();        
+        return !empty( $id ) ? $id : false;      
     }  
      
     private function sql_escape_string($query) {    
