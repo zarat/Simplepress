@@ -1,6 +1,6 @@
 Simplepress ist ein Content management system in PHP mit Datenbankanbindung zum schnellen Erstellen dynamischer Webanwendungen.
 
-**Demo**: [zarat.ml](http://zarat.ml)
+**Demo**: [zarat.ml](https://zarat.ml)
 
 Features
 ---------
