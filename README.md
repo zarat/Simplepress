@@ -11,7 +11,7 @@ Features
 
 **Taxonomien & Terme** Taxonomien kategorisieren Inhalte und setzen sie in Relation mit Termen.
 
-In der Onlinedokumentation können Sie sich bald einen Überblick verschaffen.
+In der [Onlinedokumentation](http://dev.simplepress.ml) können Sie sich einen Überblick verschaffen.
 
 Installation
 -------------
