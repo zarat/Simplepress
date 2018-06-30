@@ -92,7 +92,9 @@ abstract class core {
          
     final function query($query) {     
         $this->sql_escape_string($query);        
-        return $this->db->query($query);        
+        $result = $this->db->query($query);
+        $this->last_insert_id = $this->db->insert_id;
+        return $result;        
     }
     
     final function fetch($sql) {    
