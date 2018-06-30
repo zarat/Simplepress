@@ -1,4 +1,4 @@
-[Simplepress](https://simplepress.ml) ist ein Content management system in PHP mit Datenbankanbindung zum dchnellen Erstellen dynamischer Webanwendungen.
+[Simplepress](https://simplepress.ml) ist ein Content management system in PHP mit Datenbankanbindung zum schnellen Erstellen dynamischer Webanwendungen.
 
 Features
 ---------
