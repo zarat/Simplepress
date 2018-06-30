@@ -11,7 +11,7 @@ if(!empty($_POST['name'])) {
     /**
      * Neuen Term speichern
      */
-    $id = $system->insert( array( "insert" =>"term (name)", "values" => "('$name')" ) );
+    $system->query( "insert into term (name) values ('$name')" );
 	
 }
 
