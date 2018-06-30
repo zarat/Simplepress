@@ -93,8 +93,7 @@ if( isset( $_POST['formlogin'] ) ) {
     if( $user = $system->login($login,$pass) ) {
     
         $token = md5( $user . time() );
-        $cfg = array( "table" => "user", "set" => "token='$token' where id=" . $user );
-        $system->update( $cfg );
+        $system->query( "update user set token='$token' where id=$user" );
         
         /**
          * Cookie clientseitig setzen wg Zeitzonen Offset
