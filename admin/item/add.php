@@ -16,8 +16,7 @@ if(!empty($_POST['title'])) {
     $description = !empty( $_POST['description'] ) ? htmlentities($_POST['description'], ENT_QUOTES, 'utf-8') : "";    
     $content = !empty( $_POST['content'] ) ? htmlentities($_POST['content'], ENT_QUOTES, 'utf-8') : "";
         
-    $cfg = array("insert"=>"item (title, date, keywords, description, content, status)","values"=>"('$title', $date, '$keywords', '$description', '$content', 1)");
-    $system->insert($cfg);
+    $system->query( "insert into item (title, date, keywords, description, content, status) values ('$title', $date, '$keywords', '$description', '$content', 1)" );
     
     $last = $system->last_insert_id();
 
