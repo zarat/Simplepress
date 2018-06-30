@@ -1,4 +1,4 @@
-[Simplepress](https://simplepress.ml) ist ein Content management system in PHP mit Datenbankanbindung zum schnellen Erstellen dynamischer Webanwendungen.
+[Simplepress](https://zarat.ml) ist ein Content management system in PHP mit Datenbankanbindung zum schnellen Erstellen dynamischer Webanwendungen.
 
 Features
 ---------
@@ -11,7 +11,7 @@ Features
 
 **Taxonomien & Terme** Taxonomien kategorisieren Inhalte und setzen sie in Relation mit Termen.
 
-In der [Onlinedokumentation](https://dev.simplepress.ml) können Sie sich einen Überblick verschaffen.
+In der Onlinedokumentation können Sie sich bald einen Überblick verschaffen.
 
 Installation
 -------------
