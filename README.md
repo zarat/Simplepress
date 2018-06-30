@@ -1,4 +1,4 @@
-[Simplepress](https://zarat.ml) ist ein Content management system in PHP mit Datenbankanbindung zum schnellen Erstellen dynamischer Webanwendungen.
+Simplepress ist ein Content management system in PHP mit Datenbankanbindung zum schnellen Erstellen dynamischer Webanwendungen.
 
 Features
 ---------
