@@ -206,22 +206,6 @@ abstract class core {
         }              
         return ($metadata) ? $metadata : false;        
     }
-
-    /**
-     * Diese haessliche Funktion wird nur noch von der Klasse menu benutzt..
-     *
-     * @deprecated
-     */
-    final function archive1($config) {    
-        extract($config);        
-        $archive = false;        
-        if($items = $this->query("SELECT $select FROM $from WHERE $where")) {        
-            while($item = $this->fetch($items)) {                                   
-                $archive[] = $item;                 
-            }            
-        }
-        return (false !== $archive) ? $archive : false;        
-    }
     
     /**
      * Prueft, welche Ordner in ../content/themes/* enthalten sind.
