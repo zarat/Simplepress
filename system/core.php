@@ -57,8 +57,8 @@ abstract class core {
      * @return int|bool userID|(sucess|error)
      */
     final function login($uid, $pass) {    
-        $user = $this->select( array( "select" => "*", "from" => "user", "where" => "email='$uid' AND password='$pass'") );        
-        return !empty( $user[0]['id'] ) ? $user[0]['id'] : false;        
+        $user = $this->fetch_assoc( $this->query( "select * from user where email='$uid' AND password='$pass'" ) );        
+        return !empty( $user['id'] ) ? $user['id'] : false;        
     }
     
     /**
@@ -70,7 +70,7 @@ abstract class core {
      */
     final function logout() {    
         $token = $_COOKIE['sp-uid'];        
-        $this->update( array( "table" => "user", "set" => "token='' where token='$token'" ) );        
+        $this->query( "update user set token='' where token='$token'" );        
     }
     
     /**
@@ -82,8 +82,8 @@ abstract class core {
      */
     final function auth() {    
         $token = @$_COOKIE['sp-uid'];        
-        $user = $token ? $this->select( array( "select" => "*", "from" => "user", "where" => "token='$token'") ) : false;        
-        return !empty( $user[0]['id'] ) ? $user[0] : false;       
+        $user = $token ? $this->fetch_assoc( $this->query( "select * from user where token='$token'" ) ) : false;        
+        return !empty( $user['id'] ) ? $user['id'] : false;       
     }  
      
     private function sql_escape_string($query) {    
@@ -122,61 +122,6 @@ abstract class core {
     final function last_insert_id() {    
         return $this->last_insert_id;        
     }   
-    
-    /**
-     * Dynamisches Insert zur Bequemlichkeit. Muss weg da.
-     * 
-     * @param array($config) insert values
-     * 
-     * @return integer last_insert_ID
-     */
-    final function insert($config) {    
-        extract($config);       
-        $this->query( "INSERT INTO $insert VALUES $values" );
-        $this->last_insert_id = $this->db->insert_id;
-        return $this->last_insert_id;
-    }
-    
-    /**
-     * Dynamisches Update zur Bequemlichkeit. Muss weg da.
-     * 
-     * @param array($config) table set
-     * 
-     * @return bool 
-     */
-    final function update($config) {
-        extract($config);
-        return $this->query( "UPDATE $table SET $set" );
-    }    
-    
-    /**
-     * Dynamisches Delete zur Bequemlichkeit. Muss weg da.
-     * 
-     * @param array($config) from where
-     * 
-     * @return integer last_insert_ID
-     */
-    final function delete( $config ) {
-        extract( $config );
-        return $this->query( "DELETE FROM $from WHERE $where" );
-    }
-    
-    /**
-     * Dynamisches Select zur Bequemlichkeit. Muss weg da.
-     * 
-     * @param array($config) select from where
-     * 
-     * @return array()|bool result|(success|error) 
-     */
-    final function select($config) {
-        extract($config);
-        $arr = array();
-        $query = $this->query( "SELECT $select FROM $from WHERE $where" );
-        while( $row = $this->fetch_assoc( $query ) ) {
-            $arr[] = $row;
-        }
-        return ( $arr ) ? $arr : false;
-    }
  
     /**
      * Gibt ein assoziatives Array mit Einstellungen aus der Tabelle 'settings' zurück. 
@@ -267,7 +212,7 @@ abstract class core {
      *
      * @deprecated
      */
-    final function archive($config) {    
+    final function archive1($config) {    
         extract($config);        
         $archive = false;        
         if($items = $this->query("SELECT $select FROM $from WHERE $where")) {        
