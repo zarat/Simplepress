@@ -1,3 +1,4 @@
+<?php if( !$system->auth() ) header("Location: ../login.php"); ?>
 <script src="./js/admin.js"></script>
 <script type="text/javascript" src="./js/jquery.js"></script>
 <script type="text/javascript" src="./js/jquery.dataTables.js"></script>
@@ -28,17 +29,30 @@ $(document).ready(function() {
     <tbody>
     <?php
     $term = new term();
-    $terms = $term->get_existing_terms();    
+    $terms = $term->terms();    
     if( $terms ) {
         foreach( $terms as $term){      
             echo "\n<tr>";      
-            echo "<td>$term[name]</td>";      
+            echo "<td id=\"$term[id]\">$term[name] <a href=\"../admin/term.php?action=edit&id=$term[id]\">edit</a> <a href=\"#\" onclick=\"javascript:delete_term($term[id])\">delete</a></td>";      
             echo "\n</tr>\n";    
         }
     }
     ?>
 </tbody>
-</table>        
+</table> 
+
+<script>
+/**
+ * Zeile ausblenden nachdem der Term entfernt wurde
+ */
+function delete_term( id ) {
+    confirmed = confirm("Diesen Term wirklich entfernen?");
+	if (confirmed) {
+        ajaxget( '../admin/term/delete.php', 'term_id='+id);
+        document.getElementById( id ).style.display = "none";
+    }    
+}
+</script>       
         
 </div>        
 </div>

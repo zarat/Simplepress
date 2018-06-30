@@ -3,8 +3,7 @@
 /**
  * Simplepress Term Klasse Beta
  * 
- * Ein Term kann mehreren Taxonomien zugewiesen werden.
- * Er kann also die Taxonomie "category" oder "post_tag" oder etwas anderes sein.
+ * Ein Term wird einer Taxonomie zugewiesen.
  * 
  * @author Manuel Zarat
  */
@@ -13,8 +12,9 @@ class term extends system {
 
     /**
      * Alle Terms die in der Tabelle term existieren
+     * @deprecated die spalte taxonomy_id
      */
-    function get_existing_terms() {
+    function terms() {
         $query = "
             select id, name 
             from term
@@ -22,40 +22,36 @@ class term extends system {
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;    
     }
-    
-    /**
-     * Alle Taxonomien, die einem Term->Name zugewiesen wind
-     * 
-     * Antwort: "Allgemeines" ist der taxonomy(category) zugewiesen
-     * Antwort: "Allgemeines" ist der taxonomy(post_tag) zugewiesen
-     */
-    function get_all_taxonomies_of_term_name( $term_name) {
+
+    function by_taxonomy_id( $taxonomy_id ) {
         $query = "
-            select term_taxonomy.id, term_taxonomy.taxonomy
-            from term_taxonomy
-            inner join term_relation tr on tr.taxonomy_id = term_taxonomy.id 
-            where tr.term_id = ( 
-                select id from term where name = 'Allgemeines'
-            )
+            select term.* from term
+            join term_relation tr on tr.term_id =term.id
+            where tr.taxonomy_id=$taxonomy_id
             ";
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;
     }
-
-    /**
-     * Alle Taxonomien, die einer Term->Id zugewiesen wind
-     * 
-     * Antwort: Term 1 ist der taxonomy(category) zugewiesen
-     * Antwort: Term 1 ist der taxonomy(post_tag) zugewiesen
-     */
-    function get_all_taxonomies_of_term_id( $term_id) {
+    
+    function terms_by_taxonomy_id( $taxonomy_id ) {
         $query = "
             select id, name
             from term
-            where id in (
-            	select term_id from term_relation
-                where taxonomy_id = $taxonomy_id
-            )
+            where taxonomy_id = $taxonomy_id
+            ";
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;
+    }
+    
+    /**
+     * Wird im Widget bei item edit verwendet um die Formularfelder zu selektieren..
+     * @deprecated
+     */
+    function terms_by_item_id( $item_id, $parent_taxonomy ) {
+        $query = "
+            select * from term where id in(
+                select term_id from term_relation where object_id=$item_id and taxonomy_id=$parent_taxonomy
+            )  
             ";
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;

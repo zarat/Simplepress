@@ -39,8 +39,7 @@ private $sublevel = 0;
      * @return html
      */
     protected function items($id=0) {
-        $query = array('select' => '*','from' => 'menu','where' => "menu_id=" . $this->menu_id . " AND parent=$id ORDER BY sort");
-        if($parents = $this->archive($query)) {  
+        if($parents = $this->query( "select * from menu where menu_id=" . $this->menu_id . " AND parent=$id ORDER BY sort" ) ) {  
             if($this->sublevel<1) { 
                 echo "<ul class=\"menu level-$this->sublevel\">\n"; 
             } else { 

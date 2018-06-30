@@ -111,154 +111,21 @@ class system extends core {
     }
     
     /**
-     * Hier wird der primaere Inhalt generiert und als Array($result) an system/theme uebergeben.
-     * Diese Funktion sollte nur ausgeben was es wirklich gibt um dem Theme das filtern abzunehmen. 
-     * 
-     * @return array Der Inhalt
+     * Hier wird der primaere Inhalt generiert. 
      */
     function get_the_content() { 
         
         /**
-         * Views sagen aus, was gerade angezeigt wird. Ein einzelnes Item, ein Archiv oder nichts spezielles.
+         * das Archiv bilden
          */
-        switch( $this->request( 'type' ) ) {   
-             
-            case "post":
-            case "page":            
-                $this->view = "single"; 
-                break;                
-            case "category":
-            case "tag":
-            case "search":            
-                $this->view = "archive"; 
-                break;                
-            default:            
-                $this->view = "default"; 
-                break;                
-        }    
-                     
-        $item = false;
-        $result = false; 
-                                                    
-        switch( $this->view ) {  
-                    
-            case "single": 
-                                               
-                /**
-                 * Entsprechendes Item holen
-                 * Wenn keines vorhanden ist, setze ein Dummyitem und einen error trigger
-                 */
-                $item = $this->single( array( 'id' => $this->request('id'), 'metadata' => true ) );
-                if( !$item ) {                 
-                    $item = array( "title" => "404", "content" => $this->_t( 'no_items_to_display' ) ); 
-                    $result['error'] = "error on single";                                                                               
-                } 
-                
-                /**
-                 * Entweder das Dummy Item oder das echte fuer den header und das theme setzen
-                 */
-                $this->set_current_item($item); 
-                
-                /**
-                 * Den Inhalt Loop bildem
-                 */
-                $archive = new archive();
-                $archive->archive_init(); 
-                
-                /**
-                 * Ergebnisse fuer theme setzen.
-                 */
-                $result['content'] = $archive;               
-                $result['view'] = "single";
-                
-            break;   
-                      
-            case "archive":
-            
-                /**
-                 * Wenn der Parameter search gesetzt ist, dann suchen wir etwas
-                 * Einfach nur das Header Item setzen..
-                 */
-                if( $this->request( 'type' ) == "search" ) {
-                                                                                             
-                    $this->set_current_item( array( "title" => "Suchergebnisse zu: " . $this->request( 'term' ), "content" => "Suchergebnisse zu: " . $this->request( 'term' ) ) );
-                                                                                         
-                } 
-                
-                /**
-                 * Archive sind besonders, sie sollen naemlich andere Items nach bestimmten Eigenschaften gruppieren koennen (siehe Taxonomy)
-                 * Derzeit nur Kategorien..
-                 */
-                if( $this->request( 'type' ) == "category" ) {
-                                                                
-                    $item = $this->single( array( 'id' => $this->request( 'id' ) ) ); 
-                    
-                    if( !$item ) { 
-                    
-                        /**
-                         * Wenn es die Kategorie nicht gibt, ein Dumy fuer den header bilden
-                         */
-                        $this->set_current_item( array( "title" => "404", "description" => $this->_t( 'no_items_to_display' ), "content" => $this->_t( 'no_items_to_display' ) ) ); 
-                        $result['error'] = "error on archive"; 
-                                              
-                    } else {
-                    
-                        /**
-                         * sonst einfach die Kategorie selbst als Header Item setzen. (Meta)
-                         */
-                        $this->set_current_item( $item );
-                        
-                    }   
-                                                                      
-                }
-                
-                /**
-                 * Jetzt das Archiv bilden
-                 */
-                $archive = new archive();                
-                $archive->archive_init();
+        $archive = new archive();                
+        $archive->archive_init();
 
-                if( $archive->items ) {  
-                             
-                    /**
-                     * Wenn Ergebnisse vorhanden sind setze result[content] fuer theme und current_item fuer header
-                     */                                                          
-                    $result['content'] = $archive;
-                                                                              
-                } else { 
-                                  
-                    /**
-                     * Sind keine Ergebnisse vorhanden setze nur! den error trigger
-                     */                            
-                    $result['error'] = "error on archive"; 
-
-                }  
-                                                                                            
-                $result['view'] = "archive"; 
-                                                                                                         
-            break;   
-                                                         
-            default:
-                                                   
-                $archive = new archive();                
-                $archive->archive_init();  
-                                                                                                                                                                           
-                if( !$archive->items ) {  
-                    
-                    $item = array( "title" => "404", "content" => $this->_t( 'no_items_to_display' ) );
-                    $result['content'] = $item;
-                    $result['error'] = "error on default";               
-                    
-                } else {
-                
-                    $result['content'] = $archive;
-                    
-                } 
-                                 
-                $result['view'] = "default";  
-                                
-            break;             
-        } 
+        if( $archive->have_items() ) {                                                        
+            $result['content'] = $archive;                                                                              
+        } else {                          
+            $result['error'] = "error"; 
+        }                                                                                              
                       
         return $result;  
     }

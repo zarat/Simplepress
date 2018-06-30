@@ -58,16 +58,24 @@ class simplepress extends theme {
 }
 
 /**
- * Beispielfilter (zeige nur posts...)
+ * Beispielfilter
+ * Zeige nur Items, die die Taxonomie "type" in Verbindung mit dem Term "page" haben.
  */
 global $hooks;
 function post_filter( $item ) { 
-    $item = " and type='post'";  
+    $item = " and id IN (
+        select object_id from term_relation tr
+        inner join term_taxonomy tt on tt.id = tr.taxonomy_id
+        inner join term on term.id = tr.term_id
+        where tt.taxonomy='type'
+        and term.name='page'
+    )";  
     return $item; 
 }
 /**
- * (...auf der homepage)
+ * und ersetze den Inhalt auf der Homepage damit.
+ *
+ * $hooks->add_filter( 'archive_init_homepage', 'post_filter' );
  */
-$hooks->add_filter( 'archive_init_homepage', 'post_filter' );
 
 ?>

@@ -14,7 +14,7 @@ global $hooks;
 
 abstract class core {               
  
-    private $db = false;     
+    public $db = false;     
     private $last_insert_id = false; 
 
     /**
@@ -56,9 +56,13 @@ abstract class core {
      * 
      * @return int|bool userID|(sucess|error)
      */
-    final function login($uid, $pass) {    
-        $user = $this->select( array( "select" => "*", "from" => "user", "where" => "email='$uid' AND password='$pass'") );        
-        return !empty( $user[0]['id'] ) ? $user[0]['id'] : false;        
+    final function login($uid, $pass) {         
+        $stmt = $this->db->prepare( "select id,email,password from user where email=? AND password=?" );           
+        $stmt->bind_param( "ss" , $uid, $pass );
+        $stmt->bind_result( $id, $email, $password);
+        $stmt->execute();    
+        $stmt->fetch();        
+        return !empty( $id ) ? $id : false;        
     }
     
     /**
@@ -70,7 +74,9 @@ abstract class core {
      */
     final function logout() {    
         $token = $_COOKIE['sp-uid'];        
-        $this->update( array( "table" => "user", "set" => "token='' where token='$token'" ) );        
+        $stmt = $this->db->prepare( "update user set token='' where token=?" );           
+        $stmt->bind_param( "s" , $token );
+        $stmt->execute();          
     }
     
     /**
@@ -81,9 +87,13 @@ abstract class core {
      * @return integer|bool UserID|(success|error)
      */
     final function auth() {    
-        $token = @$_COOKIE['sp-uid'];        
-        $user = $token ? $this->select( array( "select" => "*", "from" => "user", "where" => "token='$token'") ) : false;        
-        return !empty( $user[0]['id'] ) ? $user[0] : false;       
+        $token = @$_COOKIE['sp-uid'];
+        $stmt = $this->db->prepare( "select id,email,password from user where token=?" );           
+        $stmt->bind_param( "s" , $token );
+        $stmt->bind_result( $id, $email, $password);
+        $stmt->execute();    
+        $stmt->fetch();        
+        return !empty( $id ) ? $id : false;      
     }  
      
     private function sql_escape_string($query) {    
@@ -92,7 +102,9 @@ abstract class core {
          
     final function query($query) {     
         $this->sql_escape_string($query);        
-        return $this->db->query($query);        
+        $result = $this->db->query($query);
+        $this->last_insert_id = $this->db->insert_id;
+        return $result;        
     }
     
     final function fetch($sql) {    
@@ -120,61 +132,6 @@ abstract class core {
     final function last_insert_id() {    
         return $this->last_insert_id;        
     }   
-    
-    /**
-     * Dynamisches Insert zur Bequemlichkeit. Muss weg da.
-     * 
-     * @param array($config) insert values
-     * 
-     * @return integer last_insert_ID
-     */
-    final function insert($config) {    
-        extract($config);       
-        $this->query( "INSERT INTO $insert VALUES $values" );
-        $this->last_insert_id = $this->db->insert_id;
-        return $this->last_insert_id;
-    }
-    
-    /**
-     * Dynamisches Update zur Bequemlichkeit. Muss weg da.
-     * 
-     * @param array($config) table set
-     * 
-     * @return bool 
-     */
-    final function update($config) {
-        extract($config);
-        return $this->query( "UPDATE $table SET $set" );
-    }    
-    
-    /**
-     * Dynamisches Delete zur Bequemlichkeit. Muss weg da.
-     * 
-     * @param array($config) from where
-     * 
-     * @return integer last_insert_ID
-     */
-    final function delete( $config ) {
-        extract( $config );
-        return $this->query( "DELETE FROM $from WHERE $where" );
-    }
-    
-    /**
-     * Dynamisches Select zur Bequemlichkeit. Muss weg da.
-     * 
-     * @param array($config) select from where
-     * 
-     * @return array()|bool result|(success|error) 
-     */
-    final function select($config) {
-        extract($config);
-        $arr = array();
-        $query = $this->query( "SELECT $select FROM $from WHERE $where" );
-        while( $row = $this->fetch_assoc( $query ) ) {
-            $arr[] = $row;
-        }
-        return ( $arr ) ? $arr : false;
-    }
  
     /**
      * Gibt ein assoziatives Array mit Einstellungen aus der Tabelle 'settings' zurück. 
@@ -203,10 +160,26 @@ abstract class core {
      * 
      * @return array()|bool item|(success|error)
      */
-    final function single( $config ) { 
-        extract($config);
-        $item = $this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$config[id]" ) ); 
-        if( !$item["id"] ) { return false; };
+    final function single( $config ) {    
+        extract($config);        
+        $item = $this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$config[id]" ) );                
+        if( !$item["id"] ) { return false; };        
+        /**
+         * get all taxonomies of this item
+         */
+        $tax = new taxonomy();
+        $taxonomies = $tax->taxonomies_by_item_id( $item['id'] ); 
+        if($taxonomies) {        
+            foreach( $taxonomies as $taxonomy ) {            
+                $item[ $taxonomy['taxonomy'] ] = array();                
+                $all_terms = $tax->terms_by_taxonomy_id( $taxonomy['id']);                
+                if( $all_terms ) {
+                    foreach( $all_terms as $term ) {                
+                        $item[ $taxonomy['taxonomy'] ] [$term['id']] = $term['name'];                    
+                    }
+                }                
+            }           
+        }        
         if( @$metadata && $metas = $this->single_meta($item['id'])) {
             foreach( $metas as $k => $v ) {
                 $item[$k] = $v;
@@ -243,22 +216,6 @@ abstract class core {
         }              
         return ($metadata) ? $metadata : false;        
     }
-
-    /**
-     * Diese haessliche Funktion wird nur noch von der Klasse menu benutzt..
-     *
-     * @deprecated
-     */
-    final function archive($config) {    
-        extract($config);        
-        $archive = false;        
-        if($items = $this->query("SELECT $select FROM $from WHERE $where")) {        
-            while($item = $this->fetch($items)) {                                   
-                $archive[] = $item;                 
-            }            
-        }
-        return (false !== $archive) ? $archive : false;        
-    }
     
     /**
      * Prueft, welche Ordner in ../content/themes/* enthalten sind.
@@ -294,8 +251,8 @@ abstract class core {
             parse_str($_SERVER['QUERY_STRING'], $parameters);            
             if(false !== $key) {            
                 if(!empty($parameters[$key])) {                       
-                    if($key == 'id') {                    
-                        return (int)$parameters[$key];                        
+                    if( is_numeric( $key ) ) {                    
+                        return (int) $parameters[$key];                        
                     } else {                    
                         return $parameters[$key];                       
                     }                   

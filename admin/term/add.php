@@ -3,15 +3,15 @@
 /**
  * @author Manuel Zarat
  */
+if( !$system->auth() ) header("Location: ../login.php");
 
 if(!empty($_POST['name'])) { 
 
     $name = $_POST['name'];
-    
     /**
      * Neuen Term speichern
      */
-    $id = $system->insert( array( "insert" =>"term (name)", "values" => "('$name')" ) );
+    $system->query( "insert into term (name) values ('$name')" );
 	
 }
 
@@ -31,7 +31,7 @@ if(!empty($_POST['name'])) {
     
         <form id="frm" method="post">
 
-            <p>Term</p>
+            <p>Term Name</p>
             <p><input type="text" name="name"></p>            
             
             <input type="submit" value="speichern">

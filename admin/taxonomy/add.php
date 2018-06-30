@@ -1,22 +1,25 @@
 <?php
 
 /**
+ * Speichert eine Taxonomie in der DB -> term_taxonomy
+ * 
  * @author Manuel Zarat
  */
+if( !$system->auth() ) header("Location: ../login.php");
 
-if(!empty($_POST['name'])) { 
+if( !empty( $_POST['name'] ) ) { 
 
-    $name = $_POST['name'];
-    $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;
     /**
-     * Neue Taxonomie speichern
+     * speichern
      */
+    $name = $_POST['name'];
+    $parent = isset($_POST['parent']) ? $_POST['parent'] : 0;    
     $id = $system->query( "insert into term_taxonomy (taxonomy, parent) values ('$name', $parent)" );
 	
 }
 
 /**
- * Anzeigen
+ * und Anzeigen
  */
 
 ?>
@@ -36,7 +39,7 @@ if(!empty($_POST['name'])) {
             <option value="0" selected="selected">Waehle</option>
             <?php            
             $taxonomy = new taxonomy();
-            foreach( $taxonomy->get_existing_taxonomies() as $taxonomy ) {
+            foreach( $taxonomy->taxonomies() as $taxonomy ) {
                 echo "<option value='" . $taxonomy['id'] . "'>" . $taxonomy['taxonomy'] . "</option>";
             }  
             

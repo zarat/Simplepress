@@ -95,9 +95,11 @@ class theme extends system {
                 echo "</div>\n";
             }                                                           
         } else {                                                                               
-            if( $data['view'] == "archive" ) {                        
+            if( $data['content']->is_archive ) {                        
+                $key = key( $this->request() );
+                $val = $this->request( $key );                       
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive.php";
-                $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $this->request('type') . ".php"; 
+                $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $key . ".php";                
                 $archive = $data['content'];
                 if( is_file( $custom_template ) ) {
                     include $custom_template;   
@@ -115,7 +117,7 @@ class theme extends system {
                     }  
                     $data['content']->pagination();   
                 }   
-            } else if( $data['view'] == "single" ) { 
+            } else if( $data['content']->is_single ) { 
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single.php";
                 $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "single-" . $this->request('type') . ".php";                
                 $archive = $data['content'];
@@ -132,7 +134,7 @@ class theme extends system {
                         echo "<div class='sp-content-item-body'>" . $item['content'] . "</div>\n";
                     echo "</div>\n";                                 
                 }                                                                                     
-            } else if( $data['view'] == "default" ) {                    
+            } else if( $data['content']->is_default ) {                    
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "index.php";
                 $archive = $data['content'];                              
                 if( is_file( $template ) ) {                               
@@ -168,7 +170,7 @@ class theme extends system {
             echo "<div class='sidebar-item'>\n";
                 echo "<div class='sidebar-item-head'>Suche</div>\n";
                 echo "<div class='sidebar-item-box'>\n";
-                    echo "<div class='sidebar-item-box-body'><div class='container'><form><input type='hidden' name='type' value='search'><input type='text' name='term'></form></div></div>\n";
+                    echo "<div class='sidebar-item-box-body'><div class='container'><form><input type='text' name='search'></form></div></div>\n";
                 echo "</div>\n";
             echo "</div>\n";                        
         }

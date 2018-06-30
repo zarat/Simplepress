@@ -19,8 +19,8 @@ echo "<channel>";
 echo "<title>" . $system->settings('site_title') . " > Updates</title>";
 echo "<link>" . $channel_url . "</link>";
 echo "<description>" . html_entity_decode($system->settings('site_description')) . "</description>";
-$cfg = array("select"=>"*","from"=>"item","where"=>"type='post' AND status=1 ORDER BY id DESC");
-$rss = $system->archive($cfg);
+$query = "select * from item where status=1 ORDER BY date DESC";
+$rss = $system->fetch_all_assoc( $system->query( $query ) );
     
 foreach($rss as $row)    {
     
@@ -30,7 +30,7 @@ foreach($rss as $row)    {
     /**
      * Links muesen kodiert werden um im RSS richtig dargestellt zu werden
      */
-    echo "<link>" . htmlspecialchars($item_url . "?type=" . $row['type'] . "&id=" . $row['id']) . "</link>";
+    echo "<link>" . htmlspecialchars($item_url . "?id=" . $row['id']) . "</link>";
     
     /**
      * Inhalt kuerzen, wenn laenger als n Zeichen, Woerter dabei ganz lassen!

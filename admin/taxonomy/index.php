@@ -1,3 +1,4 @@
+<?php if( !$system->auth() ) header("Location: ../login.php"); ?>
 <script src="./js/admin.js"></script>
 <script type="text/javascript" src="./js/jquery.js"></script>
 <script type="text/javascript" src="./js/jquery.dataTables.js"></script>
@@ -28,21 +29,30 @@ $(document).ready(function() {
     <tbody>
     <?php
     $taxonomy = new taxonomy();
-    if( isset( $_GET['id'] ) ) {
-        $taxonomies = $taxonomy->get_all_child_taxonomies_of_taxonomy_id( $_GET['id'] );
-    } else {
-        $taxonomies = $taxonomy->get_existing_top_taxonomies();
-    }
+    $taxonomies = $taxonomy->taxonomies();
     if( $taxonomies ) {
         foreach( $taxonomies as $taxonomy){      
             echo "\n<tr>";      
-            echo "<td><a href='../admin/taxonomy.php?id=$taxonomy[id]'>$taxonomy[taxonomy]</a> - <a href='../admin/taxonomy.php?action=edit&id=$taxonomy[id]'>edit</a></td>";      
+            echo "<td id=\"$taxonomy[id]\">$taxonomy[taxonomy] - <a href=\"../admin/taxonomy.php?action=edit&id=$taxonomy[id]\">edit</a> <a href=\"#\" onclick=\"javascript:delete_taxonomy($taxonomy[id])\">delete</a></td>";      
             echo "\n</tr>\n";    
         }
     }
     ?>
 </tbody>
-</table>        
+</table> 
+
+<script>
+/**
+ * Zeile ausblenden nachdem die Taxonomie entfernt wurde
+ */
+function delete_taxonomy( id ) {
+    confirmed = confirm("Diese Taxonomie wirklich entfernen?");
+	if (confirmed) {
+        ajaxget( '../admin/taxonomy/delete.php', 'taxonomy_id='+id);
+        document.getElementById( id ).style.display = "none";
+    }    
+}
+</script>       
         
 </div>        
 </div>

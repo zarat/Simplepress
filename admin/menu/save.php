@@ -6,6 +6,8 @@ $data = json_decode($_POST['data']);
 
 $system = new system();
 
+if( !$system->auth() ) header("Location: ../login.php");
+
 function parseJsonArray($jsonArray, $parentID = 0) {
 
   $return = array();
@@ -28,9 +30,7 @@ foreach($readbleArray as $row){
 
   $i++;
   
-	//$db->query("update menu set parent = '".$row['parentID']."', sort = '".$i."' where id = '".$row['id']."' ");
-  $system->update(array("table" => "menu", "set" => "parent=".$row['parentID'].", sort=".$i." where id=".$row['id']));
+  $system->query ( "update menu set parent=".$row['parentID'].", sort=".$i." where id=".$row['id'] );
 }
-
 
 ?>

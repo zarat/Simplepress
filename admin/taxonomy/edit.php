@@ -5,12 +5,20 @@
  * 
  * @author Manuel Zarat
  */
+if( !$system->auth() ) header("Location: ../login.php");
 
 if( isset($_GET['id']) ) { 
 
     $id = $_GET['id'];
-    $ret = $system->fetch_all_assoc( $system->query( "select * from term_taxonomy where id=$id" ) );
     
+    if( isset( $_POST['name'] ) ) {
+    
+        $name = $_POST['name'];
+        $system->query( "update term_taxonomy set taxonomy='$name' where id=$id" );    
+    
+    }
+    
+    $ret = $system->fetch_assoc( $system->query( "select * from term_taxonomy where id=$id" ) );
 }
 
 /**
@@ -28,12 +36,11 @@ if( isset($_GET['id']) ) {
     <div class="sp-content-item-body">
     
         <form id="frm" method="post">
-       
-        <?php
-            echo "<pre>";
-            print_r($ret);
-        	echo "</pre>";
-        ?>
+
+            <p>Taxonomy Name</p>
+            <p><input type="text" name="name" value="<?php echo $ret['taxonomy']; ?>"></p>            
+            
+            <input type="submit" value="speichern">
                            
         </form>
     

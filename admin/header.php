@@ -95,9 +95,9 @@ input{
             </li> 
             <li><a href="#">Inhalte</a>
                 <ul>
-                    <li><a href="./item.php?action=list&type=page">Seiten</a></li>
-                    <li><a href="./item.php?action=list&type=post">Artikel</a></li>
-                    <li><a href="./item.php?action=list&type=category">Kategorien</a></li>
+                    <li><a href="./taxonomy.php">Taxonomien</a></li>
+                    <li><a href="./term.php">Terme</a></li>
+                    <li><a href="./item.php">Items</a></li>
                 
                 </ul>
             </li>

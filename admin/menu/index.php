@@ -1,3 +1,7 @@
+<?php 
+$system = new system();
+if( !$system->auth() ) header("Location: ../login.php"); 
+?>
 <link rel="stylesheet" type="text/css" href="../admin/menu/style.css">
 
 <div class ="sp-content">
@@ -23,11 +27,9 @@
         
                     <?php
                     
-                    $system = new system();
-                    
                     $menu_id = isset( $_GET['menu_id'] ) ? $_GET['menu_id'] : 1;
                     
-                    $menu = $system->archive( array( "select" => "*", "from" => 'menu', "where" => "menu_id=$menu_id order by sort") );
+                    $menu = $system->fetch_all_assoc( $system->query( "select * from menu where menu_id=$menu_id order by sort") );
                      
                     $ref = [];
                     $items = [];
