@@ -37,10 +37,9 @@ echo "<table id=\"item_list\" class=\"display\" cellspacing=\"0\" width=\"100%\"
 <tfoot></tfoot>\n    
 <tbody>\n";
 
-$cfg = array("select"=>"*","from"=>"item","where"=>"1=1 ORDER BY id DESC");
-$results = $system->archive($cfg);
 
-if(false !== $results) {
+$results = $system->fetch_all_assoc( $system->query( "select * from item ORDER BY id DESC" ) );
+
     foreach($results as $result){
     
     $status = $result['status'];  
@@ -59,7 +58,6 @@ if(false !== $results) {
     echo "</td>";      
     echo "\n</tr>\n";    
     }
-}
 
 echo "</tbody>\n</table>";
 echo "</div>";
