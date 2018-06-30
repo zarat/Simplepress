@@ -14,7 +14,7 @@ global $hooks;
 
 abstract class core {               
  
-    private $db = false;     
+    public $db = false;     
     private $last_insert_id = false; 
 
     /**
