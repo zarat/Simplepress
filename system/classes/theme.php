@@ -96,8 +96,10 @@ class theme extends system {
             }                                                           
         } else {                                                                               
             if( $data['content']->is_archive ) {                        
+                $key = key( $this->request() );
+                $val = $this->request( $key );                       
                 $template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive.php";
-                $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $this->request('type') . ".php"; 
+                $custom_template = ABSPATH . "content" . DS . "themes" . DS . $this->settings('site_theme') . DS . "archive-" . $key . ".php";                
                 $archive = $data['content'];
                 if( is_file( $custom_template ) ) {
                     include $custom_template;   
