@@ -48,7 +48,8 @@ public $is_search = false;
         } else {                    
             $query = "";         
             /**
-             * Suche ist eine hierarchische Taxonomie.. Mehr dazu kommt noch 
+             * Suche ist besonders
+             * @todo
              */
             if( $this->request( 'search' ) ) {
 
@@ -62,13 +63,16 @@ public $is_search = false;
                 $this->is_archive = true; 
                 $this->is_search = true;
                          
-            /**
-             * Alles andere
-             */
             } else {
-                                       
+                
+                /**
+                 * Wenn eine bestimmte ID gefragt ist, brauchen wir nicht suchen
+                 */
                 if( $this->request( 'id' ) ) {
  
+                    /**
+                     * Das Item (mit Tax-Term Relatrionen) holen
+                     */
                     $stmt = $this->db->prepare( "
                         SELECT item.id, item.title, item.content, item.status, item.date, 
                         GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( SELECT name FROM term WHERE id=tr.term_id ) ) AS type
@@ -79,23 +83,40 @@ public $is_search = false;
                     $stmt->bind_param( "i", $s );                    
                     $this->is_archive = false;
                     $this->is_single = true;
-                     
+                
+                /**
+                 * Wenn ein key im Querystring gesetzt ist ( der aber nicht last ist )?
+                 */
                 } else if( $this->request() && 'last' != key( $this->request() ) ) {
                 
+                    /**
+                     * Taxonomie und Term verbinden
+                     */
                     $key = key( $this->request() );
                     $val = $this->request( $key );
                     $numparam = is_numeric( $val );
                     $param_ = "%" . $key . "_" . $val . "%";                                        
+                    
+                    /**
+                     * den Query bilden
+                     */
                     $custom_query= "                    
                         SELECT item.id, item.title, item.content, item.status, item.date, 
                         GROUP_CONCAT( 
                             ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), 
                             '_',";                     
+                    /**
+                     * Wenn der value ein Integer ist, muss der Term im ResultSet auch als Integer verlinkt sein
+                     * Wenn nicht, dann mit dem Namen
+                     */
                     if( $numparam ) { 
                         $custom_query .= "( t.id )"; 
                     } else { 
                         $custom_query .= "( t.name )"; 
-                    }                                       
+                    }                     
+                    /**
+                     * Das ganze wird in die Spalte type geschrieben
+                     */
                     $custom_query .= ") AS type
                         FROM item
                         JOIN term_relation tr ON tr.object_id=item.id
@@ -113,13 +134,26 @@ public $is_search = false;
                     
                 } else {
                                                           
+                    /**
+                     * Wird kein Querystring uebergeben wird die Homepage angezeigt
+                     * Alle Items die die Taxonomie type haben, egal mit welchem Term.
+                     */
                     $homepage = "                    
                         SELECT item.id, item.title, item.content, item.status, item.date, 
                         GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( SELECT name FROM term WHERE id=tr.term_id ) ) AS type                        
                         FROM item
                         JOIN term_relation tr ON tr.object_id=item.id
+                        join term t on t.id=tr.term_id
                         GROUP BY item.id
                     ";
+
+                    $having_ = "HAVING type LIKE ('%type_%')";
+                    /**
+                     * Die Taxonomie kann man mit einem Hook filtern
+                     */
+                    $having = $hooks->apply_filters( 'archive_init_homepage', $having_ );
+                    $homepage .= $having;
+
                     if ( $this->request( 'last' ) ) {
                         $homepage .= " AND item.date < " . $this->request( 'last' );
                     }
@@ -131,17 +165,16 @@ public $is_search = false;
                                                                  
             }          
             
+            /**
+             * Query ausfuehren
+             */
             $stmt->execute();
             $result = $stmt->get_result();
-            $rows = array(); //echo "<pre>";
+            $items = array(); 
             while ( $row = $result->fetch_assoc() ) {
-
-                $rows[] = $row;
-              
+                $items[] = $row;              
             }
-
-            $this->items = $rows;
-            //print_r( $rows );              
+            $this->items = $items;              
                       
         }         
         if( $this->items ) {        
@@ -150,9 +183,7 @@ public $is_search = false;
     }
 
     /**
-     * Prueft, ob noch weitere Items vorhanden sind die AUF DIESER SEITE angezeigt werden!
-     * 
-     * @return bool true|false
+     * Gibt aus, ob noch Items vorhanden sind die AUF DIESER SEITE angezeigt werden!
      */
     function have_items() {                    
         if( $this->displayed_this_page >= $this->max_per_page ) {                
@@ -165,21 +196,13 @@ public $is_search = false;
     /**
      * Prueft, ob noch weitere Items NACH DEN AUF DIESER SEITE AUSZUGEBENDEN vorhanden sind.
      * Wenn ja wird ein Link zum blaettern angezeigt.
-     * 
-     * @see $this->pagination()
-     * 
-     * @return bool true|false
      */
     function more() {    
         return $this->item_count < 1 ? false : true;        
     }
 
     /**
-     * Gibt das ktuelle Item im Loop zurueck.
-     * 
-     * @param array $config Konfig uebergeben?
-     * 
-     * @return array()|bool Das Item als Array oder false
+     * Gibt das aktuelle Item aus.
      */
     function the_item( $config = false ) {
         
@@ -206,7 +229,8 @@ public $is_search = false;
             /**
              * Erstes vom Stack poppen..
              */
-            $item = array_pop( $this->items );                    
+            $item = array_pop( $this->items );
+                    
             /**
              * Zuletzt angezeigte ID
              */
@@ -214,8 +238,7 @@ public $is_search = false;
             /**
              * Zuletzt angezeigter Timestamp
              */
-            $this->last_timestamp = $item['date']; 
-            $item['link'] = "../".$this->request('type')."/".$item['id'];          
+            $this->last_timestamp = $item['date'];           
             /**
              * Wieviele Items auf dieser Seite schon angezeigt wurden
              */
