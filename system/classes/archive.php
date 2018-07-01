@@ -57,7 +57,7 @@ public $is_search = false;
                         GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( SELECT id FROM term WHERE id=tr.term_id ) ) AS type
                         FROM item
                         INNER JOIN term_relation tr ON tr.object_id=item.id
-                        WHERE item.title LIKE (?) OR item.content LIKE (?)" );    
+                        WHERE item.title LIKE (?) OR item.content LIKE (?) GROUP BY item.id ORDER BY item.date ASC" );    
                 $s = "%" . htmlentities( $this->request( 'search' ) ) . "%";
                 $stmt->bind_param( "ss", $s, $s ); 
                 $this->is_archive = true; 
