@@ -22,14 +22,12 @@ function get_all_fields( $item_id ) {
 
 function add_field( $item_id, $field_key, $field_value ) {
     $system = new system();
-    $config['insert'] = "item_meta (`meta_item_id`, `meta_key`, `meta_value`)";
-    $config['values'] = " ($item_id, '$field_key', '$field_value')";
-    $system->insert( $config );
+    $system->query( "insert into item_meta (`meta_item_id`, `meta_key`, `meta_value`) values ($item_id, '$field_key', '$field_value') " );
 }
 
 function delete_field( $key, $item_id ) {
     $system = new system();
-    $system->delete( array( 'from' => 'item_meta', 'where' => 'meta_id=' . $key ) );
+    $system->query( "delete from item_meta where meta_id=$key and meta_item_id=$item_id" );
     echo $item_id;
 } 
     
@@ -39,8 +37,7 @@ if( isset( $_POST['item_id'] ) ) {
     $customfield_key = @$_POST['field_key'];
     $customfield_value = @$_POST['field_value'];
     $system = new system();
-    $config = array( "insert" => "item_meta (`meta_item_id`, `meta_key`, `meta_value`)", "values" => "($item_id, '$customfield_key', '$customfield_value')");
-    $last_id = $system->insert($config);
+    $last_id = $system->query("insert into item_meta (`meta_item_id`, `meta_key`, `meta_value`) values ($item_id, '$customfield_key', '$customfield_value')");
     echo $item_id;
 
 } elseif( isset($_GET['action']) ) { 
