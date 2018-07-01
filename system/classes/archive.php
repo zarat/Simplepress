@@ -157,7 +157,7 @@ public $is_search = false;
                     if ( $this->request( 'last' ) ) {
                         $homepage .= " AND item.date < " . $this->request( 'last' );
                     }
-                    $homepage .= " ORDER BY item.date ASC";
+                    $homepage .= " AND item.status=1 ORDER BY item.date ASC";
                     $stmt = $this->db->prepare( $homepage );     
                     $this->is_default = true; 
                                 
