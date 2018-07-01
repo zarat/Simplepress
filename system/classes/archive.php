@@ -78,7 +78,7 @@ public $is_search = false;
                         GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( SELECT name FROM term WHERE id=tr.term_id ) ) AS type
                         FROM item
                         INNER JOIN term_relation tr ON tr.object_id=item.id
-                        WHERE item.id=?" );    
+                        WHERE item.id=? AND item.status=1" );    
                     $s = $this->request( 'id' );
                     $stmt->bind_param( "i", $s );                    
                     $this->is_archive = false;
