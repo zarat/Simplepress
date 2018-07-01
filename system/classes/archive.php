@@ -52,7 +52,11 @@ public $is_search = false;
              */
             if( $this->request( 'search' ) ) {
 
-                $stmt = $this->db->prepare( "select * from item WHERE title LIKE (?) OR content LIKE (?)" );    
+                $stmt = $this->db->prepare( "SELECT item.id, item.title, item.content, item.status, item.date, 
+                        GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( SELECT id FROM term WHERE id=tr.term_id ) ) AS type
+                        FROM item
+                        INNER JOIN term_relation tr ON tr.object_id=item.id
+                        WHERE item.title LIKE (?) OR item.content LIKE (?)" );    
                 $s = "%" . htmlentities( $this->request( 'search' ) ) . "%";
                 $stmt->bind_param( "ss", $s, $s ); 
                 $this->is_archive = true; 
@@ -61,10 +65,16 @@ public $is_search = false;
             /**
              * Alles andere
              */
-            } else {                           
+            } else {
+                                       
                 if( $this->request( 'id' ) ) {
  
-                    $stmt = $this->db->prepare( "select * from item WHERE id=?" );    
+                    $stmt = $this->db->prepare( "
+                        SELECT item.id, item.title, item.content, item.status, item.date, 
+                        GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( SELECT name FROM term WHERE id=tr.term_id ) ) AS type
+                        FROM item
+                        INNER JOIN term_relation tr ON tr.object_id=item.id
+                        WHERE item.id=?" );    
                     $s = $this->request( 'id' );
                     $stmt->bind_param( "i", $s );                    
                     $this->is_archive = false;
@@ -77,7 +87,7 @@ public $is_search = false;
                     $numparam = is_numeric( $val );
                     $param_ = "%" . $key . "_" . $val . "%";                                        
                     $custom_query= "                    
-                        SELECT item.*, 
+                        SELECT item.id, item.title, item.content, item.status, item.date, 
                         GROUP_CONCAT( 
                             ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), 
                             '_',";                     
@@ -102,21 +112,18 @@ public $is_search = false;
                     $this->is_archive = true;
                     
                 } else {
-                                          
+                                                          
                     $homepage = "                    
-                        select item.* from item 
-                        inner join term_relation tr on tr.object_id=item.id
-                        inner join term_taxonomy tt on tt.id=tr.taxonomy_id
-                        inner join term t on t.id=tr.term_id
-                        where tr.taxonomy_id=(
-                        	select id from term_taxonomy where taxonomy='type'
-                        )
-                        AND t.name IN ('post')
+                        SELECT item.id, item.title, item.content, item.status, item.date, 
+                        GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( SELECT name FROM term WHERE id=tr.term_id ) ) AS type                        
+                        FROM item
+                        JOIN term_relation tr ON tr.object_id=item.id
+                        GROUP BY item.id
                     ";
                     if ( $this->request( 'last' ) ) {
                         $homepage .= " AND item.date < " . $this->request( 'last' );
                     }
-                    $homepage .= " AND item.status=1 ORDER BY item.date ASC";
+                    $homepage .= " ORDER BY item.date ASC";
                     $stmt = $this->db->prepare( $homepage );     
                     $this->is_default = true; 
                                 
@@ -133,7 +140,8 @@ public $is_search = false;
               
             }
 
-            $this->items = $rows;              
+            $this->items = $rows;
+            //print_r( $rows );              
                       
         }         
         if( $this->items ) {        
