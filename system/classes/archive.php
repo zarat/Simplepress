@@ -172,7 +172,9 @@ public $is_search = false;
             $result = $stmt->get_result();
             $items = array(); 
             while ( $row = $result->fetch_assoc() ) {
-                $items[] = $row;              
+                if( !empty($row['id']) ) {
+                    $items[] = $row;
+                }              
             }
             $this->items = $items;              
                       
