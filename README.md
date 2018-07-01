@@ -1,13 +1,13 @@
-Simplepress ist ein Content management system in PHP mit Datenbankanbindung zum schnellen Erstellen dynamischer Webanwendungen.
+Entstanden ist Simplepress zum schnellen Erstellen von Webtemplates mit Hilfe von PHP und einer Datenbank. Über die Zeit hat es sich mehr und mehr in Richtung CMS entickelt wozu ich es jetzt auch endgültig vorhabe zu machen.
 
 **Demo**: [zarat.ml](https://zarat.ml), [x-stream.ml](http://x-stream.ml)
 
 Features
 ---------
 
-**WYSIWYG** (TinyMCE): Mit dem WYSIWYG ("what you see is what you get") Editor können Sie Inhalte ähnlich einem Textbearbeitungsprogramm online bearbeiten und trotzdem ein klar strukturiertes und schönes HTML erzeugen.
+**TinyMCE** Mit dem WYSIWYG ("what you see is what you get") Editor können Sie Inhalte ähnlich einem Textbearbeitungsprogramm online bearbeiten und trotzdem ein klar strukturiertes und schönes HTML erzeugen.
 
-**Theme Support**: Themes sind Designvorlagen, die den grundsätzlichen Aufbau der Website abbilden. So kann das Aussehen geändert werden, ohne am eigentlichen Code herumwerken zu müssen.
+**Themes**: Themes sind Designvorlagen, die den grundsätzlichen Aufbau der Website abbilden. So kann das Aussehen geändert werden, ohne am eigentlichen Code herumwerken zu müssen.
 
 **Hooks**: Hooks sind Sprungmarken im Code, um das Verhalten durch "Aktionen" und "Filter" zu beeinflussen. 
 
