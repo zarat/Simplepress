@@ -28,8 +28,7 @@ $(document).ready(function() {
     <tfoot></tfoot>
     <tbody>
     <?php
-    $term = new term();
-    $terms = $term->terms();    
+    $terms = $system->terms();    
     if( $terms ) {
         foreach( $terms as $term){      
             echo "\n<tr>";      
