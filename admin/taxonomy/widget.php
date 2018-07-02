@@ -14,7 +14,7 @@ $parent_taxonomy = $_GET['id'];
 
 $item_id = $_POST['item_id'];
 
-$item_terms = $system->terms_by_item_id($item_id, $parent_taxonomy);
+$item_terms = $system->item_terms_by_taxonomy_id($item_id, $parent_taxonomy);
 
 ?>
 
