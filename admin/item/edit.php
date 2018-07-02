@@ -35,7 +35,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     //check ID!!!
     isset($_GET['id']) ? $id = $_GET['id'] : exit();
     
-    $item = $system->single( array( "id" => $id ) );  
+    $item = $system->fetch( $system->query( "select * from item where id=$id " ) );  
     
     $id = $item['id'];    
     $title = $item['title'];
@@ -116,8 +116,8 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
             <p><select onchange="select_taxonomy(this.value);"> 
             <option value="0" selected="selected">Waehle</option>       
             <?php
-            $taxonomy = new taxonomy();
-            $taxonomies = $taxonomy->taxonomies();
+
+            $taxonomies = $system->taxonomies();
             foreach( $taxonomies as $taxonomy) {
             echo "<option value='" . $taxonomy['id'] . "'>" . $taxonomy['taxonomy'] . "</option>";
             }
