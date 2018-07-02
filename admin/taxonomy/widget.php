@@ -10,15 +10,11 @@ $system = new system();
 
 if( !$system->auth() ) header("Location: ../login.php");
 
-$term = new term();
-
 $parent_taxonomy = $_GET['id'];
 
 $item_id = $_POST['item_id'];
 
-$t = new term();
-
-$item_terms = $t->terms_by_item_id($item_id, $parent_taxonomy);
+$item_terms = $system->terms_by_item_id($item_id, $parent_taxonomy);
 
 ?>
 
