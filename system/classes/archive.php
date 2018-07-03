@@ -118,10 +118,12 @@ public $is_search = false;
                 //echo $custom_query;
                 $the_items = array();
                 $result = $this->query( $custom_query ); 
-                while ( $row = $result->fetch_assoc() ) {
-                    if( !empty($row['id']) ) {
-                        $the_items[] = $row;
-                    }              
+                if( $result ) {
+                    while ( $row = $result->fetch_assoc() ) {
+                        if( !empty($row['id']) ) {
+                            $the_items[] = $row;
+                        }              
+                    }
                 }
                 $this->items = $the_items;            
                 $this->item_count = count($this->items);
