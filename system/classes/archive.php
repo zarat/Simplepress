@@ -13,7 +13,7 @@
 
 class archive extends system {
 
-private $max_per_page = 2;
+private $max_per_page = 10;
 private $displayed_this_page = 0;
 private $last = 0;
 private $item_count = -1;
@@ -62,6 +62,7 @@ public $is_search = false;
                     $the_items[] = $row;
                 }              
             } 
+            $this->items = $the_items;
             $this->item_count = count($this->items);
             $this->is_archive = true; 
             $this->is_search = true;
