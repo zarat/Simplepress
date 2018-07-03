@@ -13,7 +13,7 @@
 
 class archive extends system {
 
-private $max_per_page = 10;
+private $max_per_page = 2;
 private $displayed_this_page = 0;
 private $last = 0;
 private $item_count = -1;
@@ -53,8 +53,15 @@ public $is_search = false;
             $search_query .= "GROUP BY item.id ";
             $search_query .= "HAVING ( item.title LIKE ('$s') OR item.content LIKE ('$s') ) ";
             if( $this->request('last') ) $search_query .= "AND item.date < " . $this->request('last') . " ";
-            $search_query .= "ORDER BY item.date ASC";                
-            $this->items = $this->fetch_all_assoc( $this->query( $search_query ) );
+            $search_query .= "ORDER BY item.date ASC"; 
+            //echo $search_query;                       
+            $the_items = array();
+            $result = $this->query( $search_query ); 
+            while ( $row = $result->fetch_assoc() ) {
+                if( !empty($row['id']) ) {
+                    $the_items[] = $row;
+                }              
+            } 
             $this->item_count = count($this->items);
             $this->is_archive = true; 
             $this->is_search = true;
@@ -69,7 +76,15 @@ public $is_search = false;
                 $single_query .= "INNER JOIN term_relation tr ON tr.object_id=item.id ";                    
                 $single_query .= "INNER JOIN term t on t.id=tr.term_id ";
                 $single_query .= "WHERE item.status=1 AND item.id=$id ";
-                $this->items = $this->fetch_all_assoc( $this->query( $single_query ) );
+                // echo $single_query;
+                $the_items = array();
+                $result = $this->query( $single_query ); 
+                while ( $row = $result->fetch_assoc() ) {
+                    if( !empty($row['id']) ) {
+                        $the_items[] = $row;
+                    }              
+                }
+                $this->items = $the_items;
                 $this->item_count = count($this->items);
                 $this->is_archive = false;
                 $this->is_single = true;
@@ -90,11 +105,24 @@ public $is_search = false;
                     $p = "%" . $k . "_" . $v . "%"; 
                     $ps[] = " ( type_int LIKE ('$p') OR type_str LIKE ('$p') ) "; 
                 }                                                            
-                /** Klammer = Wichtig!!! */
-                $custom_query .= "HAVING ( " . implode(" AND ", $ps ) . " ) ";
+                /** 
+                 * Klammer = Wichtig!!! 
+                 * AND = alle muessen passen
+                 * OR = irgendeines muss passen
+                 * Default = OR
+                 */
+                $custom_query .= "HAVING ( " . implode(" OR ", $ps ) . " ) ";
                 if( $this->request('last') ) $custom_query .= "AND item.date < " . $this->request('last') . " ";
                 $custom_query .= "ORDER BY item.date ASC "; 
-                $this->items = $this->fetch_all_assoc( $this->query( $custom_query ) );
+                //echo $custom_query;
+                $the_items = array();
+                $result = $this->query( $custom_query ); 
+                while ( $row = $result->fetch_assoc() ) {
+                    if( !empty($row['id']) ) {
+                        $the_items[] = $row;
+                    }              
+                }
+                $this->items = $the_items;            
                 $this->item_count = count($this->items);
                 $this->is_archive = true;
                 return;                
@@ -113,7 +141,15 @@ public $is_search = false;
                     $homepage_query .= "AND item.date < " . $this->request('last') . " ";
                 }
                 $homepage_query .= " ORDER BY item.date ASC";
-                $this->items = $this->fetch_all_assoc( $this->query( $homepage_query ) );
+                //echo $homepage_query;
+                $the_items = array();
+                $result = $this->query( $homepage_query ); 
+                while ( $row = $result->fetch_assoc() ) {
+                    if( !empty($row['id']) ) {
+                        $the_items[] = $row;
+                    }              
+                }
+                $this->items = $the_items;
                 $this->item_count = count($this->items);     
                 $this->is_default = true; 
                 return;                
@@ -186,8 +222,7 @@ public $is_search = false;
      * @return html 
      */
     function pagination() {        
-        $url_ = array();       
-        $ps = array();
+        $url_ = $ps = array();
         $url = "?";
         if( $this->request() ) {
             foreach( $this->request() as $k => $v ) { 
