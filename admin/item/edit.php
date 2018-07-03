@@ -47,15 +47,16 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     $description = $item['description'];
 
     $date = date("d.m.Y", $item['date']);
+
     $_hours = date("H", $item['date']);
     $_minutes = date("i", $item['date']);
     
     $content = $item['content'];
     
-echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
-echo "<script type=\"text/javascript\" src=\"../admin/js/timepicker.js\"></script>\n";
-echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
-echo "<link rel=\"stylesheet\" href=\"../admin/css/timepicker.css\">\n";                                   
+    echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
+    echo "<script type=\"text/javascript\" src=\"../admin/js/timepicker.js\"></script>\n";
+    echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
+    echo "<link rel=\"stylesheet\" href=\"../admin/css/timepicker.css\">\n";                                                                  
     
 ?>
 
