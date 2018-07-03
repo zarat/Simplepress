@@ -12,9 +12,13 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
     $id = $_GET['id'];      
     $title = !empty( $_POST['title'] ) ? htmlentities($_POST['title'], ENT_QUOTES, 'utf-8') : "";
+    
+    $_date = !empty($_POST['date']) ? $_POST['date'] : date('d.m.Y');
+    $_time = !empty($_POST['time']) ? $_POST['time'] : date('H:i');
+    $date = strtotime( $_date . " " . $_time );    
+    
     $keywords = !empty( $_POST['keywords'] ) ? htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8') : "";  
-    $description = !empty( $_POST['description'] ) ? htmlentities($_POST['description'], ENT_QUOTES, 'utf-8') : "";
-    $date = !empty($_POST['date']) ? strtotime( $_POST['date'] ) : time();    
+    $description = !empty( $_POST['description'] ) ? htmlentities($_POST['description'], ENT_QUOTES, 'utf-8') : "";    
     $content = !empty( $_POST['content'] ) ? htmlentities($_POST['content'], ENT_QUOTES, 'utf-8') : "";
     
     $stmt = $system->db->prepare( "update item set title=?, date=?, keywords=?, description=?, content=? WHERE id=?" );    
@@ -35,17 +39,24 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     //check ID!!!
     isset($_GET['id']) ? $id = $_GET['id'] : exit();
     
-    $item = $system->single( array( "id" => $id ) );  
+    $item = $system->fetch( $system->query( "select * from item where id=$id " ) );  
     
     $id = $item['id'];    
     $title = $item['title'];
     $keywords = $item['keywords'];
     $description = $item['description'];
-    $date = date("d.m.Y", $item['date']);
-    $content = $item['content'];
 
+    $date = date("d.m.Y", $item['date']);
+
+    $_hours = date("H", $item['date']);
+    $_minutes = date("i", $item['date']);
+    
+    $content = $item['content'];
+    
     echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
-    echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";                                
+    echo "<script type=\"text/javascript\" src=\"../admin/js/timepicker.js\"></script>\n";
+    echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
+    echo "<link rel=\"stylesheet\" href=\"../admin/css/timepicker.css\">\n";                                                                  
     
 ?>
 
@@ -68,6 +79,9 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
                     
                     <p><?php echo $system->_t('item_modify_date'); ?></p>
                     <p><input type="text" name="date" class="datepicker" value="<?php echo $date; ?>" id="date"></p> 
+                    
+                    <p><?php echo $system->_t('item_add_time'); ?></p>
+                    <p><input type="text" name="time" data-toggle="timepicker"></p>
                            
                     <p><?php echo $system->_t('item_modify_keywords'); ?></p>
                     <p><input name="keywords" type="text" value="<?php echo $keywords; ?>" id="keywords"></p> 
@@ -116,8 +130,8 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
             <p><select onchange="select_taxonomy(this.value);"> 
             <option value="0" selected="selected">Waehle</option>       
             <?php
-            $taxonomy = new taxonomy();
-            $taxonomies = $taxonomy->taxonomies();
+
+            $taxonomies = $system->taxonomies();
             foreach( $taxonomies as $taxonomy) {
             echo "<option value='" . $taxonomy['id'] . "'>" . $taxonomy['taxonomy'] . "</option>";
             }
@@ -166,6 +180,16 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
 <script>
     document.getElementById("datepicker").datepicker();
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    timepicker.load({
+    interval: 1,
+    defaultHour: <?php echo $_hours; ?>,
+    defaultMinute: <?php echo $_minutes; ?>
+  });
+});
 </script>
 
 <script>

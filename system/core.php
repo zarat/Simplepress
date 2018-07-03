@@ -264,6 +264,24 @@ abstract class core {
             }                 
         }           
     }
+    
+    function taxonomies() {
+        $query = "select id, taxonomy from term_taxonomy";
+        $result = $this->fetch_all_assoc( $this->query( $query ) );
+        return $result;  
+    }    
+    
+    function terms() {
+        $query = "select id, name from term";
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;    
+    }
+
+    function item_terms_by_taxonomy_id( $item_id, $parent_taxonomy ) {
+        $query = "select * from term where id in ( select term_id from term_relation where object_id=$item_id and taxonomy_id=$parent_taxonomy )";
+        $result = $this->fetch_all_assoc( $this->query( $query ) ); 
+        return $result;
+    }
         
 }
 

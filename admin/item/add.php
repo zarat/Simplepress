@@ -11,7 +11,11 @@ if( !$system->auth() ) header("Location: ../login.php");
 if(!empty($_POST['title'])) { 
 
     $title = !empty( $_POST['title'] ) ? htmlentities($_POST['title'], ENT_QUOTES, 'utf-8') : "";
-    $date = !empty($_POST['date']) ? strtotime( $_POST['date'] ) : time();
+    
+    $_date = !empty($_POST['date']) ? $_POST['date'] : date('d.m.Y');
+    $_time = !empty($_POST['time']) ? $_POST['time'] : date('H:i');
+    $date = strtotime( $_date . " " . $_time );
+    
     $keywords = !empty( $_POST['keywords'] ) ? htmlentities($_POST['keywords'], ENT_QUOTES, 'utf-8') : "";  
     $description = !empty( $_POST['description'] ) ? htmlentities($_POST['description'], ENT_QUOTES, 'utf-8') : "";    
     $content = !empty( $_POST['content'] ) ? htmlentities($_POST['content'], ENT_QUOTES, 'utf-8') : "";
@@ -33,7 +37,9 @@ if(!empty($_POST['title'])) {
 } else {
 
 echo "<script type=\"text/javascript\" src=\"../admin/js/datepicker.js\"></script>\n";
+echo "<script type=\"text/javascript\" src=\"../admin/js/timepicker.js\"></script>\n";
 echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
+echo "<link rel=\"stylesheet\" href=\"../admin/css/timepicker.css\">\n";
 
 ?>
 
@@ -55,7 +61,10 @@ echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
             <div id="more" style="display:none;">
                 
                 <p><?php echo $system->_t('item_add_date'); ?></p>
-                <p><input type="text" name="date" class="datepicker"></p>        
+                <p><input type="text" name="date" class="datepicker"></p>  
+                
+                <p><?php echo $system->_t('item_add_time'); ?></p>
+                <p><input type="text" name="time" data-toggle="timepicker"></p>       
                         
                 <p><?php echo $system->_t('item_add_keywords'); ?></p>
                 <p><input name="keywords" type="text"></p>  
@@ -82,6 +91,15 @@ echo "<link rel=\"stylesheet\" href=\"../admin/css/datepicker.css\">\n";
  
 <script>
 document.getElementById("datepicker").datepicker();  
+</script>
+        
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    timepicker.load({
+    interval: 1,
+    defaultHour: 8
+  });
+});
 </script>
 
 <script>

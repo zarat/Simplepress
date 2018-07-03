@@ -28,8 +28,8 @@ $(document).ready(function() {
     <tfoot></tfoot>
     <tbody>
     <?php
-    $taxonomy = new taxonomy();
-    $taxonomies = $taxonomy->taxonomies();
+
+    $taxonomies = $system->taxonomies();
     if( $taxonomies ) {
         foreach( $taxonomies as $taxonomy){      
             echo "\n<tr>";      
