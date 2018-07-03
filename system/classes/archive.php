@@ -30,9 +30,7 @@ public $is_search = false;
      * @return void
      */
     function archive_init( $config = false ) {          
-        if( !empty( $this->request( 'last' ) ) ) {         
-            $this->last = $this->request( 'last' );            
-        }                
+        if( !empty( $this->request( 'last' ) ) ) { $this->last = $this->request( 'last' ); }                
         $this->fill_items( $config );         
     }
     
@@ -43,148 +41,84 @@ public $is_search = false;
      */
     final function fill_items( $config = false ) {        
         global $hooks;                                   
-        if( false !== $config ) {            
-            $this->items = $this->select( $config );            
-        } else {                    
-            $query = "";         
-            /**
-             * Suche ist besonders
-             * @todo
-             */
-            if( $this->request( 'search' ) ) {
-
-                $stmt = $this->db->prepare( "SELECT item.id, item.title, item.content, item.status, item.date, 
-                        GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( SELECT id FROM term WHERE id=tr.term_id ) ) AS type
-                        FROM item
-                        INNER JOIN term_relation tr ON tr.object_id=item.id
-                        WHERE item.title LIKE (?) OR item.content LIKE (?) GROUP BY item.id ORDER BY item.date ASC" );    
-                $s = "%" . htmlentities( $this->request( 'search' ) ) . "%";
-                $stmt->bind_param( "ss", $s, $s ); 
-                $this->is_archive = true; 
-                $this->is_search = true;
-                         
-            } else {
-                
-                /**
-                 * Wenn eine bestimmte ID gefragt ist, brauchen wir nicht suchen
-                 */
-                if( $this->request( 'id' ) ) {
- 
-                    /**
-                     * Das Item (mit Tax-Term Relatrionen) holen
-                     */
-                    $stmt = $this->db->prepare( "
-                        SELECT item.id, item.title, item.content, item.status, item.date, 
-                        GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( SELECT name FROM term WHERE id=tr.term_id ) ) AS type
-                        FROM item
-                        INNER JOIN term_relation tr ON tr.object_id=item.id
-                        WHERE item.id=? AND item.status=1" );    
-                    $s = $this->request( 'id' );
-                    $stmt->bind_param( "i", $s );                    
-                    $this->is_archive = false;
-                    $this->is_single = true;
-                
-                /**
-                 * Wenn ein key im Querystring gesetzt ist ( der aber nicht last ist )?
-                 */
-                } else if( $this->request() && 'last' != key( $this->request() ) ) {
-                
-                    $custom_query = "SELECT item.id, item.title, item.content, item.status, item.date,"; 
-                    
-                    /** taxonomy_STR */
-                    $custom_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
-                    
-                    /** taxonomy_INT  */
-                    $custom_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
-                    
-                    $custom_query .= "FROM item ";
-                        
-                    $custom_query .= "INNER JOIN term_relation tr ON tr.object_id=item.id ";                    
-                    $custom_query .= "INNER JOIN term t on t.id=tr.term_id ";
- 
-                    $custom_query .= "WHERE item.status=1 ";
-                    $custom_query .= "GROUP BY item.id ";
-
-                    $ps = array();
-                    $stop = array('id','last');
-                    foreach( $this->request() as $k => $v ) { 
-                        if( in_array( $k, $stop ) ) continue;
-                        $p = "%" . $k . "_" . $v . "%"; 
-                        $ps[] = " ( type_int LIKE ('$p') OR type_str LIKE ('$p') ) "; 
-                    }                                        
-                    
-                    /**
-                     * OR muss eines von ... haben
-                     * AND muss alle von ... haben
-                     * TAXONOMIE ?!
-                     */
-                    $custom_query .= "HAVING ( " . implode(" AND ", $ps ) . " ) ";
-                    
-                    if( $this->request('last') ) $custom_query .= "AND item.date < " . $this->request('last') . " ";
-                    
-                    $custom_query .= "ORDER BY item.date ASC ";
-                    
-                    echo $custom_query; 
-                                       
-                    $this->is_archive = true;
-                    $this->items = $this->fetch_all_assoc( $this->query( $custom_query ) );
-                    
-                    if( $this->items ) {        
-                        $this->item_count = count($this->items);
-                    }
-                    
-                    return;
-                    
-                } else {
-                                                          
-                    /**
-                     * Wird kein Querystring uebergeben wird die Homepage angezeigt
-                     * Alle Items die die Taxonomie type haben, egal mit welchem Term.
-                     */
-                    $homepage = "                    
-                        SELECT item.id, item.title, item.content, item.status, item.date, 
-                        GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( SELECT name FROM term WHERE id=tr.term_id ) ) AS type                        
-                        FROM item
-                        JOIN term_relation tr ON tr.object_id=item.id
-                        join term t on t.id=tr.term_id
-                        GROUP BY item.id
-                    ";
-
-                    $having_ = "HAVING type LIKE ('%type_%')";
-                    /**
-                     * Die Taxonomie kann man mit einem Hook filtern
-                     */
-                    $having = $hooks->apply_filters( 'archive_init_homepage', $having_ );
-                    $homepage .= $having;
-
-                    if ( $this->request( 'last' ) ) {
-                        $homepage .= " AND item.date < " . $this->request( 'last' );
-                    }
-                    $homepage .= " AND item.status=1 ORDER BY item.date ASC";
-                    $stmt = $this->db->prepare( $homepage );     
-                    $this->is_default = true; 
-                                
-                } 
-                                                                 
-            }          
-            
-            /**
-             * Query ausfuehren
-             */
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $items = array(); 
-            while ( $row = $result->fetch_assoc() ) {
-                if( !empty($row['id']) ) {
-                    $items[] = $row;
-                }              
-            }
-            $this->items = $items;              
-                      
-        }         
-        if( $this->items ) {        
+        if( $this->request( 'search' ) ) {
+            $s = "%" . htmlentities( $this->request( 'search' ) ) . "%";            
+            $search_query = "SELECT item.id, item.title, item.content, item.status, item.date,";                   
+            $search_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
+            $search_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
+            $search_query .= "FROM item ";
+            $search_query .= "INNER JOIN term_relation tr ON tr.object_id=item.id ";                    
+            $search_query .= "INNER JOIN term t on t.id=tr.term_id ";
+            $search_query .= "WHERE item.status=1 ";
+            $search_query .= "GROUP BY item.id ";
+            $search_query .= "HAVING ( item.title LIKE ('$s') OR item.content LIKE ('$s') ) ";
+            if( $this->request('last') ) $search_query .= "AND item.date < " . $this->request('last') . " ";
+            $search_query .= "ORDER BY item.date ASC";                
+            $this->items = $this->fetch_all_assoc( $this->query( $search_query ) );
             $this->item_count = count($this->items);
-        }          
+            $this->is_archive = true; 
+            $this->is_search = true;
+            return;                     
+        } else {
+            if( $this->request( 'id' ) ) {                
+                $id = $this->request( 'id' );
+                $single_query = "SELECT item.id, item.title, item.content, item.status, item.date,"; 
+                $single_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
+                $single_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
+                $single_query .= "FROM item ";
+                $single_query .= "INNER JOIN term_relation tr ON tr.object_id=item.id ";                    
+                $single_query .= "INNER JOIN term t on t.id=tr.term_id ";
+                $single_query .= "WHERE item.status=1 AND item.id=$id ";
+                $this->items = $this->fetch_all_assoc( $this->query( $single_query ) );
+                $this->item_count = count($this->items);
+                $this->is_archive = false;
+                $this->is_single = true;
+                return;
+            } else if( $this->request() && 'last' != key( $this->request() ) ) {            
+                $custom_query = "SELECT item.id, item.title, item.content, item.status, item.date,"; 
+                $custom_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
+                $custom_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
+                $custom_query .= "FROM item ";
+                $custom_query .= "INNER JOIN term_relation tr ON tr.object_id=item.id ";                    
+                $custom_query .= "INNER JOIN term t on t.id=tr.term_id "; 
+                $custom_query .= "WHERE item.status=1 ";
+                $custom_query .= "GROUP BY item.id ";
+                $ps = array();
+                $stop = array('id','last');
+                foreach( $this->request() as $k => $v ) { 
+                    if( in_array( $k, $stop ) ) continue;
+                    $p = "%" . $k . "_" . $v . "%"; 
+                    $ps[] = " ( type_int LIKE ('$p') OR type_str LIKE ('$p') ) "; 
+                }                                                            
+                /** Klammer = Wichtig!!! */
+                $custom_query .= "HAVING ( " . implode(" AND ", $ps ) . " ) ";
+                if( $this->request('last') ) $custom_query .= "AND item.date < " . $this->request('last') . " ";
+                $custom_query .= "ORDER BY item.date ASC "; 
+                $this->items = $this->fetch_all_assoc( $this->query( $custom_query ) );
+                $this->item_count = count($this->items);
+                $this->is_archive = true;
+                return;                
+            } else {                                                      
+                $homepage_query = "SELECT item.id, item.title, item.content, item.status, item.date,"; 
+                $homepage_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
+                $homepage_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
+                $homepage_query .= "FROM item ";
+                $homepage_query .= "INNER JOIN term_relation tr ON tr.object_id=item.id ";                    
+                $homepage_query .= "INNER JOIN term t on t.id=tr.term_id "; 
+                $homepage_query .= "WHERE item.status=1 ";
+                $homepage_query .= "GROUP BY item.id ";
+                /** Klammer = Wichtig! */
+                $homepage_query .= "HAVING ( type_int LIKE ('%type_%') OR type_str LIKE ('%type_%') ) ";
+                if( $this->request('last') ) {
+                    $homepage_query .= "AND item.date < " . $this->request('last') . " ";
+                }
+                $homepage_query .= " ORDER BY item.date ASC";
+                $this->items = $this->fetch_all_assoc( $this->query( $homepage_query ) );
+                $this->item_count = count($this->items);     
+                $this->is_default = true; 
+                return;                
+            }                                                              
+        }                   
     }
 
     /**
@@ -210,43 +144,13 @@ public $is_search = false;
      * Gibt das aktuelle Item aus.
      */
     function the_item( $config = false ) {
-        
-        /**
-         * Default Config
-         */ 
-        $metadata = true;
-        $content_length = false;
-        $html = true;
-        $strip_tags = false;
-        /**
-         * und wenn Parameter uebergeben, dann ueberschreiben.
-         */
-        if( $config ) {
-            extract( $config );
-        }
-        /**
-         * Nur weitermachen wenn noch Items vorhanden sind
-         */
-        if( $this->more() ) {
-        
-        $this->item_count--; 
-                                   
-            /**
-             * Erstes vom Stack poppen..
-             */
+        $metadata = true; $content_length = false; $html = true; $strip_tags = false;
+        if( $config ) { extract( $config ); }
+        if( $this->more() ) {        
+            $this->item_count--; 
             $item = array_pop( $this->items );
-                    
-            /**
-             * Zuletzt angezeigte ID
-             */
-            $this->last = $item['id']; 
-            /**
-             * Zuletzt angezeigter Timestamp
-             */
+            $this->last = $item['date']; 
             $this->last_timestamp = $item['date'];           
-            /**
-             * Wieviele Items auf dieser Seite schon angezeigt wurden
-             */
             $this->displayed_this_page++;            
             if( $metadata ) {
                 $tmp_data = $this->single_meta( $item['id'] );
@@ -257,9 +161,7 @@ public $is_search = false;
                 }
             }
             if( $content_length ) {                        
-                /**
-                 * Woerter und HTML Tags ganz lassen
-                 */
+                /** Woerter und HTML Tags ganz lassen */
                 $tmp = strip_tags( html_entity_decode( $item['content'] ) );
                 if ( strlen( $tmp ) > $content_length ) {
                     $item['content'] = preg_replace("/[^ ]*$/", '', substr( $tmp , 0, $content_length) ) . " ..."; 
@@ -273,7 +175,7 @@ public $is_search = false;
             }           
             return $item;  
         }  
-        return false; 
+        return false;
     }
 
     /**
@@ -284,32 +186,26 @@ public $is_search = false;
      * @return html 
      */
     function pagination() {        
-        /**
-         * Nur anzeigen wenn es noch Items gibt.
-         */
+        $url_ = array();       
+        $ps = array();
+        $url = "?";
+        if( $this->request() ) {
+            foreach( $this->request() as $k => $v ) { 
+                if( $k == 'last' ) continue;
+                $url_[] = "$k=$v"; 
+            }
+            $url .= implode("&", $url_);
+        }       
+        if( $this->last ) {
+            $url .= "&last=" . $this->last;
+        }            
         if( $this->more() ) {                                                  
-            if( !$this->is_single ) { 
-                echo "<!-- BeginNoIndex --><div class='sp-content-item'>\n<div class='sp-content-item-head'>";             
-                if( $this->request('search') ) {
-                    echo "<a rel='nofollow' href='?search=".$this->request('search')."&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
-                } else if( $this->request('category') ) {
-                    echo "<a rel='nofollow' href='?category=" . $this->request('category') . "&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";    
-                } else if( $this->request('tag') ) {                               
-                    echo "<a rel='nofollow' href='?tag=" . $this->request('tag') . "&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";                
-                } else if( $this->request() ) {
-                    $key = @key( $this->request() );
-                    if( $key == 'last' ) {
-                        echo "<a rel='nofollow' href='?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";        
-                    } else {
-                        $val = $this->request( $key );
-                        echo "<a rel='nofollow' href='?$key=$val&last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
-                    }                    
-                } else {
-                    echo "<a rel='nofollow' href='?last=" . $this->last_timestamp . "'>&auml;ltere Beitr&auml;ge</a>";
-                }
-                echo "</div>\n</div>\n<!-- EndNoIndex -->\n";
-            }                                           
-        }                                                                       
+            echo "<!-- BeginNoIndex --><div class='sp-content-item'>\n<div class='sp-content-item-head'>";
+            if( !$this->is_single ) {
+                echo "<a rel='nofollow' href='$url'>&auml;ltere Beitr&auml;ge</a>";
+            }
+            echo "</div>\n</div>\n<!-- EndNoIndex -->\n";
+        }                                                              
     }                                         
 
 }
