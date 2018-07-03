@@ -137,7 +137,7 @@ public $is_search = false;
                 $homepage_query .= "WHERE item.status=1 ";
                 $homepage_query .= "GROUP BY item.id ";
                 /** Klammer = Wichtig! */
-                $homepage_query .= "HAVING ( type_int LIKE ('%type_%') OR type_str LIKE ('%type_%') ) ";
+                $homepage_query .= "HAVING ( type_int LIKE ('%type_post%') OR type_str LIKE ('%type_post%') ) ";
                 if( $this->request('last') ) {
                     $homepage_query .= "AND item.date < " . $this->request('last') . " ";
                 }
