@@ -107,12 +107,9 @@ public $is_search = false;
                     $ps[] = " ( type_int LIKE ('$p') OR type_str LIKE ('$p') ) "; 
                 }                                                            
                 /** 
-                 * Klammer = Wichtig!!! 
-                 * AND = alle muessen passen
-                 * OR = irgendeines muss passen
-                 * Default = OR
+                 * AND = alle muessen passen, OR = irgendeines muss passen 
                  */
-                $custom_query .= "HAVING ( " . implode(" OR ", $ps ) . " ) ";
+                $custom_query .= "HAVING ( " . implode(" AND ", $ps ) . " ) ";
                 if( $this->request('last') ) $custom_query .= "AND item.date < " . $this->request('last') . " ";
                 $custom_query .= "ORDER BY item.date ASC "; 
                 //echo $custom_query;
