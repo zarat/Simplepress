@@ -38,8 +38,7 @@ if( !empty( $_POST['name'] ) ) {
             <select name="parent">
             <option value="0" selected="selected">Waehle</option>
             <?php            
-            $taxonomy = new taxonomy();
-            foreach( $taxonomy->taxonomies() as $taxonomy ) {
+            foreach( $system->taxonomies() as $taxonomy ) {
                 echo "<option value='" . $taxonomy['id'] . "'>" . $taxonomy['taxonomy'] . "</option>";
             }  
             
