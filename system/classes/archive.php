@@ -89,48 +89,51 @@ public $is_search = false;
                  */
                 } else if( $this->request() && 'last' != key( $this->request() ) ) {
                 
-                    /**
-                     * Taxonomie und Term verbinden
-                     */
-                    $key = key( $this->request() );
-                    $val = $this->request( $key );
-                    $numparam = is_numeric( $val );
-                    $param_ = "%" . $key . "_" . $val . "%";                                        
+                    $custom_query = "SELECT item.id, item.title, item.content, item.status, item.date,"; 
+                    
+                    /** taxonomy_STR */
+                    $custom_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
+                    
+                    /** taxonomy_INT  */
+                    $custom_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
+                    
+                    $custom_query .= "FROM item ";
+                        
+                    $custom_query .= "INNER JOIN term_relation tr ON tr.object_id=item.id ";                    
+                    $custom_query .= "INNER JOIN term t on t.id=tr.term_id ";
+ 
+                    $custom_query .= "WHERE item.status=1 ";
+                    $custom_query .= "GROUP BY item.id ";
+
+                    $ps = array();
+                    $stop = array('id','last');
+                    foreach( $this->request() as $k => $v ) { 
+                        if( in_array( $k, $stop ) ) continue;
+                        $p = "%" . $k . "_" . $v . "%"; 
+                        $ps[] = " ( type_int LIKE ('$p') OR type_str LIKE ('$p') ) "; 
+                    }                                        
                     
                     /**
-                     * den Query bilden
+                     * OR muss eines von ... haben
+                     * AND muss alle von ... haben
+                     * TAXONOMIE ?!
                      */
-                    $custom_query= "                    
-                        SELECT item.id, item.title, item.content, item.status, item.date, 
-                        GROUP_CONCAT( 
-                            ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), 
-                            '_',";                     
-                    /**
-                     * Wenn der value ein Integer ist, muss der Term im ResultSet auch als Integer verlinkt sein
-                     * Wenn nicht, dann mit dem Namen
-                     */
-                    if( $numparam ) { 
-                        $custom_query .= "( t.id )"; 
-                    } else { 
-                        $custom_query .= "( t.name )"; 
-                    }                     
-                    /**
-                     * Das ganze wird in die Spalte type geschrieben
-                     */
-                    $custom_query .= ") AS type
-                        FROM item
-                        JOIN term_relation tr ON tr.object_id=item.id
-                        join term t on t.id=tr.term_id
-                        GROUP BY item.id";                        
-                    $custom_query .= " HAVING type LIKE (?)";
-
-                    if ( $this->request( 'last' ) ) {
-                        $custom_query .= " AND item.date < " . $this->request( 'last' );
-                    }                    
-                    $custom_query .= " AND item.status=1 ORDER BY item.date ASC";
-                    $stmt = $this->db->prepare( $custom_query );
-                    $stmt->bind_param( "s", $param_ );                    
+                    $custom_query .= "HAVING ( " . implode(" AND ", $ps ) . " ) ";
+                    
+                    if( $this->request('last') ) $custom_query .= "AND item.date < " . $this->request('last') . " ";
+                    
+                    $custom_query .= "ORDER BY item.date ASC ";
+                    
+                    echo $custom_query; 
+                                       
                     $this->is_archive = true;
+                    $this->items = $this->fetch_all_assoc( $this->query( $custom_query ) );
+                    
+                    if( $this->items ) {        
+                        $this->item_count = count($this->items);
+                    }
+                    
+                    return;
                     
                 } else {
                                                           
