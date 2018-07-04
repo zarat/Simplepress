@@ -59,7 +59,7 @@ class system extends core {
      * 
      * @return string uebersetzer_string|fehlerstring
      */
-    final function _t( $str, $arr ) { 
+    final function _t( $str, $arr = false ) { 
         
         /**
          * Erst di Default Sprachdatei, das wir alles haben..
