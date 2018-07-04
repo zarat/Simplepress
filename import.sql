@@ -56,7 +56,7 @@ CREATE TABLE `item` (
 
 INSERT INTO `item` (`id`, `title`, `keywords`, `description`, `content`, `date`, `status`) VALUES
 (1,	'About',	'homepage,blog,simplepress',	'',	'Das ist eine Testseite. Auch Seiten kannst du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten und entfernen.',	1515507779,	1),
-(2,	'Dein neuer Blog', '',	'',	'Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten oder wieder entfernen kannst. Sieh dich dort am besten gleich mal um und dann auf ans bloggen!',	1515107311,	1);
+(2,	'Dein neuer Blog', '',	'',	'Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten oder wieder entfernen kannst.',	1515107311,	1);
 
 -- --------------------------------------------------------
 
