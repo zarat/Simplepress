@@ -28,7 +28,7 @@ while( $archive->have_items() ) {
         }
  
         if( $matches = $this->relation("type_(\w+)", $item) ) {
-            print_r( $matches[1] );
+            if( in_array( 'post', $matches[1] ) ) echo "its a post";
         }
     
     echo "</div>\n";
