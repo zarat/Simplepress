@@ -20,11 +20,11 @@ while( $archive->have_items() ) {
     
         echo "<div class ='sp-content-item-body'>" . $item['content'] . "</div>\n";
     
-        if( $item_tags = $this->terms( 'category', $item['id'] ) ) {
-            foreach( $item_tags as $tag ) { 
-                $tags[] = "<a href='../?category=$tag[id]'>$tag[name]</a>"; 
+        if( $item_categories = $this->terms( 'category', $item['id'] ) ) {
+            foreach( $item_categories as $category ) { 
+                $categories[] = "<a href='../?category=$category[id]'>$category[name]</a>"; 
             }
-            echo "<div class ='sp-content-item-body'>Kategorien: " . implode(', ', $tags) . "</div>";
+            echo "<div class ='sp-content-item-body'>Kategorien: " . implode( ', ', $categories ) . "</div>";
         }
  
         if( $matches = $this->relation("category_(\w+)", $item) ) {
