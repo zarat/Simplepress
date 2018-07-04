@@ -297,6 +297,13 @@ abstract class core {
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;
     }
+ 
+    function relation( $patterns, $item ) {
+        if( preg_match_all( '/'.$patterns.'/', $item['type_str'], $matches) || preg_match_all( '/'.$patterns.'/', $item['type_int'], $matches) ) {
+            return $matches;
+        }
+        return false;    
+    }
         
 }
 
