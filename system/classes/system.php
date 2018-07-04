@@ -75,7 +75,7 @@ class system extends core {
         }  
                   
         return isset($lang[$str]) ? vsprintf( $lang[$str], $arr ) : "Fehler: Sprachdatei fehlerhaft, kann '$str' nicht finden.";  
-                  
+
     }
  
     /**

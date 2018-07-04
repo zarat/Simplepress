@@ -41,14 +41,12 @@ INSERT INTO `menu` (`id`, `menu_id`, `label`, `link`, `parent`, `sort`) VALUES
 DROP TABLE IF EXISTS `item`;
 CREATE TABLE `item` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `type` varchar(10) NOT NULL,
   `title` varchar(150) NOT NULL,
   `keywords` varchar(150) NOT NULL,
   `description` varchar(150) NOT NULL,
   `content` longtext NOT NULL,
   `date` int(15) NOT NULL,
   `status` int(1) NOT NULL,
-  `category` int(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -56,9 +54,9 @@ CREATE TABLE `item` (
 -- Daten für Tabelle `item`
 --
 
-INSERT INTO `item` (`id`, `type`, `title`, `keywords`, `description`, `content`, `date`, `status`, `category`) VALUES
-(1,	'page',	'About',	'homepage,blog,simplepress',	'',	'Das ist eine Testseite. Auch Seiten kannst du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten und entfernen.',	1515507779,	1,	1),
-(2,	'post',	'Dein neuer Blog', '',	'',	'Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten oder wieder entfernen kannst. Sieh dich dort am besten gleich mal um und dann auf ans bloggen!',	1515107311,	1,	1);
+INSERT INTO `item` (`id`, `title`, `keywords`, `description`, `content`, `date`, `status`) VALUES
+(1,	'About',	'homepage,blog,simplepress',	'',	'Das ist eine Testseite. Auch Seiten kannst du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten und entfernen.',	1515507779,	1),
+(2,	'Dein neuer Blog', '',	'',	'Willkommen zu deinem neuen Blog! Das ist ein erster Post, den du im &lt;a href=&quot;../admin&quot;&gt;Adminbereich&lt;/a&gt; bearbeiten oder wieder entfernen kannst. Sieh dich dort am besten gleich mal um und dann auf ans bloggen!',	1515107311,	1);
 
 -- --------------------------------------------------------
 
@@ -124,7 +122,6 @@ CREATE TABLE `user` (
 CREATE TABLE `term_taxonomy` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `taxonomy` varchar(30) NOT NULL DEFAULT '',
-  `parent` int(10) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

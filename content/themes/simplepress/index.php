@@ -8,7 +8,7 @@ echo "<!--BeginNoIndex-->\n";
 
 while( $archive->have_items() ) {
 
-    $item = $archive->the_item( array( "content_length" => 240 ) );
+    $item = $archive->the_item( array( "content_length" => 240, 'strip_tags' => true ) );
     
     echo "<div class='sp-content-item'>\n";
     echo "<div class='sp-content-item-head'><a href='../?id=$item[id]'>" . $item['title'] . "</a></div>\n";

@@ -23,18 +23,9 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     
     $stmt = $system->db->prepare( "update item set title=?, date=?, keywords=?, description=?, content=? WHERE id=?" );    
     $stmt->bind_param( "sisssi" , $title, $date, $keywords, $description, $content, $id );
-    $stmt->execute();
+    $stmt->execute();    	
 
-    echo "<div class=\"sp-content\">\n";
-    echo "<div class=\"sp-content-item\">\n";
-    echo "<div class=\"sp-content-item-head\">" . $system->_t('item_modify') . "</div>\n";
-    echo "<div class=\"sp-content-item-body\">\n";   
-    echo "Dein Inhalt wurde gespeichert. Du kannst ihn <a href='../?id=$id'>hier ansehen</a>, <a href='../admin/item.php?action=edit&id=$id'>weiter bearbeiten</a> oder <a href=\"../admin/item.php?action=add\">neu anlegen</a>.";
-    echo "</div>\n";
-    echo "</div>\n";
-    echo "</div>\n";     	
-
-} else {	
+} 	
 		
     //check ID!!!
     isset($_GET['id']) ? $id = $_GET['id'] : exit();
@@ -66,32 +57,32 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
     <div class="sp-content-item">
     
-        <div class="sp-content-item-head"><?php echo $system->_t('item_modify'); ?></div>
+        <div class="sp-content-item-head"><?php echo $system->_t('item_edit'); ?></div>
         
         <div class="sp-content-item-body">
         
             <form id="frm" method="post">
             
-                <p><?php echo $system->_t('item_modify_title'); ?> <a onclick="toggle('more');" href="#">weitere Optionen</a></p>    
+                <p><?php echo $system->_t('item_edit_title'); ?> <a onclick="toggle('more');" href="#">weitere Optionen</a></p>    
                 <p><input name="title" type="text" value="<?php echo $title; ?>" id="title"></p>  
                   
                 <div id="more" style="display:none;">
                     
-                    <p><?php echo $system->_t('item_modify_date'); ?></p>
+                    <p><?php echo $system->_t('item_edit_date'); ?></p>
                     <p><input type="text" name="date" class="datepicker" value="<?php echo $date; ?>" id="date"></p> 
                     
-                    <p><?php echo $system->_t('item_add_time'); ?></p>
+                    <p><?php echo $system->_t('item_edit_time', array('test') ); ?></p>
                     <p><input type="text" name="time" data-toggle="timepicker"></p>
                            
-                    <p><?php echo $system->_t('item_modify_keywords'); ?></p>
+                    <p><?php echo $system->_t('item_edit_keywords'); ?></p>
                     <p><input name="keywords" type="text" value="<?php echo $keywords; ?>" id="keywords"></p> 
                            
-                    <p><?php echo $system->_t('item_modify_description'); ?></p>
+                    <p><?php echo $system->_t('item_edit_description'); ?></p>
                     <p><input name="description" type="text" value="<?php echo $description; ?>" id="description"></p> 
                       
                 </div> 
                   
-                <p><?php echo $system->_t('item_modify_content'); ?></p>
+                <p><?php echo $system->_t('item_edit_content'); ?></p>
                 <p><textarea name="content" style="width:100% !important;" rows="20"><?php echo $content; ?></textarea></p>
                 
                 <p><input type="submit" value="speichern"></p> 
@@ -226,5 +217,3 @@ tinymce.init({
     image_list: "../admin/uploads.php"       
 });
 </script>
-
-<?php } ?>

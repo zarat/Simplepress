@@ -271,8 +271,23 @@ abstract class core {
         return $result;  
     }    
     
-    function terms() {
-        $query = "select id, name from term";
+    function terms( $taxonomy = false, $item_id = false ) {
+        $query = "select term.id, term.name from term ";
+        if( $taxonomy ) {
+            $query .= "
+                join term_relation tr on tr.term_id=term.id 
+                where tr.taxonomy_id = ( select id from term_taxonomy where taxonomy='$taxonomy' ) 
+                and tr.term_id = term.id
+                ";
+            if( $item_id ) {
+                $query .= "
+                and tr.object_id=$item_id
+                ";            
+            }    
+            $query .= "
+                group by term.id
+                ";
+        } 
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;    
     }
@@ -281,6 +296,13 @@ abstract class core {
         $query = "select * from term where id in ( select term_id from term_relation where object_id=$item_id and taxonomy_id=$parent_taxonomy )";
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;
+    }
+ 
+    function relation( $patterns, $item ) {
+        if( preg_match_all( '/'.$patterns.'/', $item['type_str'], $matches) || preg_match_all( '/'.$patterns.'/', $item['type_int'], $matches) ) {
+            return $matches;
+        }
+        return false;    
     }
         
 }

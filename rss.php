@@ -19,7 +19,16 @@ echo "<channel>";
 echo "<title>" . $system->settings('site_title') . " > Updates</title>";
 echo "<link>" . $channel_url . "</link>";
 echo "<description>" . html_entity_decode($system->settings('site_description')) . "</description>";
-$query = "select * from item where status=1 ORDER BY date DESC";
+$query = "SELECT item.id, item.title, item.content, item.status, item.date, 
+GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, 
+GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str
+FROM item 
+INNER JOIN term_relation tr ON tr.object_id=item.id 
+INNER JOIN term t on t.id=tr.term_id
+WHERE item.status=1
+GROUP BY item.id 
+HAVING type_str LIKE ('%type_post%')
+ORDER BY item.date ASC";
 $rss = $system->fetch_all_assoc( $system->query( $query ) );
     
 foreach($rss as $row)    {
