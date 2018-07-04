@@ -25,7 +25,11 @@ while( $archive->have_items() ) {
                 $tags[] = "<a href='../?tag=$tag[id]'>$tag[name]</a>"; 
             }
             echo "<div class ='sp-content-item-body'>Tags: " . implode(', ', $tags) . "</div>";
-        } 
+        }
+ 
+        if( $matches = $this->relation("type_(\w+)", $item) ) {
+            print_r( $matches[1] );
+        }
     
     echo "</div>\n";
     
