@@ -32,7 +32,7 @@ if( !empty( $_POST['name'] ) ) {
     <div class="sp-content-item-body">
     
         <form id="frm" method="post">
-    
+
             <p>Name</p>
             <p><input type="text" name="name"></p>            
             
