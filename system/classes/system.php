@@ -59,7 +59,7 @@ class system extends core {
      * 
      * @return string uebersetzer_string|fehlerstring
      */
-    final function _t($str) { 
+    final function _t( $str, $arr = false ) { 
         
         /**
          * Erst di Default Sprachdatei, das wir alles haben..
@@ -74,7 +74,7 @@ class system extends core {
                            
         }  
                   
-        return isset($lang[$str]) ? $lang[$str] : "Fehler: Sprachdatei fehlerhaft, kann '$str' nicht finden.";  
+        return isset($lang[$str]) ? vsprintf( $lang[$str], $arr ) : "Fehler: Sprachdatei fehlerhaft, kann '$str' nicht finden.";  
                   
     }
  
