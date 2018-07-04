@@ -30,10 +30,10 @@ $lang["menu_manager_description"] = "Edit the main navigation";
 /**
  * Item Add
  */
-$lang['item_add'] = "Create Item";
+$lang['item_add'] = "Add Item";
 $lang['item_add_title'] = "Title";
 $lang['item_add_date'] = "Date";
-$lang['item_add_category'] = "Category"; 
+$lang['item_add_time'] = "Time"; 
 $lang['item_add_keywords'] = "Metatags";
 $lang['item_add_description'] = "Metadescription";
 $lang['item_add_content'] = "Content";
@@ -41,13 +41,13 @@ $lang['item_add_content'] = "Content";
 /**
  * Item Modify 
  */
-$lang['item_modify'] = "Edit Item";
-$lang['item_modify_title'] = "Title";
-$lang['item_modify_date'] = "Date";
-$lang['item_modify_category'] = "Category"; 
-$lang['item_modify_keywords'] = "Metatags";
-$lang['item_modify_description'] = "Metadescription";
-$lang['item_modify_content'] = "Content";
+$lang['item_edit'] = "Edit Item";
+$lang['item_edit_title'] = "Title";
+$lang['item_edit_date'] = "Date";
+$lang['item_edit_time'] = "Time"; 
+$lang['item_edit_keywords'] = "Metatags";
+$lang['item_edit_description'] = "Metadescription";
+$lang['item_edit_content'] = "Content";
 
 /**
  * Additional
