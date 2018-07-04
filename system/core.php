@@ -271,8 +271,14 @@ abstract class core {
         return $result;  
     }    
     
-    function terms() {
-        $query = "select id, name from term";
+    function terms( $taxonomy = false ) {
+        $query = "select term.id, term.name from term ";
+        if( $taxonomy ) {
+            $query .= "join term_relation tr on tr.term_id=term.id
+            where tr.taxonomy_id=(select id from term_taxonomy where taxonomy='$taxonomy')
+            and tr.term_id=term.id
+            group by term.id";
+        } 
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;    
     }
