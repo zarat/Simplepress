@@ -124,7 +124,6 @@ CREATE TABLE `user` (
 CREATE TABLE `term_taxonomy` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `taxonomy` varchar(30) NOT NULL DEFAULT '',
-  `parent` int(10) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
