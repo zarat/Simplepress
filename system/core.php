@@ -271,13 +271,22 @@ abstract class core {
         return $result;  
     }    
     
-    function terms( $taxonomy = false ) {
+    function terms( $taxonomy = false, $item_id = false ) {
         $query = "select term.id, term.name from term ";
         if( $taxonomy ) {
-            $query .= "join term_relation tr on tr.term_id=term.id
-            where tr.taxonomy_id=(select id from term_taxonomy where taxonomy='$taxonomy')
-            and tr.term_id=term.id
-            group by term.id";
+            $query .= "
+                join term_relation tr on tr.term_id=term.id 
+                where tr.taxonomy_id = ( select id from term_taxonomy where taxonomy='$taxonomy' ) 
+                and tr.term_id = term.id
+                ";
+            if( $item_id ) {
+                $query .= "
+                and tr.object_id=$item_id
+                ";            
+            }    
+            $query .= "
+                group by term.id
+                ";
         } 
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;    
