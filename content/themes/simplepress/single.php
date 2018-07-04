@@ -20,15 +20,17 @@ while( $archive->have_items() ) {
     
         echo "<div class ='sp-content-item-body'>" . $item['content'] . "</div>\n";
     
-        if( $item_tags = $this->terms( 'tag', $item['id'] ) ) {
+        if( $item_tags = $this->terms( 'category', $item['id'] ) ) {
             foreach( $item_tags as $tag ) { 
-                $tags[] = "<a href='../?tag=$tag[id]'>$tag[name]</a>"; 
+                $tags[] = "<a href='../?category=$tag[id]'>$tag[name]</a>"; 
             }
-            echo "<div class ='sp-content-item-body'>Tags: " . implode(', ', $tags) . "</div>";
+            echo "<div class ='sp-content-item-body'>Kategorien: " . implode(', ', $tags) . "</div>";
         }
  
-        if( $matches = $this->relation("type_(\w+)", $item) ) {
-            if( in_array( 'post', $matches[1] ) ) echo "its a post";
+        if( $matches = $this->relation("category_(\w+)", $item) ) {
+            if( in_array( 'Allgemein', $matches[1] ) ) {
+                // echo "<div class ='sp-content-item-body'>'Allgemein' ist in Relation zu 'category'</div>";
+            }
         }
     
     echo "</div>\n";
