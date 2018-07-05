@@ -1,6 +1,6 @@
 Entstanden ist Simplepress zum schnellen Erstellen von Webtemplates als Freelancer mit Hilfe von PHP und einer Datenbank. Über die Zeit hat es sich mehr und mehr in Richtung CMS entickelt wozu ich es jetzt auch endgültig vorhabe zu machen.
 
-Demo: [http://simplepress.ml](simplepress.ml)
+Demo: [simplepress.ml](http://simplepress.ml)
 
 Features
 ---------
