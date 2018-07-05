@@ -28,7 +28,7 @@ INNER JOIN term t on t.id=tr.term_id
 WHERE item.status=1
 GROUP BY item.id 
 HAVING type_str LIKE ('%type_post%')
-ORDER BY item.date ASC";
+ORDER BY item.date DESC";
 $rss = $system->fetch_all_assoc( $system->query( $query ) );
     
 foreach($rss as $row)    {
