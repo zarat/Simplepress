@@ -13,7 +13,7 @@
 
 class archive extends system {
 
-private $max_per_page = 10;
+private $max_per_page = 2;
 private $displayed_this_page = 0;
 private $last = 0;
 private $item_count = -1;
@@ -90,39 +90,33 @@ public $is_search = false;
                 $this->is_archive = false;
                 $this->is_single = true;
                 return;
-            } else if( $this->request() && 'last' != key( $this->request() ) ) {            
-                $custom_query = "SELECT item.id, item.title, item.content, item.status, item.date,"; 
+            } else if( $this->request() && 'last' != key( $this->request() ) ) {                
+                $custom_query = "SELECT item.id, item.title, item.content, item.status, item.date, "; 
                 $custom_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
                 $custom_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
                 $custom_query .= "FROM item ";
                 $custom_query .= "INNER JOIN term_relation tr ON tr.object_id=item.id ";                    
                 $custom_query .= "INNER JOIN term t on t.id=tr.term_id "; 
                 $custom_query .= "WHERE item.status=1 ";
-                $custom_query .= "GROUP BY item.id ";
-                $ps = array();
-                $stop = array('id','last');
-                foreach( $this->request() as $k => $v ) { 
-                    if( in_array( $k, $stop ) ) continue;
-                    $p = "%" . $k . "_" . $v . "%"; 
-                    $ps[] = " ( type_int LIKE ('$p') OR type_str LIKE ('$p') ) "; 
-                }                                                            
-                /** 
-                 * AND = alle muessen passen, OR = irgendeines muss passen 
-                 */
-                $custom_query .= "HAVING ( " . implode(" AND ", $ps ) . " ) ";
                 if( $this->request('last') ) $custom_query .= "AND item.date < " . $this->request('last') . " ";
-                $custom_query .= "ORDER BY item.date ASC "; 
-                //echo $custom_query;
-                $the_items = array();
-                $result = $this->query( $custom_query ); 
-                if( $result ) {
-                    while ( $row = $result->fetch_assoc() ) {
-                        if( !empty($row['id']) ) {
-                            $the_items[] = $row;
-                        }              
-                    }
+                $custom_query .= "GROUP BY item.id ";
+                $custom_query .= "HAVING type_str like (?) or type_int like (?) ";           
+                $custom_query .= "ORDER BY item.date ASC ";                
+                $data = array();                
+                $statement = $this->db->prepare( $custom_query );
+                $stop = array('id','last');                
+                foreach( $this->request() as $k => $v ) {                 
+                    if( in_array( $k, $stop ) ) continue;
+                    $param = "%" . $k . "_" . $v . "%"; 
+                    $statement->bind_param("ss", $param, $param);
+                    $statement->execute();
+                    $result = $statement->get_result();
+                    while( $row = $result->fetch_assoc() ) { 
+                        $data[] = $row; 
+                    }                    
                 }
-                $this->items = $the_items;            
+                $this->items = array_map( "unserialize", array_unique( array_map("serialize", $data) ) );
+                //echo "<pre>";print_r( $this->items );echo "</pre>";            
                 $this->item_count = count($this->items);
                 $this->is_archive = true;
                 return;                
