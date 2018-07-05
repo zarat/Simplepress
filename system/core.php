@@ -254,7 +254,8 @@ abstract class core {
                     if( is_numeric( $key ) ) {                    
                         return (int) $parameters[$key];                        
                     } else {                    
-                        return $parameters[$key];                       
+                        preg_match('/\w+/', $parameters[$key], $clear);
+                        return $clear[0];                       
                     }                   
                 } else {               
                     return false;                                
