@@ -29,7 +29,7 @@ if( !empty( $_POST['id'] ) ) {
     $arr['menu_id'] = $_POST['menu_id'];
 
     $stmt = $system->db->prepare( "insert into menu (label,link,menu_id) values (?,?,?)" );    
-    $stmt->bind_param( "sii" , $arr['label'], $arr['link'], $arr['menu_id'] );
+    $stmt->bind_param( "ssi" , $arr['label'], $arr['link'], $arr['menu_id'] );
     $stmt->execute();
     $insert_id = $stmt->insert_id;
     
