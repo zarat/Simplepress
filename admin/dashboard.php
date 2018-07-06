@@ -1,33 +1,17 @@
 <?php
 
 /**
+ * Simplepress Admin Dashboard. 
  * 
- * Dashboard. 
- * 
+ * @author Manuel Zarat
  */
 
-echo "<script type='text/javascript'>
-    function chg(k,id) { 
-        go_on = confirm('Diesen Inhalt wirklich entfernen?');
-        if (go_on) { 
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('GET','../admin/settings.php?setting='+k+'&value='+id,true);
-            xmlhttp.send();
-        }
-    }
-</script>";
+if( !$system->auth() ) header("Location: ../login.php");
 
-/**
- * SP COntent Start
- */
 echo "<div class=\"sp-content\">";
 echo "<div class=\"sp-content-item\">";
 echo "<div class=\"sp-content-item-head\">" . $system->_t('welcome_to_dashboard') . "</div>";
 echo "<div class=\"sp-content-item-head-secondary\">" . $system->_t('dashboard_description') . "</div>";
-
-/**
- * SP COntent Item BodyStart
- */
 echo "<div class=\"sp-content-item-body\">";
 
 if (isset($_POST['submit'])) {
@@ -86,10 +70,6 @@ if (isset($_POST['submit'])) {
 
 echo "</div>";
 echo "</div>";
-
-/**
- * SP Content Ende
- */
 echo "</div>";
 
 ?>
