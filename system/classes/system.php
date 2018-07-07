@@ -122,6 +122,7 @@ class system extends core {
         $archive->archive_init();
 
         if( $archive->have_items() ) { 
+            /** Metadata Hotfix */
             if( $archive->is_single ) { 
                 $item = $archive->items[0]; 
                 $this->set_current_item( $item ); 
