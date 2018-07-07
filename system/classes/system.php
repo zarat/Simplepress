@@ -121,7 +121,11 @@ class system extends core {
         $archive = new archive();                
         $archive->archive_init();
 
-        if( $archive->have_items() ) {                                                        
+        if( $archive->have_items() ) { 
+            if( $archive->is_single ) { 
+                $item = $archive->items[0]; 
+                $this->set_current_item( $item ); 
+            }                                                      
             $result['content'] = $archive;                                                                              
         } else {                          
             $result['error'] = "error"; 
