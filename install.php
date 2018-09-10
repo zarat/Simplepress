@@ -4,6 +4,9 @@
  * @author Manuel Zarat
  */
 
+if(is_file('config.php')) {
+    exit("A config file already exists. You should delete it and run the Installer again if needed.");    
+}
 if(!empty($_POST['host']) && !empty($_POST['user']) && !empty($_POST['password']) && !empty($_POST['database']) && !empty($_POST['adminemail']) && !empty($_POST['adminpass']) && !empty($_POST['admindisplayname'])) {
 
 $dbhost = $_POST['host'];
