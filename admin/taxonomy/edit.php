@@ -31,7 +31,7 @@ if( isset($_GET['id']) ) {
 
     <div class="sp-content-item">
     
-    <div class="sp-content-item-head">Taxonomie editiren</div>
+    <div class="sp-content-item-head">Taxonomie bearbeiten</div>
     
     <div class="sp-content-item-body">
     
