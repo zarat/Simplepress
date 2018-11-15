@@ -129,8 +129,12 @@ public $is_search = false;
                 $homepage_query .= "INNER JOIN term t on t.id=tr.term_id "; 
                 $homepage_query .= "WHERE item.status=1 ";
                 $homepage_query .= "GROUP BY item.id ";
-                /** Klammer = Wichtig! */
-                $homepage_query .= "HAVING ( type_int LIKE ('%type_post%') OR type_str LIKE ('%type_post%') ) ";
+                
+                /** Klammer = Wichtig! */               
+                $custom_homepage_query = "HAVING ( type_int LIKE ('%type_post%') OR type_str LIKE ('%type_post%') ) ";
+                $custom_homepage_query = $hooks->apply_filters('archive_init_homepage', $custom_homepage_query);
+                $homepage_query .= $custom_homepage_query;
+                
                 if( $this->request('last') ) {
                     $homepage_query .= "AND item.date < " . $this->request('last') . " ";
                 }
