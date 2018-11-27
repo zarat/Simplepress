@@ -30,7 +30,7 @@ public $is_search = false;
      * @return void
      */
     function archive_init( $config = false ) {          
-        if( !empty( $this->request( 'last' ) ) ) { $this->last = $this->request( 'last' ); }                
+        if( $this->request( 'last' ) ) { $this->last = intval( $this->request( 'last' ) ); }               
         $this->fill_items( $config );         
     }
     
