@@ -70,7 +70,7 @@ public $is_search = false;
         } else {
             if( $this->request( 'id' ) ) {                
                 $id = $this->request( 'id' );
-                $single_query = "SELECT item.id, item.title, item.content, item.status, item.date,"; 
+                $single_query = "SELECT item.id, item.title, item.content, item.status, item.date, item.keywords, item.description, "; 
                 $single_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
                 $single_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
                 $single_query .= "FROM item ";
