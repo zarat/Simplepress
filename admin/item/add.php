@@ -61,7 +61,7 @@ echo "<link rel=\"stylesheet\" href=\"../admin/css/timepicker.css\">\n";
             <div id="more" style="display:none;">
                 
                 <p><?php echo $system->_t('item_add_date'); ?></p>
-                <p><input type="text" name="date" class="datepicker"></p>  
+                <p><input type="text" name="date" class="datepicker" value="<?php echo date('d.m.Y'); ?>"></p>  
                 
                 <p><?php echo $system->_t('item_add_time'); ?></p>
                 <p><input type="text" name="time" data-toggle="timepicker"></p>       
@@ -97,7 +97,8 @@ document.getElementById("datepicker").datepicker();
   document.addEventListener("DOMContentLoaded", function(event) {
     timepicker.load({
     interval: 1,
-    defaultHour: 8
+    defaultHour: <?php echo date('H'); ?>,
+    defaultMinute: <?php echo date('i'); ?>
   });
 });
 </script>
