@@ -170,7 +170,8 @@ class theme extends system {
             echo "<div class='sidebar-item'>\n";
                 echo "<div class='sidebar-item-head'>Suche</div>\n";
                 echo "<div class='sidebar-item-box'>\n";
-                    echo "<div class='sidebar-item-box-body'><div class='container'><form><input type='text' name='search'></form></div></div>\n";
+                    $searchVal = $this->request("search") ? " value='" . $this->request("search") . "'" : "";
+                    echo "<div class='sidebar-item-box-body'><div class='container'><form><input type='text' name='search'" . $searchVal . "></form></div></div>\n";
                 echo "</div>\n";
             echo "</div>\n";                        
         }
