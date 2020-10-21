@@ -7,7 +7,7 @@
 echo "<!--BeginNoIndex-->\n";
 
 echo "<div class='sp-content-item'>\n";
-echo "<div class='sp-content-item-head'>Suchergebnisse</div>\n";
+echo "<div class='sp-content-item-head'>Suchergebnisse zu \"" . $this->request('search') . "\"</div>\n";
 echo "</div>\n";
 
 while( $archive->have_items() ) {
