@@ -142,7 +142,7 @@ abstract class core {
      * @return string|array eines|alle
      */
     final function settings($key = false) { 
-        $query = $this->query( ( false !== $key ) ? "SELECT * FROM settings WHERE settings.key='$key'" : "SELECT * FROM settings" );
+        $query = $this->query( $key ? "SELECT * FROM settings WHERE settings.key='$key'" : "SELECT * FROM settings" );
         $arr = false;
         while( $row = $this->fetch( $query ) ) {
             $arr[$row['key']] = $row['value'];
@@ -163,7 +163,8 @@ abstract class core {
     final function single( $config ) {    
         extract($config);        
         $item = $this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$config[id]" ) );                
-        if( !$item["id"] ) { return false; };        
+        if( !$item["id"] ) 
+            return false;       
         /**
          * get all taxonomies of this item
          */
@@ -185,7 +186,7 @@ abstract class core {
                 $item[$k] = $v;
             }
         }
-        return isset($item['id']) ? $item : false;
+        return $item; 
     }
     
     /**
@@ -205,7 +206,7 @@ abstract class core {
         } else {        
             $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM item_meta WHERE meta_item_id=$item_id");            
         }        
-        $metadata = false;       
+        $metadata = false; // if no metadata by default return false       
         while($metas = $this->fetch_assoc($item_meta)) {        
             if( $index ) {
                 //print_r( $metas );
@@ -214,7 +215,7 @@ abstract class core {
                 $metadata[$metas['k']] = $metas['v'];  
             }         
         }              
-        return ($metadata) ? $metadata : false;        
+        return $metadata;      
     }
     
     /**
