@@ -63,7 +63,7 @@ class simplepress extends theme {
  */
 global $hooks;
 function post_filter( $item ) { 
-    $item = " and id IN (
+    $item = "HAVING id IN (
         select object_id from term_relation tr
         inner join term_taxonomy tt on tt.id = tr.taxonomy_id
         inner join term on term.id = tr.term_id
