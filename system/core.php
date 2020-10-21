@@ -252,12 +252,8 @@ abstract class core {
             parse_str($_SERVER['QUERY_STRING'], $parameters);            
             if(false !== $key) {            
                 if(!empty($parameters[$key])) {                       
-                    if( is_numeric( $key ) ) {                    
-                        return (int) $parameters[$key];                        
-                    } else {                    
-                        preg_match('/\w+/', $parameters[$key], $clear);
-                        return $clear[0];                       
-                    }                   
+                    preg_match('/\w+/', $parameters[$key], $clear);
+                    return $clear[0];                                         
                 } else {               
                     return false;                                
                 }                        
