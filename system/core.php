@@ -252,12 +252,18 @@ abstract class core {
             parse_str($_SERVER['QUERY_STRING'], $parameters);            
             if(false !== $key) {            
                 if(!empty($parameters[$key])) {                       
-                    preg_match('/\w+/', $parameters[$key], $clear);
+                    preg_match('/[a-zA-ZäöüÄÖÜ0-9+-]+$/', $parameters[$key], $clear); // preg_match('/\w+/', $parameters[$key], $clear);
                     return $clear[0];                                         
                 } else {               
                     return false;                                
                 }                        
-            } else {              
+            } else {
+                $i = 0;
+                foreach($parameters as $parameter) {
+                    preg_match('/[a-zA-ZäöüÄÖÜ0-9+-]+$/', $parameter, $clear);
+                    $parameters[$i] = $clear;
+                    $i++;    
+                }              
                 return ($parameters) ? $parameters : false;                    
             }                 
         }           
