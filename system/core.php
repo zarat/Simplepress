@@ -308,6 +308,13 @@ abstract class core {
         }
         return false;    
     }
+ 
+    // todo intval is ugly
+    final function getUserById($id) {         
+        $sid = intval($id);
+        $user = $this->fetch_assoc( $this->query( "select * from user where id=$sid" ) );        
+        return isset($user) ? $user : false;        
+    }
         
 }
 
