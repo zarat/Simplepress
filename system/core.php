@@ -315,6 +315,13 @@ abstract class core {
         $user = $this->fetch_assoc( $this->query( "select * from user where id=$sid" ) );        
         return isset($user) ? $user : false;        
     }
+ 
+    // todo pdo
+    final function currentUser() {    
+        $token = @$_COOKIE['sp-uid'];         
+        $result = $this->fetch_assoc( $this->query( "select id, email, fname, lname from user where token='$token'" ) );             
+        return $result;     
+    }
         
 }
 
