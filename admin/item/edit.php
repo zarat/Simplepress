@@ -99,7 +99,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
     <div class="sp-sidebar-item">
     
-        <div class="sp-sidebar-item-head">Relations</div>
+        <div class="sp-sidebar-item-head">Relationen</div>
         
         <div class="sp-sidebar-item-body">
 
@@ -119,7 +119,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
             
             <p>Taxonomy</p>
             <p><select onchange="select_taxonomy(this.value);"> 
-            <option value="0" selected="selected">Waehle</option>       
+            <option value="0" selected="selected">W&auml;hle</option>       
             <?php
 
             $taxonomies = $system->taxonomies();
@@ -138,17 +138,17 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
 
     <div class="sp-sidebar-item">
     
-        <div class="sp-sidebar-item-head">Custom fields</div>
+        <div class="sp-sidebar-item-head">Erweiterte Eigenschaften</div>
         
         <div class="sp-sidebar-item-body">
         
             <p>Custom Key</p>
-            <p><input type="text" id="customfieldKey" placeholder="Keyword"></p>
+            <input type="text" id="customfieldKey" placeholder="Keyword">
             
             <p>Custom Value</p>
-            <p><input type="text" id="customfieldValue" placeholder="Value"></p>
+            <input type="text" id="customfieldValue" placeholder="Value">
             
-            <a style="cursor:pointer;" onclick="savecustomfield('<?php echo $id; ?>')">Feld hinzuf&uuml;gen</a>
+            <a style="cursor:pointer;" onclick="savecustomfield('<?php echo $id; ?>')">Hinzuf&uuml;gen</a>
             
             <br>
             
