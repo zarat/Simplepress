@@ -43,7 +43,7 @@ public $is_search = false;
         global $hooks;                                   
         if( $this->request( 'search' ) ) {
             $s = "%" . htmlentities( $this->request( 'search' ) ) . "%";            
-            $search_query = "SELECT item.id, item.title, item.content, item.status, item.date,";                   
+            $search_query = "SELECT item.id, item.title, item.content, item.status, item.date, item.author, ";                   
             $search_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
             $search_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
             $search_query .= "FROM item ";
@@ -70,7 +70,7 @@ public $is_search = false;
         } else {
             if( $this->request( 'id' ) ) {                
                 $id = $this->request( 'id' );
-                $single_query = "SELECT item.id, item.title, item.content, item.status, item.date, item.keywords, item.description, "; 
+                $single_query = "SELECT item.id, item.title, item.content, item.status, item.date, item.keywords, item.description, item.author, "; 
                 $single_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
                 $single_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
                 $single_query .= "FROM item ";
@@ -91,7 +91,7 @@ public $is_search = false;
                 $this->is_single = true;
                 return;
             } else if( $this->request() && 'last' != key( $this->request() ) ) {                
-                $custom_query = "SELECT item.id, item.title, item.content, item.status, item.date, "; 
+                $custom_query = "SELECT item.id, item.title, item.content, item.status, item.date, item.author, "; 
                 $custom_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
                 $custom_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
                 $custom_query .= "FROM item ";
@@ -121,7 +121,7 @@ public $is_search = false;
                 $this->is_archive = true;
                 return;                
             } else {                                                      
-                $homepage_query = "SELECT item.id, item.title, item.content, item.status, item.date,"; 
+                $homepage_query = "SELECT item.id, item.title, item.content, item.status, item.date, item.author, "; 
                 $homepage_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
                 $homepage_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
                 $homepage_query .= "FROM item ";
