@@ -117,7 +117,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
             }
             </script>
             
-            <p>Taxonomy</p>
+            <p>Taxonomien</p>
             <p><select onchange="select_taxonomy(this.value);"> 
             <option value="0" selected="selected">W&auml;hle</option>       
             <?php
