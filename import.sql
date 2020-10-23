@@ -46,6 +46,7 @@ CREATE TABLE `item` (
   `description` varchar(150) NOT NULL,
   `content` longtext NOT NULL,
   `date` int(15) NOT NULL,
+  `author` int(10) NOT NULL,
   `status` int(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
