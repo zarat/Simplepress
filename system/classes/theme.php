@@ -19,7 +19,7 @@ class theme extends system {
      * 
      * @return html
      */
-    final function html_header($custom_data) {             
+    protected function html_header($custom_data = false) {             
         echo "<!DOCTYPE html>\n";
         echo "<html lang=de>\n";
             echo "<head>\n";                
@@ -35,7 +35,8 @@ class theme extends system {
                 echo "<meta name='description' content='$description'>\n";        
                 echo "<link rel='stylesheet' href='/content/themes/" . $this->settings( 'site_theme' ) . "/css/style.css'>\n";
                 echo "<link rel='stylesheet' href='/content/themes/" . $this->settings( 'site_theme' ) . "/css/menu.css'>\n"; 
-                echo $custom_data;
+                if($custom_data)
+                    echo $custom_data;
             echo "</head>\n";
         echo "<body>\n";        
     }
