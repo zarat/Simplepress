@@ -59,8 +59,8 @@ class simplepress extends theme {
 
 /**
  * Beispielfilter
- * Zeige nur Items, die die Taxonomie "type" in Verbindung mit dem Term "page" haben.
- */
+ * Zeige nur Items auf der Homepage, die die Taxonomie "type" in Verbindung mit dem Term "page" haben.
+*/
 global $hooks;
 function post_filter( $item ) { 
     $item = "HAVING id IN (
@@ -71,11 +71,20 @@ function post_filter( $item ) {
         and term.name='page'
     )";  
     return $item; 
+} 
+//$hooks->add_filter( 'archive_init_homepage', 'post_filter' ); 
+
+function paitContent( $item ) {          
+    if(!isset($item["testkey"]))
+        return $item;        
+    $system = new system();
+    if( $matches = $system->relation("category_(\w+)", $item) ) {
+        if( in_array( 'Allgemein', $matches[1] ) ) {
+            $item["content"] = "You have to pay for this content!";
+        }
+    }
+    return $item; 
 }
-/**
- * und ersetze den Inhalt auf der Homepage damit.
- *
- * $hooks->add_filter( 'archive_init_homepage', 'post_filter' );
- */
+$hooks->add_filter( 'get_current_item', 'paidContent' );
 
 ?>
