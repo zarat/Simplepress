@@ -74,13 +74,11 @@ function post_filter( $item ) {
 } 
 //$hooks->add_filter( 'archive_init_homepage', 'post_filter' ); 
 
-function paidContent( $item ) {          
-    if(!isset($item["testkey"]))
-        return $item;        
+function paidContent( $item ) {                  
     $system = new system();
     if( $matches = $system->relation("category_(\w+)", $item) ) {
-        if( in_array( 'Allgemein', $matches[1] ) ) {
-            $item["content"] = "You have to pay for this content!";
+        if( in_array( 'Subscriptions', $matches[1] ) ) {
+            // do something with $item here
         }
     }
     return $item; 
