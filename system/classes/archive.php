@@ -59,7 +59,10 @@ public $is_search = false;
             $result = $this->query( $search_query ); 
             while ( $row = $result->fetch_assoc() ) {
                 if( !empty($row['id']) ) {
-                    $the_items[] = $row;
+                    $item = array_merge($row, $this->single(array("id" => $row['id'], "metadata" => true)));
+                    $this->set_current_item($item);
+                    $item = $this->get_current_item();
+                    $the_items[] = $item;
                 }              
             } 
             $this->items = $the_items;
@@ -82,7 +85,10 @@ public $is_search = false;
                 $result = $this->query( $single_query ); 
                 while ( $row = $result->fetch_assoc() ) {
                     if( !empty($row['id']) ) {
-                        $the_items[] = $row;
+                        $item = array_merge($row, $this->single(array("id" => $row['id'], "metadata" => true)));
+                        $this->set_current_item($item);
+                        $item = $this->get_current_item();
+                        $the_items[] = $item;
                     }              
                 }
                 $this->items = $the_items;
@@ -112,7 +118,10 @@ public $is_search = false;
                     $statement->execute();
                     $result = $statement->get_result();
                     while( $row = $result->fetch_assoc() ) { 
-                        $data[] = $row; 
+                        $item = array_merge($row, $this->single(array("id" => $row['id'], "metadata" => true)));
+                        $this->set_current_item($item);
+                        $item = $this->get_current_item();
+                        $data[] = $item; 
                     }                    
                 }
                 $this->items = array_map( "unserialize", array_unique( array_map("serialize", $data) ) );
@@ -144,7 +153,10 @@ public $is_search = false;
                 $result = $this->query( $homepage_query ); 
                 while ( $row = $result->fetch_assoc() ) {
                     if( !empty($row['id']) ) {
-                        $the_items[] = $row;
+                        $item = array_merge($row, $this->single(array("id" => $row['id'], "metadata" => true)));
+                        $this->set_current_item($item);
+                        $item = $this->get_current_item();
+                        $the_items[] = $item;
                     }              
                 }
                 $this->items = $the_items;
