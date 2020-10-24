@@ -85,6 +85,6 @@ function paidContent( $item ) {
     }
     return $item; 
 }
-$hooks->add_filter( 'get_current_item', 'paidContent' );
+//$hooks->add_filter( 'get_current_item', 'paidContent' );
 
 ?>
