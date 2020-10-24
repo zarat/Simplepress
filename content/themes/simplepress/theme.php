@@ -74,7 +74,7 @@ function post_filter( $item ) {
 } 
 //$hooks->add_filter( 'archive_init_homepage', 'post_filter' ); 
 
-function paitContent( $item ) {          
+function paidContent( $item ) {          
     if(!isset($item["testkey"]))
         return $item;        
     $system = new system();
