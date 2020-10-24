@@ -203,7 +203,7 @@ class theme extends system {
      */
     function render() {
         $this->get_the_content();                
-        $this->html_header();
+        $this->html_header(false);
         $this->header();
         $this->navigation();
         $this->content(); //
