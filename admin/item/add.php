@@ -23,8 +23,8 @@ if(!empty($_POST['title'])) {
     
     $author = $system->currentUser();
     
-    $stmt = $system->db->prepare( "insert into item (title, date, keywords, description, content, status, author) values (?,?,?,?,?,?,?)" );    
-    $stmt->bind_param( "sisssii" , $title, $date, $keywords, $description, $content, $status, $author["id"]);
+    $stmt = $system->db->prepare( "insert into item (title, date, keywords, description, content, status) values (?,?,?,?,?,?)" );    
+    $stmt->bind_param( "sisssi" , $title, $date, $keywords, $description, $content, $status);
     $stmt->execute();
     $last = $stmt->insert_id;
     echo "<div class=\"sp-content\">\n";
