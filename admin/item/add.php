@@ -21,8 +21,6 @@ if(!empty($_POST['title'])) {
     $content = !empty( $_POST['content'] ) ? htmlentities($_POST['content'], ENT_QUOTES, 'utf-8') : "";
     $status = 0;
     
-    $author = $system->currentUser();
-    
     $stmt = $system->db->prepare( "insert into item (title, date, keywords, description, content, status) values (?,?,?,?,?,?)" );    
     $stmt->bind_param( "sisssi" , $title, $date, $keywords, $description, $content, $status);
     $stmt->execute();
