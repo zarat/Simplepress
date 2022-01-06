@@ -11,7 +11,9 @@ $system = new system();
 if( !$system->auth() ) { header("Location: ../login.php"); }
 
 ?> 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"> -->
+<!-- TinyMCE requires standard mode -->
+<!DOCTYPE HTML>
 <html>
 <head>
 <title>Adminpanel</title>
