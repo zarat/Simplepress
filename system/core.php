@@ -73,6 +73,8 @@ abstract class core {
      * @return bool 
      */
     final function logout() {    
+        if( !isset($_COOKIE["sp-uid"]) || empty($_COOKIE["sp-uid"]) )
+            return false;
         $token = $_COOKIE['sp-uid'];        
         $stmt = $this->db->prepare( "update user set token='' where token=?" );           
         $stmt->bind_param( "s" , $token );
@@ -87,7 +89,9 @@ abstract class core {
      * @return integer|bool UserID|(success|error)
      */
     final function auth() {    
-        $token = @$_COOKIE['sp-uid'];
+        if( !isset($_COOKIE["sp-uid"]) || empty($_COOKIE["sp-uid"]) )
+            return false;
+        $token = $_COOKIE['sp-uid'];
         $stmt = $this->db->prepare( "select id,email,password from user where token=?" );           
         $stmt->bind_param( "s" , $token );
         $stmt->bind_result( $id, $email, $password);
