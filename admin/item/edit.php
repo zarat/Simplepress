@@ -51,7 +51,7 @@ if ( isset( $_GET['id'] ) && isset( $_POST['title'] ) ) {
     
 ?>
 
-<script src="../admin/js/tinymce.min.js"></script>
+<script src="../admin/js/tinymce/tinymce.min.js"></script>
 
 <div class="sp-content">
 
