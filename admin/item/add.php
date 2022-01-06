@@ -43,7 +43,7 @@ echo "<link rel=\"stylesheet\" href=\"../admin/css/timepicker.css\">\n";
 
 ?>
 
-<script src="../admin/js/tinymce.min.js"></script>
+<script src="../admin/js/tinymce/tinymce.min.js"></script>
 
 <div class="sp-content">
 
