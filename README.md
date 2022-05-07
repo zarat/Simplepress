@@ -1,4 +1,4 @@
-Entstanden ist Simplepress nicht als herkömmliches CMS das online läuft sondern zum schnellen Erstellen von Webtemplates als Freelancer mit Hilfe von PHP und einer Datenbank um anschliessend das statische HTML zu kopieren.
+Entstanden ist Simplepress nicht als herkömmliches CMS das online läuft sondern zum schnellen Erstellen von Webtemplates mit Hilfe von PHP und einer Datenbank um anschliessend das daraus generierte statische HTML zu kopieren.
 
 Features
 ---------
