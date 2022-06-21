@@ -91,6 +91,7 @@ public $is_search = false;
                         $the_items[] = $item;
                     }              
                 }
+                $a = 1;
                 $this->items = $the_items;
                 $this->item_count = count($this->items);
                 $this->is_archive = false;
