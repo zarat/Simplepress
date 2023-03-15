@@ -308,6 +308,11 @@ abstract class core {
     }
  
     function relation( $patterns, $item ) {
+     
+        /* php7.4 fix if there is no result */
+        if(null == $item || false == $item)
+            return false;
+     
         if( preg_match_all( '/'.$patterns.'/', $item['type_str'], $matches) || preg_match_all( '/'.$patterns.'/', $item['type_int'], $matches) ) {
             return $matches;
         }
