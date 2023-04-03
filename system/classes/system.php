@@ -62,9 +62,7 @@ class system extends core {
     final function _t( $str, $arr = false ) { 
         
         /**
-         * Erst di Default Sprachdatei, das wir alles haben..
-         *
-         * Danach, falls es eine gibt, diese einbinden und die Default ueberschreiben
+         * Falls es eine spezielle Sprachdatei gibt, diese einbinden, wenn nicht dann die Default.
          */
         include ABSPATH . 'system' . DS . 'lang' . DS . 'lang.php'; 
                
@@ -72,9 +70,13 @@ class system extends core {
                
             include $langfile; 
                            
-        }  
+        } else {
+            
+            include ABSPATH . 'system' . DS . 'lang' . DS . 'lang.php';
+        
+        }
                   
-        return isset($lang[$str]) ? vsprintf( $lang[$str], $arr ) : "Fehler: Sprachdatei fehlerhaft, kann '$str' nicht finden.";  
+        return isset($lang[$str]) ? $lang[$str] : "Fehler: Sprachdatei fehlerhaft, kann '$str' nicht finden.";  
 
     }
  
