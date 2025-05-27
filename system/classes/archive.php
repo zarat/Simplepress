@@ -13,7 +13,7 @@
 
 class archive extends system {
 
-private $max_per_page = 10;
+public $max_per_page = 100;
 private $displayed_this_page = 0;
 private $last = 0;
 private $item_count = -1;
@@ -30,7 +30,7 @@ public $is_search = false;
      * @return void
      */
     function archive_init( $config = false ) {          
-        if( $this->request( 'last' ) ) { $this->last = intval( $this->request( 'last' ) ); }               
+        if( !empty( $this->request( 'last' ) ) ) { $this->last = $this->request( 'last' ); }                
         $this->fill_items( $config );         
     }
     
@@ -43,7 +43,7 @@ public $is_search = false;
         global $hooks;                                   
         if( $this->request( 'search' ) ) {
             $s = "%" . htmlentities( $this->request( 'search' ) ) . "%";            
-            $search_query = "SELECT item.id, item.title, item.content, item.status, item.date, item.author, ";                   
+            $search_query = "SELECT item.id, item.title, item.content, item.status, item.date, item.author,";                   
             $search_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
             $search_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
             $search_query .= "FROM item ";
@@ -52,17 +52,15 @@ public $is_search = false;
             $search_query .= "WHERE item.status=1 ";
             $search_query .= "GROUP BY item.id ";
             $search_query .= "HAVING ( item.title LIKE ('$s') OR item.content LIKE ('$s') ) ";
-            if( $this->request('last') ) $search_query .= "AND item.date < " . $this->request('last') . " ";
-            $search_query .= "ORDER BY item.date ASC"; 
+
+            if( $this->request('last') ) $search_query .= " AND item.date < " . $this->request('last') . " ";
+            $search_query .= " ORDER BY item.date ASC "; 
             //echo $search_query;                       
             $the_items = array();
             $result = $this->query( $search_query ); 
             while ( $row = $result->fetch_assoc() ) {
                 if( !empty($row['id']) ) {
-                    $item = array_merge($row, $this->single(array("id" => $row['id'], "metadata" => true)));
-                    $this->set_current_item($item);
-                    $item = $this->get_current_item();
-                    $the_items[] = $item;
+                    $the_items[] = $row;
                 }              
             } 
             $this->items = $the_items;
@@ -73,7 +71,7 @@ public $is_search = false;
         } else {
             if( $this->request( 'id' ) ) {                
                 $id = $this->request( 'id' );
-                $single_query = "SELECT item.id, item.title, item.content, item.status, item.date, item.keywords, item.description, item.author, "; 
+                $single_query = "SELECT item.id, item.title, item.content, item.status, item.date, item.author, item.keywords, item.description, "; 
                 $single_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.id ) ) AS type_int, ";
                 $single_query .= "GROUP_CONCAT( ( SELECT taxonomy FROM term_taxonomy WHERE id=tr.taxonomy_id ), '_', ( t.name ) ) AS type_str ";
                 $single_query .= "FROM item ";
@@ -85,13 +83,9 @@ public $is_search = false;
                 $result = $this->query( $single_query ); 
                 while ( $row = $result->fetch_assoc() ) {
                     if( !empty($row['id']) ) {
-                        $item = array_merge($row, $this->single(array("id" => $row['id'], "metadata" => true)));
-                        $this->set_current_item($item);
-                        $item = $this->get_current_item();
-                        $the_items[] = $item;
+                        $the_items[] = $row;
                     }              
                 }
-                $a = 1;
                 $this->items = $the_items;
                 $this->item_count = count($this->items);
                 $this->is_archive = false;
@@ -119,10 +113,7 @@ public $is_search = false;
                     $statement->execute();
                     $result = $statement->get_result();
                     while( $row = $result->fetch_assoc() ) { 
-                        $item = array_merge($row, $this->single(array("id" => $row['id'], "metadata" => true)));
-                        $this->set_current_item($item);
-                        $item = $this->get_current_item();
-                        $data[] = $item; 
+                        $data[] = $row; 
                     }                    
                 }
                 $this->items = array_map( "unserialize", array_unique( array_map("serialize", $data) ) );
@@ -146,7 +137,7 @@ public $is_search = false;
                 $homepage_query .= $custom_homepage_query;
                 
                 if( $this->request('last') ) {
-                    $homepage_query .= "AND item.date < " . $this->request('last') . " ";
+                    $homepage_query .= " AND item.date < " . $this->request('last') . " ";
                 }
                 $homepage_query .= " ORDER BY item.date ASC";
                 //echo $homepage_query;
@@ -154,10 +145,7 @@ public $is_search = false;
                 $result = $this->query( $homepage_query ); 
                 while ( $row = $result->fetch_assoc() ) {
                     if( !empty($row['id']) ) {
-                        $item = array_merge($row, $this->single(array("id" => $row['id'], "metadata" => true)));
-                        $this->set_current_item($item);
-                        $item = $this->get_current_item();
-                        $the_items[] = $item;
+                        $the_items[] = $row;
                     }              
                 }
                 $this->items = $the_items;
@@ -191,7 +179,9 @@ public $is_search = false;
      * Gibt das aktuelle Item aus.
      */
     function the_item( $config = false ) {
-        $metadata = true; $content_length = false; $html = true; $strip_tags = false;
+        $metadata = true; 
+        $content_length = false; 
+        $html = true; $strip_tags = false;
         if( $config ) { extract( $config ); }
         if( $this->more() ) {        
             $this->item_count--; 
@@ -232,7 +222,8 @@ public $is_search = false;
      * 
      * @return html 
      */
-    function pagination() {        
+    function pagination() { 
+
         $url_ = $ps = array();
         $url = "?";
         if( $this->request() ) {
@@ -249,6 +240,8 @@ public $is_search = false;
             echo "<!-- BeginNoIndex --><div class='sp-content-item'>\n<div class='sp-content-item-head'>";
             if( !$this->is_single ) {
                 echo "<a rel='nofollow' href='$url'>&auml;ltere Beitr&auml;ge</a>";
+				
+				
             }
             echo "</div>\n</div>\n<!-- EndNoIndex -->\n";
         }                                                              
