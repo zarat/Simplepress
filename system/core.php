@@ -16,6 +16,7 @@ abstract class core {
  
     public $db = false;     
     private $last_insert_id = false; 
+    private $mode = "mysqli";
 
     /**
      * Im Konstruktor wird entweder die Konfiguration geladene und fall keine vorhanden ist
@@ -31,8 +32,15 @@ abstract class core {
         } else {         
             include ABSPATH . "install.php"; 
             exit();             
-        }                        
-        $this->db = new mysqli($dbhost,$dbuser,$dbpass,$dbname);                                                         
+        } 
+        
+        if($this->mode == "pdo") {
+            $connectionString = 'mysql:host=' . $dbhost . '; dbname=' . $dbname . ';charset=utf8';
+            $this->db = new PDO($connectionString, $dbuser, $dbpass);
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } else {                       
+            $this->db = new mysqli($dbhost,$dbuser,$dbpass,$dbname);
+        }                                                         
     }
 
     /**
@@ -73,8 +81,6 @@ abstract class core {
      * @return bool 
      */
     final function logout() {    
-        if( !isset($_COOKIE["sp-uid"]) || empty($_COOKIE["sp-uid"]) )
-            return false;
         $token = $_COOKIE['sp-uid'];        
         $stmt = $this->db->prepare( "update user set token='' where token=?" );           
         $stmt->bind_param( "s" , $token );
@@ -89,30 +95,66 @@ abstract class core {
      * @return integer|bool UserID|(success|error)
      */
     final function auth() {    
-        if( !isset($_COOKIE["sp-uid"]) || empty($_COOKIE["sp-uid"]) )
-            return false;
-        $token = $_COOKIE['sp-uid'];
-        $stmt = $this->db->prepare( "select id,email,password from user where token=?" );           
+        $token = @$_COOKIE['sp-uid'];
+        $stmt = $this->db->prepare( "select id,email,password,displayname from user where token=?" );           
         $stmt->bind_param( "s" , $token );
-        $stmt->bind_result( $id, $email, $password);
+        $stmt->bind_result( $id, $email, $password, $displayname);
         $stmt->execute();    
         $stmt->fetch();        
         return !empty( $id ) ? $id : false;      
-    }  
-     
+    } 
+    
+    final function getUser($uid) {    
+
+        $stmt = $this->db->prepare( "select id,email,password,displayname from user where id=?" );           
+        $stmt->bind_param( "i" , $uid );
+        $stmt->bind_result( $id, $email, $password, $displayname);
+        $stmt->execute();    
+        $stmt->fetch();        
+        return !empty( $id ) ? $displayname : false;
+
+        /*
+        $token = @$_COOKIE['sp-uid'];
+        $stmt = $this->db->query( "select * from user where token=$token" );           
+        //$stmt->bind_param( "s" , $token );
+        //$stmt->bind_result( $id, $email, $password);
+        //$stmt->execute();    
+        $user = $this->db->fetchArray();
+        echo "User: " . $user['displayname'];        
+        return $user; //!empty( $id ) ? $id : false;
+        */
+    } 
+    
+    /**
+     * @deprecated
+     */
     private function sql_escape_string($query) {    
-        return mysqli_real_escape_string($this->db, $query);            
+        return $query; //mysqli_real_escape_string($this->db, $query);            
     }   
          
     final function query($query) {     
-        $this->sql_escape_string($query);        
-        $result = $this->db->query($query);
-        $this->last_insert_id = $this->db->insert_id;
+        $result = false;
+        if($this->mode == "pdo") {
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+            $this->last_insert_id = $this->db->lastInsertId();
+        } else {
+            $this->sql_escape_string($query);        
+            $result = $this->db->query($query);
+            $this->last_insert_id = $this->db->insert_id;
+        }
         return $result;        
     }
     
     final function fetch($sql) {    
-        return $sql->fetch_array();        
+        $result = false;
+        if($this->mode == "pdo") {
+            $result = $this->db->fetch(PDO::FETCH_ASSOC);
+        } else {
+            $result = $sql->fetch_array();
+        }
+        return $result;        
     }
     
     final function fetch_assoc($sql) {    
@@ -146,7 +188,7 @@ abstract class core {
      * @return string|array eines|alle
      */
     final function settings($key = false) { 
-        $query = $this->query( $key ? "SELECT * FROM settings WHERE settings.key='$key'" : "SELECT * FROM settings" );
+        $query = $this->query( ( false !== $key ) ? "SELECT * FROM settings WHERE settings.key='$key'" : "SELECT * FROM settings" );
         $arr = false;
         while( $row = $this->fetch( $query ) ) {
             $arr[$row['key']] = $row['value'];
@@ -165,10 +207,9 @@ abstract class core {
      * @return array()|bool item|(success|error)
      */
     final function single( $config ) {    
-        extract($config);        
+        //extract($config);        
         $item = $this->fetch_assoc( $this->query( "SELECT * FROM item WHERE id=$config[id]" ) );                
-        if( !$item["id"] ) 
-            return false;       
+        if( !$item["id"] ) { return false; };        
         /**
          * get all taxonomies of this item
          */
@@ -190,7 +231,7 @@ abstract class core {
                 $item[$k] = $v;
             }
         }
-        return $item; 
+        return isset($item['id']) ? $item : false;
     }
     
     /**
@@ -210,7 +251,7 @@ abstract class core {
         } else {        
             $item_meta = $this->query("SELECT meta_key as k, meta_value as v FROM item_meta WHERE meta_item_id=$item_id");            
         }        
-        $metadata = false; // if no metadata by default return false       
+        $metadata = false;       
         while($metas = $this->fetch_assoc($item_meta)) {        
             if( $index ) {
                 //print_r( $metas );
@@ -219,7 +260,7 @@ abstract class core {
                 $metadata[$metas['k']] = $metas['v'];  
             }         
         }              
-        return $metadata;      
+        return ($metadata) ? $metadata : false;        
     }
     
     /**
@@ -252,23 +293,23 @@ abstract class core {
      * @return array()|bool parameter|(success|error)
      */
     final function request($key=false) {   
-        $secure_pattern = "/[a-zA-ZäöüÄÖÜ0-9- ]+$/";
         if($_SERVER['QUERY_STRING']) {
             parse_str($_SERVER['QUERY_STRING'], $parameters);            
             if(false !== $key) {            
                 if(!empty($parameters[$key])) {                       
-                    preg_match($secure_pattern, $parameters[$key], $clear); // preg_match('/\w+/', $parameters[$key], $clear);
-                    return $clear[0];                                         
+                    if( is_numeric( $key ) ) {                    
+                        return (int) $parameters[$key];                        
+                    } else {                    
+                        preg_match('/\w+/', $parameters[$key], $clear);
+                        if(isset($clear[0]) && !empty($clear[0]) && $clear[0] != " ")
+                            return $clear[0];
+                        else
+                            return false;                       
+                    }                   
                 } else {               
                     return false;                                
                 }                        
-            } else {
-                $i = 0;
-                foreach($parameters as $parameter) {
-                    preg_match($secure_pattern, $parameter, $clear);
-                    $parameters[$i] = $clear;
-                    $i++;    
-                }              
+            } else {              
                 return ($parameters) ? $parameters : false;                    
             }                 
         }           
@@ -300,6 +341,10 @@ abstract class core {
         $result = $this->fetch_all_assoc( $this->query( $query ) ); 
         return $result;    
     }
+    
+    function allUser() {
+        return $this->fetch_all_assoc( $this->query( "SELECT * FROM user" ) );    
+    }
 
     function item_terms_by_taxonomy_id( $item_id, $parent_taxonomy ) {
         $query = "select * from term where id in ( select term_id from term_relation where object_id=$item_id and taxonomy_id=$parent_taxonomy )";
@@ -308,29 +353,10 @@ abstract class core {
     }
  
     function relation( $patterns, $item ) {
-     
-        /* php7.4 fix if there is no result */
-        if(null == $item || false == $item)
-            return false;
-     
         if( preg_match_all( '/'.$patterns.'/', $item['type_str'], $matches) || preg_match_all( '/'.$patterns.'/', $item['type_int'], $matches) ) {
             return $matches;
         }
         return false;    
-    }
- 
-    // todo intval is ugly
-    final function getUserById($id) {         
-        $sid = intval($id);
-        $user = $this->fetch_assoc( $this->query( "select * from user where id=$sid" ) );        
-        return isset($user) ? $user : false;        
-    }
- 
-    // todo pdo
-    final function currentUser() {    
-        $token = @$_COOKIE['sp-uid'];         
-        $result = $this->fetch_assoc( $this->query( "select id, email, fname, lname from user where token='$token'" ) );             
-        return $result;     
     }
         
 }
