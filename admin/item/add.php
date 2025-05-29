@@ -112,6 +112,16 @@ tinymce.init({
     image_advtab: true,
     mobile: { theme: 'mobile' },    
     relative_urls : false,
+
+    // WICHTIG: Script-Tags erlauben
+    valid_elements: '*[*]', // erlaubt alle Tags und Attribute
+    extended_valid_elements: 'script[language|type|src|charset]',
+    valid_children: '+body[script]', // erlaubt <script> innerhalb von <body>
+    forced_root_block: false, // verhindert automatisches <p> um alles herum
+
+    // Optional: XSS-Schutz abschalten – nur wenn du kontrollierst, wer Inhalte eingibt!
+    protect: [ /\<script(.*?)\>(.*?)\<\/script\>/g ],
+	
     images_upload_handler: function (blobInfo, success, failure) {
         var xhr, formData;
         xhr = new XMLHttpRequest();
