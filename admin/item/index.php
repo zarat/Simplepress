@@ -47,7 +47,7 @@ $results = $system->fetch_all_assoc( $system->query( "select * from item ORDER B
       
     echo "\n<tr id='$id'>";      
     //echo "<td><strong><a href=\"../admin/item.php?action=edit&id=$id\" title=\"$result[keywords]\">$result[title]</a></strong><span style=\"display:none;\">$result["content"]</span><br>";
-    echo "<td><strong><a href=\"../admin/item.php?action=edit&id=$id\" title=\"$result[keywords]\">$result[title]</a></strong><span style=\"display:none;\">" . htmlentities($result[content]) . "</span><br>";
+    echo "<td><strong><a href=\"../admin/item.php?action=edit&id=$id\" title=\"$result[keywords]\">$result[title]</a></strong><span style=\"display:none;\">" . htmlentities($result["content"]) . "</span><br>";
     echo "<br>";       
     if($status==0) { 
         echo "<span id='item_status_link_$result[id]'><a style='cursor:pointer' onclick=\"update_status($result[id],1)\">aktivieren</a></span>";
